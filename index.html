@@ -1130,7 +1130,32 @@
         let manualAlertTime = null;
         let alertTimeout = null;
         let snowInterval = null;
-        const BAGHDAD_OFFSET = 3; // UTC+3
+        
+        // ===== وقت بغداد الحقيقي (مصحح) =====
+        function getBaghdadTime() {
+            const now = new Date();
+            
+            // الطريقة الصحيحة: نأخذ الوقت العالمي (UTC) ونضيف 3 ساعات لبغداد
+            // وقت UTC الحالي
+            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+            // بغداد = UTC + 3 ساعات
+            const baghdadTime = new Date(utcTime + (3 * 60 * 60 * 1000));
+            
+            return baghdadTime;
+        }
+        
+        function updateCurrentTime() {
+            const baghdadTime = getBaghdadTime();
+            const timeStr = baghdadTime.toLocaleTimeString('ar-SA', { 
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            document.getElementById('currentTime').textContent = timeStr;
+            return baghdadTime;
+        }
         
         // ===== إضافة الثلج متجاوب =====
         function createSnow() {
@@ -1168,26 +1193,6 @@
             }, 300);
         }
         
-        // ===== وقت بغداد الحقيقي =====
-        function getBaghdadTime() {
-            const now = new Date();
-            // تحويل إلى توقيت بغداد (UTC+3)
-            const baghdadTime = new Date(now.getTime() + (BAGHDAD_OFFSET * 60 * 60 * 1000));
-            return baghdadTime;
-        }
-        
-        function updateCurrentTime() {
-            const baghdadTime = getBaghdadTime();
-            const timeStr = baghdadTime.toLocaleTimeString('ar-SA', { 
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.getElementById('currentTime').textContent = timeStr;
-            return baghdadTime;
-        }
-        
         // ===== تشغيل الموسيقى الأولى =====
         function playFirstMusic() {
             try {
@@ -1222,11 +1227,18 @@
                 manualBtn.classList.remove('active');
                 manualControls.style.display = 'none';
                 
-                // تعيين المنبه الافتراضي
-                const defaultAlert = new Date('2025-12-31T20:59:00Z'); // 23:59 بغداد
-                manualAlertTime = null;
+                // تعيين المنبه الافتراضي (توقيت بغداد)
+                // 2025-12-31 23:59:00 بتوقيت بغداد
+                const baghdadTime = getBaghdadTime();
+                baghdadTime.setFullYear(2025, 11, 31); // ديسمبر هو 11 (0-based)
+                baghdadTime.setHours(23, 59, 0, 0);
                 
-                scheduleAlert(defaultAlert);
+                // نحتاج لتحويله إلى UTC للجدولة
+                const utcAlertTime = new Date(baghdadTime.getTime() - (3 * 60 * 60 * 1000));
+                
+                manualAlertTime = baghdadTime;
+                
+                scheduleAlert(baghdadTime);
                 showAlert("⏰ تم تفعيل المنبه التلقائي: 2025-12-31 23:59:00");
             } else {
                 isAutoAlert = false;
@@ -1282,6 +1294,7 @@
                 document.getElementById('alertDisplayTime').textContent = alertDisplay;
                 
                 updateGlobalCountdown();
+                showAlert(`⏰ المنبه مضبوط لـ ${alertDisplay}`);
             } else {
                 showAlert("⚠️ الوقت المحدد قد مضى، اختر وقتاً قادماً");
             }
@@ -1321,7 +1334,15 @@
         }
 
         function updateGlobalCountdown() {
-            const alertTime = isAutoAlert ? new Date('2025-12-31T20:59:00Z') : manualAlertTime;
+            const alertTime = isAutoAlert ? 
+                (() => {
+                    const t = getBaghdadTime();
+                    t.setFullYear(2025, 11, 31);
+                    t.setHours(23, 59, 0, 0);
+                    return t;
+                })() : 
+                manualAlertTime;
+                
             if (!alertTime) return;
             
             const now = getBaghdadTime();
@@ -1378,7 +1399,11 @@
             
             // جدولة المنبه
             if (isAutoAlert) {
-                scheduleAlert(new Date('2025-12-31T20:59:00Z'));
+                // المنبه التلقائي: 2025-12-31 23:59:00 بغداد
+                const alertTime = getBaghdadTime();
+                alertTime.setFullYear(2025, 11, 31);
+                alertTime.setHours(23, 59, 0, 0);
+                scheduleAlert(alertTime);
             } else if (manualAlertTime) {
                 scheduleAlert(manualAlertTime);
             }
@@ -1415,8 +1440,18 @@
         
         // ===== عداد التنازلي =====
         function startCountdown() {
-            const targetDate = isAutoAlert ? new Date('2025-12-31T20:59:00Z') : manualAlertTime;
-            if (!targetDate) return;
+            let targetDate;
+            
+            if (isAutoAlert) {
+                // المنبه التلقائي: 2025-12-31 23:59:00 بغداد
+                targetDate = getBaghdadTime();
+                targetDate.setFullYear(2025, 11, 31);
+                targetDate.setHours(23, 59, 0, 0);
+            } else if (manualAlertTime) {
+                targetDate = manualAlertTime;
+            } else {
+                return;
+            }
             
             function updateCountdown() {
                 const now = getBaghdadTime();
@@ -1517,7 +1552,10 @@
             setInterval(updateGlobalCountdown, 1000);
             
             // جدولة المنبه التلقائي
-            scheduleAlert(new Date('2025-12-31T20:59:00Z'));
+            const alertTime = getBaghdadTime();
+            alertTime.setFullYear(2025, 11, 31);
+            alertTime.setHours(23, 59, 0, 0);
+            scheduleAlert(alertTime);
             
             document.getElementById("username").focus();
             
