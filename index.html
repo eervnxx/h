@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قاعة النخيل - نظام الحجوزات</title>
+    <title>قاعة النخيل - نظام إدارة الحجوزات الداخلي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* المتغيرات والألوان */
+        /* المتغيرات والألوان العراقية */
         :root {
-            --primary-beige: #F5E6D3;
-            --secondary-beige: #E8D0B3;
-            --dark-beige: #D4B483;
-            --off-white: #FAF9F6;
-            --wood: #A0522D;
-            --light-wood: #C17A4A;
-            --success: #2E7D32;
-            --warning: #ED6C02;
-            --error: #D32F2F;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --gold: #D4AF37;
+            --dark-gold: #B8860B;
+            --light-gold: #F5E6A4;
+            --red: #8B0000;
+            --dark-red: #660000;
+            --cream: #FFF8E7;
+            --dark-cream: #F5E6D3;
+            --brown: #8B4513;
+            --dark-brown: #654321;
+            --green: #2E8B57;
+            --shadow: 0 10px 30px rgba(139, 69, 19, 0.15);
+            --gradient: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
         }
 
         /* الأساسيات */
@@ -26,18 +29,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Noto Sans Arabic', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--off-white) 0%, var(--primary-beige) 100%);
-            color: #333;
+            background: linear-gradient(135deg, var(--cream) 0%, #f9f3e9 100%);
+            color: var(--brown);
             min-height: 100vh;
             position: relative;
-            overflow-x: hidden;
         }
 
-        /* خلفية العرسان */
+        /* خلفية ذهبية عراقية */
         body::before {
             content: "";
             position: fixed;
@@ -45,42 +47,104 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkFGOUY2Ii8+CjxwYXRoIGQ9Ik0yMCAzMEw0MCA1MEwyMCA3MFoiIGZpbGw9IiNFREQwQjMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+CjxwYXRoIGQ9Ik02MCAyMEw4MCA0MEw2MCA2MFoiIGZpbGw9IiNENEI0ODMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+CjxwYXRoIGQ9Ik00MCA2MEw2MCA4MEw0MCAxMDBaIiBmaWxsPSIjQjA3QjJBIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4K');
-            opacity: 0.3;
+            background-image: 
+                radial-gradient(circle at 20% 80%, var(--light-gold) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--light-gold) 0%, transparent 50%);
+            opacity: 0.15;
             z-index: -1;
         }
 
-        /* الهيدر */
+        /* الهيدر الفخم */
         .header {
-            background: linear-gradient(to right, var(--wood), var(--light-wood));
+            background: var(--gradient);
             color: white;
             padding: 1.5rem 2rem;
-            text-align: center;
             box-shadow: var(--shadow);
-            border-bottom: 5px solid var(--dark-beige);
+            border-bottom: 5px solid var(--dark-red);
             position: relative;
             overflow: hidden;
         }
 
         .header::before {
-            content: "🎉";
+            content: "🎪";
             position: absolute;
-            font-size: 8rem;
+            font-size: 10rem;
             opacity: 0.1;
-            right: -20px;
-            top: -20px;
-            transform: rotate(15deg);
+            right: -30px;
+            top: -30px;
+            transform: rotate(-15deg);
         }
 
-        .header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .header p {
-            font-size: 1.2rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .logo-text h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 0.3rem;
+        }
+
+        .logo-text p {
+            font-size: 1rem;
             opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .admin-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* الشريط الإحصائي */
+        .stats-bar {
+            background: white;
+            padding: 1rem 2rem;
+            margin: 1rem auto;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--dark-cream);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--brown);
+            font-weight: 600;
         }
 
         /* المحتوى الرئيسي */
@@ -99,37 +163,98 @@
             }
         }
 
-        /* الكارد */
+        /* الكارد الفخم */
         .card {
             background: white;
             border-radius: 20px;
             padding: 2rem;
             box-shadow: var(--shadow);
-            border: 1px solid var(--primary-beige);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid var(--dark-cream);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.2);
         }
 
         .card-title {
-            color: var(--wood);
+            color: var(--dark-red);
             font-size: 1.8rem;
             margin-bottom: 1.5rem;
             padding-bottom: 0.8rem;
-            border-bottom: 3px solid var(--secondary-beige);
+            border-bottom: 3px solid var(--gold);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .card-title i {
-            color: var(--light-wood);
+            color: var(--gold);
         }
 
-        /* النموذج */
+        /* إعدادات البوتات */
+        .bots-config {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 2px dashed #dee2e6;
+        }
+
+        .bot-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--gold);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .bot-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .bot-name {
+            font-weight: bold;
+            color: var(--dark-red);
+        }
+
+        .bot-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .status-connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* النموذج العراقي */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -137,7 +262,7 @@
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--wood);
+            color: var(--dark-brown);
             font-weight: 600;
             font-size: 1.1rem;
         }
@@ -145,70 +270,158 @@
         .form-input, .form-textarea, .form-select {
             width: 100%;
             padding: 0.9rem 1rem;
-            border: 2px solid var(--primary-beige);
+            border: 2px solid var(--dark-cream);
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            background: var(--off-white);
+            background: white;
+            color: var(--brown);
         }
 
         .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
-            border-color: var(--light-wood);
-            box-shadow: 0 0 0 3px rgba(161, 82, 45, 0.1);
-            background: white;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            background: var(--cream);
         }
 
         .form-textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
 
         /* شبكة الحقول */
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
         }
 
-        @media (min-width: 768px) {
+        @media (max-width: 768px) {
             .form-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
             }
+        }
+
+        /* خيارات القاعات */
+        .hall-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .hall-option {
+            position: relative;
+        }
+
+        .hall-option input {
+            display: none;
+        }
+
+        .hall-option label {
+            display: block;
+            padding: 1rem;
+            background: white;
+            border: 2px solid var(--dark-cream);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hall-option input:checked + label {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--gold);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* خيارات الوقت */
+        .time-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .time-option {
+            position: relative;
+        }
+
+        .time-option input {
+            display: none;
+        }
+
+        .time-option label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: white;
+            border: 2px solid var(--dark-cream);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-option input:checked + label {
+            background: linear-gradient(to right, var(--cream), white);
+            border-color: var(--gold);
+            box-shadow: 0 3px 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .time-slot {
+            font-weight: 600;
+            color: var(--dark-red);
         }
 
         /* عرض المبلغ المتبقي */
         .amount-display {
-            background: linear-gradient(135deg, var(--primary-beige), var(--secondary-beige));
+            background: linear-gradient(135deg, var(--cream), white);
             padding: 1.5rem;
             border-radius: 15px;
             margin: 1.5rem 0;
             text-align: center;
-            border: 2px dashed var(--dark-beige);
+            border: 2px solid var(--gold);
+            position: relative;
+        }
+
+        .amount-display::before {
+            content: "💵";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: 0.3;
         }
 
         .amount-label {
             font-size: 1.1rem;
-            color: var(--wood);
+            color: var(--dark-brown);
             margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
         .amount-value {
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--wood);
+            color: var(--dark-red);
             transition: all 0.3s ease;
+            direction: ltr;
+            display: inline-block;
         }
 
         .amount-positive {
-            color: var(--error);
+            color: var(--dark-red);
         }
 
         .amount-zero {
-            color: var(--success);
+            color: var(--green);
         }
 
-        /* الأزرار */
+        /* الأزرار العراقية */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -223,39 +436,87 @@
             transition: all 0.3s ease;
             width: 100%;
             margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(to right, var(--wood), var(--light-wood));
+            background: var(--gradient);
             color: white;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(160, 82, 45, 0.3);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-telegram {
+            background: linear-gradient(to right, #0088cc, #34b7f1);
+            color: white;
+        }
+
+        .btn-telegram:hover {
+            background: linear-gradient(to right, #0077b5, #2aa8e6);
         }
 
         .btn-secondary {
-            background: var(--off-white);
-            color: var(--wood);
-            border: 2px solid var(--primary-beige);
+            background: white;
+            color: var(--dark-red);
+            border: 2px solid var(--gold);
         }
 
         .btn-secondary:hover {
-            background: var(--primary-beige);
+            background: var(--cream);
+        }
+
+        /* خيارات الإرسال */
+        .send-options {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            border: 1px solid var(--gold);
+        }
+
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .option-group label {
+            font-weight: 600;
+            color: var(--dark-brown);
         }
 
         /* معاينة الحجز */
         .preview-card {
-            background: linear-gradient(135deg, #FFF9F3, #FFF);
-            border: 2px solid var(--primary-beige);
+            background: linear-gradient(135deg, #FFFDF9, white);
+            border: 2px solid var(--gold);
         }
 
         .preview-item {
             display: flex;
             justify-content: space-between;
             padding: 1rem 0;
-            border-bottom: 1px solid var(--primary-beige);
+            border-bottom: 1px solid var(--dark-cream);
         }
 
         .preview-item:last-child {
@@ -263,56 +524,70 @@
         }
 
         .preview-label {
-            color: var(--wood);
+            color: var(--dark-red);
             font-weight: 600;
+            min-width: 120px;
         }
 
         .preview-value {
-            color: #555;
+            color: var(--brown);
             text-align: left;
             max-width: 60%;
             word-break: break-word;
+            font-weight: 500;
         }
 
         /* قائمة الحجوزات */
         .reservation-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
             margin-top: 1rem;
+            padding-right: 10px;
+        }
+
+        .reservation-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .reservation-list::-webkit-scrollbar-track {
+            background: var(--cream);
+            border-radius: 10px;
+        }
+
+        .reservation-list::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 10px;
         }
 
         .reservation-item {
-            background: var(--off-white);
-            padding: 1rem;
-            border-radius: 10px;
+            background: white;
+            padding: 1.2rem;
+            border-radius: 12px;
             margin-bottom: 1rem;
-            border-left: 4px solid var(--light-wood);
+            border-right: 4px solid var(--gold);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            position: relative;
+            transition: all 0.3s ease;
         }
 
-        /* الفوتر */
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            background: linear-gradient(to right, var(--wood), var(--light-wood));
-            color: white;
+        .reservation-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.15);
         }
 
-        .footer p {
-            margin: 0.5rem 0;
+        .telegram-sent {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--cream);
+            color: var(--dark-red);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid var(--gold);
         }
 
-        /* الرسوم المتحركة */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        /* التحميل */
+        /* محمل التحميل */
         .loader {
             display: none;
             text-align: center;
@@ -320,8 +595,8 @@
         }
 
         .spinner {
-            border: 4px solid var(--primary-beige);
-            border-top: 4px solid var(--wood);
+            border: 4px solid var(--cream);
+            border-top: 4px solid var(--gold);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -334,10 +609,24 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* أزرار التحكم */
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
         /* التكيف مع الشاشات الصغيرة */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
             }
             
             .container {
@@ -351,113 +640,249 @@
             .amount-value {
                 font-size: 2rem;
             }
+            
+            .control-buttons {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- الهيدر -->
-    <header class="header fade-in">
-        <h1><i class="fas fa-palette"></i> قاعة النخيل للاحتفالات</h1>
-        <p>نظام حجوزات متكامل - احجز مناسبتك بسهولة وأمان</p>
+    <!-- الهيدر الفخم -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🎪</div>
+                <div class="logo-text">
+                    <h1>قاعة النخيل</h1>
+                    <p>نظام إدارة الحجوزات الداخلي</p>
+                </div>
+            </div>
+            <div class="admin-info">
+                <i class="fas fa-user-shield"></i>
+                <span>لوحة تحكم الإدارة</span>
+            </div>
+        </div>
     </header>
+
+    <!-- الشريط الإحصائي -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-value" id="totalReservations">0</span>
+            <span class="stat-label">إجمالي الحجوزات</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="todayReservations">0</span>
+            <span class="stat-label">حجوزات اليوم</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="totalRevenue">0</span>
+            <span class="stat-label">إجمالي الإيرادات</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="pendingAmount">0</span>
+            <span class="stat-label">المبالغ المعلقة</span>
+        </div>
+    </div>
 
     <!-- المحتوى الرئيسي -->
     <main class="container">
         <!-- نموذج الحجز -->
-        <section class="card fade-in">
-            <h2 class="card-title"><i class="fas fa-calendar-plus"></i> نموذج حجز جديد</h2>
+        <section class="card">
+            <h2 class="card-title"><i class="fas fa-plus-circle"></i> تسجيل حجز جديد</h2>
+            
+            <!-- إعدادات البوتات -->
+            <div class="bots-config">
+                <h3 style="color: var(--dark-red); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+                    <i class="fab fa-telegram"></i> نظام الإرسال الآلي
+                </h3>
+                
+                <div class="bot-item">
+                    <div class="bot-header">
+                        <span class="bot-name">البوت الإداري الرئيسي</span>
+                        <span id="bot1Status" class="bot-status status-connected">
+                            <i class="fas fa-circle" style="font-size: 8px;"></i> نشط
+                        </span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--brown);">
+                        <i class="fas fa-user-tie"></i> يرسل تفاصيل الحجز الكاملة للإدارة
+                    </div>
+                </div>
+                
+                <div class="bot-item">
+                    <div class="bot-header">
+                        <span class="bot-name">بوت المالية والمحاسبة</span>
+                        <span id="bot2Status" class="bot-status status-connected">
+                            <i class="fas fa-circle" style="font-size: 8px;"></i> نشط
+                        </span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--brown);">
+                        <i class="fas fa-calculator"></i> يركز على التفاصيل المالية فقط
+                    </div>
+                </div>
+            </div>
             
             <form id="reservationForm">
+                <!-- المعلومات الأساسية -->
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">اسم العريس</label>
-                        <input type="text" class="form-input" id="groomName" placeholder="أدخل اسم العريس" required>
+                        <input type="text" class="form-input" id="groomName" placeholder="الاسم الثلاثي للعريس" required>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">اسم العروس</label>
-                        <input type="text" class="form-input" id="brideName" placeholder="أدخل اسم العروس" required>
+                        <input type="text" class="form-input" id="brideName" placeholder="الاسم الثلاثي للعروس" required>
+                    </div>
+                </div>
+                
+                <!-- معلومات الاتصال -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">رقم الهاتف</label>
+                        <input type="tel" class="form-input" id="phoneNumber" placeholder="07XXXXXXXXX" required>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">تاريخ المناسبة</label>
                         <input type="date" class="form-input" id="eventDate" required>
                     </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">نوع المناسبة</label>
-                        <select class="form-select" id="eventType">
-                            <option value="زفاف">زفاف</option>
-                            <option value="خطوبة">خطوبة</option>
-                            <option value="تخرج">تخرج</option>
-                            <option value="ميلاد">ميلاد</option>
-                            <option value="مناسبة خاصة">مناسبة خاصة</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">عدد الضيوف</label>
-                        <input type="number" class="form-input" id="guestsCount" min="1" max="500" value="100">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">وقت المناسبة</label>
-                        <select class="form-select" id="eventTime">
-                            <option value="مساء">مساءً (6:00 - 12:00)</option>
-                            <option value="صباح">صباحاً (9:00 - 2:00)</option>
-                            <option value="كامل">كامل اليوم</option>
-                        </select>
+                </div>
+                
+                <!-- نوع المناسبة -->
+                <div class="form-group">
+                    <label class="form-label">نوع المناسبة</label>
+                    <select class="form-select" id="eventType">
+                        <option value="زفاف">🎎 زفاف</option>
+                        <option value="خطوبة">💍 خطوبة</option>
+                        <option value="تخرج">🎓 تخرج</option>
+                        <option value="مولد">🎂 مولد</option>
+                        <option value="اجتماع">🤝 اجتماع عمل</option>
+                        <option value="مناسبة خاصة">🎉 مناسبة خاصة</option>
+                    </select>
+                </div>
+                
+                <!-- اختيار القاعة -->
+                <div class="form-group">
+                    <label class="form-label">اختيار القاعة</label>
+                    <div class="hall-options">
+                        <div class="hall-option">
+                            <input type="radio" id="hall1" name="hall" value="قاعة 1" checked>
+                            <label for="hall1">
+                                <i class="fas fa-door-open"></i><br>
+                                <strong>القاعة الاولى 1</strong><br>
+                                <small>سعة: 300 شخص</small>
+                            </label>
+                        </div>
+                        <div class="hall-option">
+                            <input type="radio" id="hall2" name="hall" value="قاعة 2">
+                            <label for="hall2">
+                                <i class="fas fa-door-closed"></i><br>
+                                <strong>القاعة الثانيه 2</strong><br>
+                                <small>سعة: 250 شخص</small>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 
+                <!-- اختيار الوقت -->
                 <div class="form-group">
-                    <label class="form-label">المبلغ الكلي (ريال سعودي)</label>
-                    <input type="number" class="form-input" id="totalAmount" min="0" step="100" value="10000" required>
+                    <label class="form-label">اختيار وقت المناسبة</label>
+                    <div class="time-options">
+                        <div class="time-option">
+                            <input type="radio" id="time1" name="time" value="من 3 عصراً إلى 8 مساءً" checked>
+                            <label for="time1">
+                                <span>⏰</span>
+                                <span class="time-slot">من 3 عصراً إلى 8 مساءً</span>
+                            </label>
+                        </div>
+                        <div class="time-option">
+                            <input type="radio" id="time2" name="time" value="من 8:30 مساءً إلى 11:30 مساءً">
+                            <label for="time2">
+                                <span>🌙</span>
+                                <span class="time-slot">من 8:30 مساءً إلى 11:30 مساءً</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">المبلغ الواصل (ريال سعودي)</label>
-                    <input type="number" class="form-input" id="paidAmount" min="0" step="100" value="3000" required>
+                <!-- التفاصيل المالية -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">المبلغ الكلي (دينار عراقي)</label>
+                        <input type="number" class="form-input" id="totalAmount" min="0" value="2500000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">المبلغ المدفوع (دينار عراقي)</label>
+                        <input type="number" class="form-input" id="paidAmount" min="0" value="1000000" required>
+                    </div>
                 </div>
                 
                 <!-- عرض المبلغ المتبقي -->
                 <div class="amount-display">
                     <div class="amount-label">المبلغ المتبقي للدفع</div>
-                    <div id="remainingAmount" class="amount-value">7,000 ريال</div>
+                    <div id="remainingAmount" class="amount-value">1,500,000 دينار</div>
                 </div>
                 
+                <!-- تفاصيل إضافية -->
                 <div class="form-group">
-                    <label class="form-label">تفاصيل إضافية</label>
-                    <textarea class="form-textarea" id="details" placeholder="ملاحظات إضافية، طلبات خاصة، تفاصيل القاعة..."></textarea>
+                    <label class="form-label">ملاحظات إضافية</label>
+                    <textarea class="form-textarea" id="details" placeholder="أي ملاحظات خاصة، طلبات إضافية، متطلبات خاصة..."></textarea>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">رقم التواصل</label>
-                    <input type="tel" class="form-input" id="phoneNumber" placeholder="05xxxxxxxx" required>
+                <!-- خيارات الإرسال -->
+                <div class="send-options">
+                    <h4 style="color: var(--dark-red); margin-bottom: 1rem;">
+                        <i class="fas fa-paper-plane"></i> خيارات إرسال الحجز
+                    </h4>
+                    
+                    <div class="option-group">
+                        <input type="checkbox" id="sendToBothBots" checked>
+                        <label for="sendToBothBots">إرسال إلى كلا البوتين معاً</label>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="option-group">
+                            <input type="checkbox" id="sendToBot1" checked>
+                            <label for="sendToBot1" style="color: var(--dark-red); font-weight: 600;">
+                                <i class="fas fa-user-tie"></i> البوت الإداري
+                            </label>
+                        </div>
+                        
+                        <div class="option-group">
+                            <input type="checkbox" id="sendToBot2" checked>
+                            <label for="sendToBot2" style="color: var(--dark-red); font-weight: 600;">
+                                <i class="fas fa-calculator"></i> بوت المالية
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- زر الإرسال -->
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    <i class="fas fa-paper-plane"></i> تأكيد الحجز وإرسال البيانات
-                </button>
-                
-                <!-- زر المسح -->
-                <button type="button" class="btn btn-secondary" onclick="clearForm()">
-                    <i class="fas fa-redo"></i> مسح النموذج
-                </button>
+                <!-- أزرار التحكم -->
+                <div class="control-buttons">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> حفظ الحجز وإرساله
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                        <i class="fas fa-eraser"></i> مسح النموذج
+                    </button>
+                </div>
             </form>
             
             <!-- محمل التحميل -->
             <div class="loader" id="loader">
                 <div class="spinner"></div>
-                <p>جاري حفظ الحجز وإرساله...</p>
+                <p style="color: var(--brown); margin-top: 1rem;">جاري حفظ الحجز وإرساله...</p>
+                <div id="botProgress" style="margin-top: 1rem;"></div>
             </div>
         </section>
 
-        <!-- معاينة الحجز وقائمة الحجوزات -->
+        <!-- الجانب الأيمن -->
         <section>
             <!-- معاينة الحجز -->
-            <div class="card preview-card fade-in" style="animation-delay: 0.2s">
+            <div class="card preview-card">
                 <h2 class="card-title"><i class="fas fa-eye"></i> معاينة الحجز</h2>
                 <div id="previewContent">
                     <div class="preview-item">
@@ -469,157 +894,266 @@
                         <span class="preview-value" id="previewDate">-</span>
                     </div>
                     <div class="preview-item">
-                        <span class="preview-label">المبلغ الكلي:</span>
+                        <span class="preview-label">القاعة:</span>
+                        <span class="preview-value" id="previewHall">-</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">الوقت:</span>
+                        <span class="preview-value" id="previewTime">-</span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">الإجمالي:</span>
                         <span class="preview-value" id="previewTotal">-</span>
                     </div>
                     <div class="preview-item">
-                        <span class="preview-label">المبلغ المتبقي:</span>
+                        <span class="preview-label">المتبقي:</span>
                         <span class="preview-value" id="previewRemaining">-</span>
                     </div>
                     <div class="preview-item">
-                        <span class="preview-label">حالة الدفع:</span>
-                        <span class="preview-value" id="previewStatus">-</span>
+                        <span class="preview-label">حالة الإرسال:</span>
+                        <span class="preview-value" id="previewSendStatus">-</span>
                     </div>
                 </div>
             </div>
 
-            <!-- قائمة الحجوزات المحفوظة -->
-            <div class="card fade-in" style="animation-delay: 0.4s; margin-top: 2rem;">
-                <h2 class="card-title"><i class="fas fa-history"></i> الحجوزات الأخيرة</h2>
+            <!-- قائمة الحجوزات -->
+            <div class="card" style="margin-top: 2rem;">
+                <h2 class="card-title"><i class="fas fa-list-alt"></i> الحجوزات المسجلة</h2>
                 <div class="reservation-list" id="reservationsList">
                     <!-- سيتم ملؤها بالجافاسكريبت -->
-                    <p class="text-center" style="color: #777; padding: 2rem;">لا توجد حجوزات سابقة</p>
+                    <div style="text-align: center; padding: 3rem; color: var(--brown);">
+                        <i class="fas fa-calendar-times" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                        <p>لا توجد حجوزات مسجلة</p>
+                    </div>
                 </div>
-                <button class="btn btn-secondary" onclick="downloadReservations()" style="margin-top: 1rem;">
-                    <i class="fas fa-download"></i> تحميل جميع الحجوزات
-                </button>
+                
+                <div class="control-buttons" style="margin-top: 1.5rem;">
+                    <button class="btn btn-telegram" onclick="downloadReservations()">
+                        <i class="fas fa-download"></i> تصدير الحجوزات
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="manageReservations()">
+                        <i class="fas fa-cog"></i> إدارة الحجوزات
+                    </button>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- الفوتر -->
-    <footer class="footer fade-in" style="animation-delay: 0.6s">
-        <p><i class="fas fa-phone"></i> للاستفسارات: 0551234567</p>
-        <p><i class="fas fa-map-marker-alt"></i> العنوان: الرياض - حي النخيل</p>
-        <p>© 2024 قاعة النخيل للاحتفالات. جميع الحقوق محفوظة.</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
-            تم التطوير باستخدام HTML, CSS, JavaScript | متوافق مع GitHub Pages
-        </p>
-    </footer>
-
     <!-- الجافاسكريبت -->
     <script>
-        // تهيئة التاريخ ليكون غداً كتاريخ افتراضي
-        document.addEventListener('DOMContentLoaded', function() {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            document.getElementById('eventDate').valueAsDate = tomorrow;
-            
-            // تحديث المعاينة عند التحميل
-            updatePreview();
-            updateRemainingAmount();
-            
-            // تحميل الحجوزات المحفوظة
-            loadReservations();
-        });
-
-        // متغيرات عامة
-        let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
-        
-        // حساب المبلغ المتبقي
-        function updateRemainingAmount() {
-            const total = parseFloat(document.getElementById('totalAmount').value) || 0;
-            const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-            const remaining = total - paid;
-            
-            const remainingElement = document.getElementById('remainingAmount');
-            remainingElement.textContent = remaining.toLocaleString() + ' ريال';
-            
-            // تغيير اللون حسب القيمة
-            if (remaining > 0) {
-                remainingElement.className = 'amount-value amount-positive';
-            } else if (remaining === 0) {
-                remainingElement.className = 'amount-value amount-zero';
-            } else {
-                remainingElement.className = 'amount-value';
+        // === إعدادات البوتات ===
+        const TELEGRAM_CONFIG = {
+            BOT_1: {
+                name: "البوت الإداري",
+                token: "YOUR_FIRST_BOT_TOKEN",
+                chatId: "YOUR_FIRST_CHAT_ID",
+                enabled: true
+            },
+            BOT_2: {
+                name: "بوت المالية",
+                token: "YOUR_SECOND_BOT_TOKEN",
+                chatId: "YOUR_SECOND_CHAT_ID",
+                enabled: true
             }
+        };
+
+        // تهيئة التطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            // تعيين تاريخ اليوم كتاريخ افتراضي
+            const today = new Date();
+            document.getElementById('eventDate').valueAsDate = today;
+            
+            // تحديث الإحصائيات
+            updateStatistics();
             
             // تحديث المعاينة
             updatePreview();
-        }
+            updateRemainingAmount();
+            
+            // تحميل الحجوزات
+            loadReservations();
+            
+            // إعداد مستمعات الأحداث
+            setupEventListeners();
+        });
 
-        // تحديث المعاينة
-        function updatePreview() {
-            const groom = document.getElementById('groomName').value || 'غير محدد';
-            const bride = document.getElementById('brideName').value || 'غير محدد';
-            const date = document.getElementById('eventDate').value || 'غير محدد';
-            const total = document.getElementById('totalAmount').value || 0;
-            const paid = document.getElementById('paidAmount').value || 0;
+        // متغيرات التطبيق
+        let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
+        
+        // إعداد مستمعات الأحداث
+        function setupEventListeners() {
+            // تحديث المعاينة عند التغيير
+            const inputs = ['groomName', 'brideName', 'phoneNumber', 'eventDate', 
+                          'totalAmount', 'paidAmount', 'details'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+            });
+            
+            // تحديث المبلغ المتبقي
+            document.getElementById('totalAmount').addEventListener('input', updateRemainingAmount);
+            document.getElementById('paidAmount').addEventListener('input', updateRemainingAmount);
+            
+            // تحديث المعاينة عند تغيير الخيارات
+            document.querySelectorAll('input[name="hall"], input[name="time"]').forEach(input => {
+                input.addEventListener('change', updatePreview);
+            });
+            
+            // إعداد خيارات الإرسال
+            setupSendOptions();
+            
+            // إرسال النموذج
+            document.getElementById('reservationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReservation();
+            });
+        }
+        
+        // إعداد خيارات الإرسال
+        function setupSendOptions() {
+            const sendToBoth = document.getElementById('sendToBothBots');
+            const bot1Checkbox = document.getElementById('sendToBot1');
+            const bot2Checkbox = document.getElementById('sendToBot2');
+            
+            sendToBoth.addEventListener('change', function() {
+                bot1Checkbox.checked = this.checked;
+                bot2Checkbox.checked = this.checked;
+                updatePreview();
+            });
+            
+            [bot1Checkbox, bot2Checkbox].forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (!bot1Checkbox.checked || !bot2Checkbox.checked) {
+                        sendToBoth.checked = false;
+                    } else {
+                        sendToBoth.checked = true;
+                    }
+                    updatePreview();
+                });
+            });
+        }
+        
+        // تحديث الإحصائيات
+        function updateStatistics() {
+            const total = reservations.length;
+            const today = new Date().toISOString().split('T')[0];
+            const todayCount = reservations.filter(r => r.eventDate === today).length;
+            
+            let totalRevenue = 0;
+            let pendingAmount = 0;
+            
+            reservations.forEach(r => {
+                totalRevenue += r.totalAmount;
+                pendingAmount += (r.totalAmount - r.paidAmount);
+            });
+            
+            // تحديث القيم
+            document.getElementById('totalReservations').textContent = total;
+            document.getElementById('todayReservations').textContent = todayCount;
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('pendingAmount').textContent = formatCurrency(pendingAmount);
+        }
+        
+        // تنسيق العملة العراقية
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('ar-IQ').format(amount) + ' د.ع';
+        }
+        
+        // تحديث المبلغ المتبقي
+        function updateRemainingAmount() {
+            const total = parseInt(document.getElementById('totalAmount').value) || 0;
+            const paid = parseInt(document.getElementById('paidAmount').value) || 0;
             const remaining = total - paid;
             
-            // تحديث معاينة الحجز
+            const element = document.getElementById('remainingAmount');
+            element.textContent = formatCurrency(remaining);
+            
+            // تغيير اللون
+            element.className = 'amount-value ' + 
+                (remaining > 0 ? 'amount-positive' : 
+                 remaining === 0 ? 'amount-zero' : '');
+            
+            updatePreview();
+        }
+        
+        // تحديث المعاينة
+        function updatePreview() {
+            // معلومات العروسين
+            const groom = document.getElementById('groomName').value || 'غير محدد';
+            const bride = document.getElementById('brideName').value || 'غير محدد';
+            
+            // معلومات التاريخ
+            const date = document.getElementById('eventDate').value;
+            
+            // معلومات القاعة والوقت
+            const hall = document.querySelector('input[name="hall"]:checked')?.value || 'غير محدد';
+            const time = document.querySelector('input[name="time"]:checked')?.value || 'غير محدد';
+            
+            // معلومات المبالغ
+            const total = parseInt(document.getElementById('totalAmount').value) || 0;
+            const paid = parseInt(document.getElementById('paidAmount').value) || 0;
+            const remaining = total - paid;
+            
+            // تحديث العناصر
             document.getElementById('previewCouple').textContent = groom + ' & ' + bride;
             document.getElementById('previewDate').textContent = formatDate(date);
-            document.getElementById('previewTotal').textContent = Number(total).toLocaleString() + ' ريال';
-            document.getElementById('previewRemaining').textContent = Number(remaining).toLocaleString() + ' ريال';
+            document.getElementById('previewHall').textContent = hall;
+            document.getElementById('previewTime').textContent = time;
+            document.getElementById('previewTotal').textContent = formatCurrency(total);
+            document.getElementById('previewRemaining').textContent = formatCurrency(remaining);
             
-            // حالة الدفع
-            let status = '';
-            if (remaining === 0) {
-                status = '✅ تم السداد بالكامل';
-            } else if (remaining > 0) {
-                status = '⚠️ متبقي: ' + remaining.toLocaleString() + ' ريال';
+            // حالة الإرسال
+            const sendToBot1 = document.getElementById('sendToBot1').checked;
+            const sendToBot2 = document.getElementById('sendToBot2').checked;
+            
+            let sendStatus = '';
+            if (sendToBot1 && sendToBot2) {
+                sendStatus = '📤 سيُرسل إلى كلا البوتين';
+            } else if (sendToBot1) {
+                sendStatus = '📤 سيُرسل إلى البوت الإداري';
+            } else if (sendToBot2) {
+                sendStatus = '📤 سيُرسل إلى بوت المالية';
             } else {
-                status = '❌ خطأ في الحساب';
+                sendStatus = '❌ لن يُرسل';
             }
-            document.getElementById('previewStatus').textContent = status;
+            document.getElementById('previewSendStatus').textContent = sendStatus;
         }
-
+        
         // تنسيق التاريخ
         function formatDate(dateString) {
             if (!dateString) return '-';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ar-SA', {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('ar-IQ', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
         }
-
-        // معالجة إرسال النموذج
-        document.getElementById('reservationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitReservation();
-        });
-
-        // إضافة مستمعات للتحديث التلقائي
-        document.getElementById('groomName').addEventListener('input', updatePreview);
-        document.getElementById('brideName').addEventListener('input', updatePreview);
-        document.getElementById('eventDate').addEventListener('input', updatePreview);
-        document.getElementById('totalAmount').addEventListener('input', updateRemainingAmount);
-        document.getElementById('paidAmount').addEventListener('input', updateRemainingAmount);
-        document.getElementById('eventType').addEventListener('change', updatePreview);
-        document.getElementById('guestsCount').addEventListener('input', updatePreview);
-        document.getElementById('eventTime').addEventListener('change', updatePreview);
-        document.getElementById('phoneNumber').addEventListener('input', updatePreview);
-
-        // دالة إرسال الحجز
-        function submitReservation() {
+        
+        // إرسال الحجز
+        async function submitReservation() {
             // جمع البيانات
             const reservation = {
                 id: Date.now(),
                 groomName: document.getElementById('groomName').value.trim(),
                 brideName: document.getElementById('brideName').value.trim(),
+                phoneNumber: document.getElementById('phoneNumber').value.trim(),
                 eventDate: document.getElementById('eventDate').value,
                 eventType: document.getElementById('eventType').value,
-                guestsCount: document.getElementById('guestsCount').value,
-                eventTime: document.getElementById('eventTime').value,
-                totalAmount: parseFloat(document.getElementById('totalAmount').value),
-                paidAmount: parseFloat(document.getElementById('paidAmount').value),
-                phoneNumber: document.getElementById('phoneNumber').value.trim(),
+                hall: document.querySelector('input[name="hall"]:checked')?.value,
+                time: document.querySelector('input[name="time"]:checked')?.value,
+                totalAmount: parseInt(document.getElementById('totalAmount').value),
+                paidAmount: parseInt(document.getElementById('paidAmount').value),
                 details: document.getElementById('details').value.trim(),
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                status: 'active',
+                telegramSent: {
+                    bot1: document.getElementById('sendToBot1').checked,
+                    bot2: document.getElementById('sendToBot2').checked,
+                    bot1Success: false,
+                    bot2Success: false
+                }
             };
             
             // التحقق من البيانات
@@ -628,120 +1162,208 @@
                     icon: 'warning',
                     title: 'بيانات ناقصة',
                     text: 'الرجاء تعبئة جميع الحقول الإلزامية',
-                    confirmButtonColor: 'var(--wood)'
+                    confirmButtonColor: 'var(--dark-red)',
+                    confirmButtonText: 'حسناً'
                 });
                 return;
             }
             
-            // إظهار محمل التحميل
+            // إظهار المحمل
             document.getElementById('loader').style.display = 'block';
             document.getElementById('submitBtn').disabled = true;
             
-            // محاكاة التأخير
-            setTimeout(() => {
-                // حفظ في localStorage
-                reservations.unshift(reservation);
+            // حفظ في التخزين المحلي
+            reservations.unshift(reservation);
+            localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
+            
+            // إرسال إلى Telegram (محاكاة)
+            const sendResults = await sendToTelegramBots(reservation);
+            
+            // تحديث حالة الإرسال
+            reservation.telegramSent.bot1Success = sendResults.bot1.success;
+            reservation.telegramSent.bot2Success = sendResults.bot2.success;
+            
+            // تحديث التخزين
+            const index = reservations.findIndex(r => r.id === reservation.id);
+            if (index !== -1) {
+                reservations[index] = reservation;
                 localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
-                
-                // إرسال إلى بوت التليجرام (محاكاة)
-                sendToTelegramBot(reservation);
-                
-                // إعادة تحميل القائمة
-                loadReservations();
-                
-                // إخفاء المحمل
+            }
+            
+            // إخفاء المحمل
+            setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
                 
-                // رسالة نجاح
-                Swal.fire({
-                    icon: 'success',
-                    title: 'تم الحجز بنجاح!',
-                    html: `
-                        <div style="text-align: right; direction: rtl;">
-                            <p><strong>رقم الحجز:</strong> ${reservation.id}</p>
-                            <p><strong>العروسين:</strong> ${reservation.groomName} & ${reservation.brideName}</p>
-                            <p><strong>التاريخ:</strong> ${formatDate(reservation.eventDate)}</p>
-                            <p><strong>المبلغ المتبقي:</strong> ${(reservation.totalAmount - reservation.paidAmount).toLocaleString()} ريال</p>
-                            <hr>
-                            <p style="font-size: 0.9rem; color: #666;">تم إرسال تفاصيل الحجز إلى بوت التليجرام</p>
-                        </div>
-                    `,
-                    confirmButtonColor: 'var(--wood)',
-                    confirmButtonText: 'تم'
-                });
+                // تحديث الواجهة
+                updateStatistics();
+                loadReservations();
                 
-                // مسح النموذج (اختياري)
-                // clearForm();
+                // عرض النتيجة
+                showReservationResult(reservation, sendResults);
                 
             }, 1500);
         }
-
-        // محاكاة إرسال إلى بوت التليجرام
-        function sendToTelegramBot(reservation) {
-            // هنا يمكنك إضافة الكود الحقيقي لإرسال البيانات إلى بوتك
-            // مثال: 
-            // fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
-            //     method: 'POST',
-            //     headers: {'Content-Type': 'application/json'},
-            //     body: JSON.stringify({
-            //         chat_id: YOUR_CHAT_ID,
-            //         text: `حجز جديد: ${reservation.groomName} & ${reservation.brideName}`
-            //     })
-            // });
-            
-            // محاكاة فقط
-            console.log('إرسال إلى بوت التليجرام:', {
-                bot: 'نظام قاعة النخيل',
-                reservation: reservation
-            });
-            
-            // حفظ في سجل (محاكاة)
-            const log = {
-                timestamp: new Date().toISOString(),
-                reservationId: reservation.id,
-                status: 'sent_to_bot'
+        
+        // إرسال إلى بوتات Telegram
+        async function sendToTelegramBots(reservation) {
+            const results = {
+                bot1: { success: false, message: '' },
+                bot2: { success: false, message: '' }
             };
             
-            let logs = JSON.parse(localStorage.getItem('telegramLogs')) || [];
-            logs.push(log);
-            localStorage.setItem('telegramLogs', JSON.stringify(logs));
+            const botProgress = document.getElementById('botProgress');
+            botProgress.innerHTML = '';
+            
+            // إرسال إلى البوت الأول
+            if (reservation.telegramSent.bot1) {
+                botProgress.innerHTML += '<p>جاري الإرسال إلى البوت الإداري...</p>';
+                
+                try {
+                    // محاكاة الإرسال
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    results.bot1.success = Math.random() > 0.1;
+                    results.bot1.message = results.bot1.success ? 
+                        'تم الإرسال بنجاح' : 'فشل الإرسال';
+                    
+                    botProgress.innerHTML += results.bot1.success ? 
+                        '<p style="color: green;">✓ تم الإرسال إلى البوت الإداري</p>' :
+                        '<p style="color: red;">✗ فشل الإرسال إلى البوت الإداري</p>';
+                } catch (error) {
+                    results.bot1.message = 'خطأ: ' + error.message;
+                }
+            }
+            
+            // إرسال إلى البوت الثاني
+            if (reservation.telegramSent.bot2) {
+                botProgress.innerHTML += '<p>جاري الإرسال إلى بوت المالية...</p>';
+                
+                try {
+                    // محاكاة الإرسال
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    results.bot2.success = Math.random() > 0.1;
+                    results.bot2.message = results.bot2.success ? 
+                        'تم الإرسال بنجاح' : 'فشل الإرسال';
+                    
+                    botProgress.innerHTML += results.bot2.success ? 
+                        '<p style="color: green;">✓ تم الإرسال إلى بوت المالية</p>' :
+                        '<p style="color: red;">✗ فشل الإرسال إلى بوت المالية</p>';
+                } catch (error) {
+                    results.bot2.message = 'خطأ: ' + error.message;
+                }
+            }
+            
+            return results;
         }
-
-        // تحميل الحجوزات المحفوظة
+        
+        // عرض نتيجة الحجز
+        function showReservationResult(reservation, sendResults) {
+            const sentToBot1 = reservation.telegramSent.bot1;
+            const sentToBot2 = reservation.telegramSent.bot2;
+            const success1 = sendResults.bot1.success;
+            const success2 = sendResults.bot2.success;
+            
+            let successCount = 0;
+            if (sentToBot1 && success1) successCount++;
+            if (sentToBot2 && success2) successCount++;
+            
+            let html = `
+                <div style="text-align: right; direction: rtl;">
+                    <h3 style="color: var(--dark-red);">تم تسجيل الحجز بنجاح!</h3>
+                    
+                    <div style="background: var(--cream); padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <p><strong>رقم الحجز:</strong> #${reservation.id.toString().slice(-6)}</p>
+                        <p><strong>العروسين:</strong> ${reservation.groomName} & ${reservation.brideName}</p>
+                        <p><strong>التاريخ:</strong> ${formatDate(reservation.eventDate)}</p>
+                        <p><strong>المبلغ المتبقي:</strong> ${formatCurrency(reservation.totalAmount - reservation.paidAmount)}</p>
+                    </div>
+            `;
+            
+            if (sentToBot1 || sentToBot2) {
+                html += `<h4>نتائج الإرسال:</h4>`;
+                
+                if (sentToBot1) {
+                    html += `<p style="color: ${success1 ? 'green' : 'red'};">
+                        ${success1 ? '✅' : '❌'} البوت الإداري: ${sendResults.bot1.message}
+                    </p>`;
+                }
+                
+                if (sentToBot2) {
+                    html += `<p style="color: ${success2 ? 'green' : 'red'};">
+                        ${success2 ? '✅' : '❌'} بوت المالية: ${sendResults.bot2.message}
+                    </p>`;
+                }
+                
+                const totalSent = (sentToBot1 ? 1 : 0) + (sentToBot2 ? 1 : 0);
+                html += `<p><strong>النتيجة:</strong> ${successCount}/${totalSent} إرسالات ناجحة</p>`;
+            }
+            
+            html += `</div>`;
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'تمت العملية',
+                html: html,
+                confirmButtonColor: 'var(--dark-red)',
+                confirmButtonText: 'تم'
+            });
+        }
+        
+        // تحميل الحجوزات
         function loadReservations() {
             const listElement = document.getElementById('reservationsList');
             
             if (reservations.length === 0) {
-                listElement.innerHTML = '<p class="text-center" style="color: #777; padding: 2rem;">لا توجد حجوزات سابقة</p>';
+                listElement.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--brown);">
+                        <i class="fas fa-calendar-times" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                        <p>لا توجد حجوزات مسجلة</p>
+                    </div>
+                `;
                 return;
             }
             
             let html = '';
-            reservations.slice(0, 5).forEach(res => {
+            reservations.slice(0, 10).forEach(res => {
                 const remaining = res.totalAmount - res.paidAmount;
-                const statusClass = remaining === 0 ? 'success' : 'warning';
-                const statusText = remaining === 0 ? 'مكتمل' : 'قيد الدفع';
+                const isPaid = remaining === 0;
                 
                 html += `
                     <div class="reservation-item">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <strong style="color: var(--wood);">#${res.id.toString().slice(-6)}</strong>
-                            <span style="background: ${statusClass === 'success' ? '#E8F5E9' : '#FFF3E0'}; 
-                                  color: ${statusClass === 'success' ? '#2E7D32' : '#ED6C02'}; 
-                                  padding: 2px 10px; border-radius: 20px; font-size: 0.9rem;">
-                                ${statusText}
+                        ${res.telegramSent && (res.telegramSent.bot1 || res.telegramSent.bot2) ? 
+                            '<span class="telegram-sent"><i class="fab fa-telegram"></i> Telegram</span>' : ''}
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div>
+                                <strong style="color: var(--dark-red);">#${res.id.toString().slice(-6)}</strong>
+                                <div style="font-size: 1.1rem; font-weight: 600; margin-top: 0.3rem;">
+                                    ${res.groomName} & ${res.brideName}
+                                </div>
+                            </div>
+                            <span style="background: ${isPaid ? '#E8F5E9' : '#FFF3E0'}; 
+                                  color: ${isPaid ? '#2E8B57' : '#ED6C02'}; 
+                                  padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                ${isPaid ? 'مسدد' : 'قيد الدفع'}
                             </span>
                         </div>
-                        <div>${res.groomName} & ${res.brideName}</div>
-                        <div style="color: #666; font-size: 0.9rem;">
-                            ${formatDate(res.eventDate)} | ${res.guestsCount} ضيف
+                        
+                        <div style="color: var(--brown); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                            <div><i class="far fa-calendar"></i> ${formatDate(res.eventDate)}</div>
+                            <div><i class="fas fa-door-open"></i> ${res.hall} | <i class="far fa-clock"></i> ${res.time}</div>
                         </div>
-                        <div style="margin-top: 0.5rem; display: flex; justify-content: space-between;">
-                            <span>${res.totalAmount.toLocaleString()} ريال</span>
-                            <span style="color: ${remaining > 0 ? 'var(--error)' : 'var(--success)'}">
-                                ${remaining > 0 ? 'متبقي: ' + remaining.toLocaleString() + ' ريال' : 'مسدد بالكامل'}
-                            </span>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; color: var(--dark-brown);">
+                                    ${formatCurrency(res.totalAmount)}
+                                </div>
+                                <div style="font-size: 0.85rem; color: ${remaining > 0 ? 'var(--dark-red)' : 'var(--green)'};">
+                                    ${remaining > 0 ? 'متبقي: ' + formatCurrency(remaining) : 'مسدد بالكامل'}
+                                </div>
+                            </div>
+                            <button onclick="viewReservationDetails(${res.id})" style="background: none; border: none; color: var(--gold); cursor: pointer;">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -749,76 +1371,291 @@
             
             listElement.innerHTML = html;
         }
-
-        // تحميل جميع الحجوزات كملف JSON
+        
+        // تصدير الحجوزات (بدون الأسماء)
         function downloadReservations() {
             if (reservations.length === 0) {
                 Swal.fire({
                     icon: 'info',
                     title: 'لا توجد حجوزات',
-                    text: 'لم يتم حفظ أي حجوزات بعد',
-                    confirmButtonColor: 'var(--wood)'
+                    text: 'لم يتم تسجيل أي حجوزات بعد',
+                    confirmButtonColor: 'var(--dark-red)'
                 });
                 return;
             }
             
-            const dataStr = JSON.stringify(reservations, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
+            // إنشاء نسخة بدون الأسماء لحماية الخصوصية
+            const exportData = reservations.map(res => ({
+                رقم_الحجز: res.id,
+                تاريخ_المناسبة: res.eventDate,
+                نوع_المناسبة: res.eventType,
+                القاعة: res.hall,
+                الوقت: res.time,
+                المبلغ_الكلي: res.totalAmount,
+                المبلغ_المدفوع: res.paidAmount,
+                المبلغ_المتبقي: res.totalAmount - res.paidAmount,
+                حالة_الدفع: (res.totalAmount - res.paidAmount) === 0 ? 'مسدد' : 'قيد الدفع',
+                وقت_التسجيل: res.timestamp,
+                تم_الإرسال_للبوت_الإداري: res.telegramSent?.bot1Success || false,
+                تم_الإرسال_لبوت_المالية: res.telegramSent?.bot2Success || false
+            }));
             
+            // تحويل إلى CSV
+            const headers = Object.keys(exportData[0]).join(',');
+            const rows = exportData.map(obj => Object.values(obj).join(','));
+            const csv = [headers, ...rows].join('\n');
+            
+            // تحميل الملف
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `nakhil-reservations-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = `حجوزات_قاعة_النخيل_${new Date().toISOString().split('T')[0]}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
             Swal.fire({
                 icon: 'success',
-                title: 'تم التحميل',
-                text: `تم تحميل ${reservations.length} حجز`,
-                confirmButtonColor: 'var(--wood)'
+                title: 'تم التصدير',
+                text: `تم تصدير ${reservations.length} حجز`,
+                confirmButtonColor: 'var(--dark-red)'
             });
         }
-
+        
+        // عرض تفاصيل الحجز
+        function viewReservationDetails(id) {
+            const reservation = reservations.find(r => r.id === id);
+            if (!reservation) return;
+            
+            const remaining = reservation.totalAmount - reservation.paidAmount;
+            
+            Swal.fire({
+                title: 'تفاصيل الحجز',
+                html: `
+                    <div style="text-align: right; direction: rtl;">
+                        <div style="background: var(--cream); padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <h3 style="color: var(--dark-red); margin-bottom: 1rem;">#${reservation.id.toString().slice(-6)}</h3>
+                            
+                            <div class="preview-item">
+                                <span class="preview-label">العروسين:</span>
+                                <span class="preview-value">${reservation.groomName} & ${reservation.brideName}</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">رقم الهاتف:</span>
+                                <span class="preview-value">${reservation.phoneNumber}</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">التاريخ:</span>
+                                <span class="preview-value">${formatDate(reservation.eventDate)}</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">القاعة:</span>
+                                <span class="preview-value">${reservation.hall}</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">الوقت:</span>
+                                <span class="preview-value">${reservation.time}</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">الإجمالي:</span>
+                                <span class="preview-value">${formatCurrency(reservation.totalAmount)}</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">المتبقي:</span>
+                                <span class="preview-value" style="color: ${remaining > 0 ? 'var(--dark-red)' : 'var(--green)'}">
+                                    ${formatCurrency(remaining)}
+                                </span>
+                            </div>
+                            ${reservation.details ? `
+                                <div class="preview-item">
+                                    <span class="preview-label">الملاحظات:</span>
+                                    <span class="preview-value">${reservation.details}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <button onclick="editReservation(${reservation.id})" class="btn-secondary" style="padding: 0.5rem;">
+                                <i class="fas fa-edit"></i> تعديل
+                            </button>
+                            <button onclick="deleteReservation(${reservation.id})" class="btn-secondary" style="padding: 0.5rem; background: #f8d7da; color: #721c24;">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                        </div>
+                    </div>
+                `,
+                width: 600,
+                showConfirmButton: false,
+                showCloseButton: true
+            });
+        }
+        
         // مسح النموذج
         function clearForm() {
             if (confirm('هل تريد مسح جميع البيانات المدخلة؟')) {
                 document.getElementById('reservationForm').reset();
                 
-                // إعادة تعيين التاريخ ليكون غداً
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                document.getElementById('eventDate').valueAsDate = tomorrow;
+                // إعادة تعيين القيم الافتراضية
+                document.getElementById('totalAmount').value = 2500000;
+                document.getElementById('paidAmount').value = 1000000;
+                document.getElementById('eventDate').valueAsDate = new Date();
                 
-                // إعادة تعيين بعض القيم
-                document.getElementById('totalAmount').value = 10000;
-                document.getElementById('paidAmount').value = 3000;
-                document.getElementById('guestsCount').value = 100;
+                // تفعيل خيارات الإرسال
+                document.getElementById('sendToBothBots').checked = true;
+                document.getElementById('sendToBot1').checked = true;
+                document.getElementById('sendToBot2').checked = true;
                 
-                // تحديث المعاينة
                 updatePreview();
                 updateRemainingAmount();
             }
         }
-
-        // (اختياري) دالة للطباعة
-        function printReservation() {
-            const printContent = `
-                <div style="text-align: center; padding: 20px; direction: rtl;">
-                    <h1 style="color: var(--wood);">قاعة النخيل للاحتفالات</h1>
-                    <h2>إيصال حجز</h2>
-                    <div style="text-align: right; margin: 20px auto; max-width: 500px;">
-                        ${document.getElementById('previewContent').innerHTML}
+        
+        // إدارة الحجوزات
+        function manageReservations() {
+            Swal.fire({
+                title: 'إدارة الحجوزات',
+                html: `
+                    <div style="text-align: right; direction: rtl;">
+                        <p>إجمالي الحجوزات: <strong>${reservations.length}</strong></p>
+                        <p>الحجوزات النشطة: <strong>${reservations.filter(r => r.status === 'active').length}</strong></p>
+                        <p>إجمالي الإيرادات: <strong>${formatCurrency(reservations.reduce((sum, r) => sum + r.totalAmount, 0))}</strong></p>
+                        <p>المبالغ المعلقة: <strong>${formatCurrency(reservations.reduce((sum, r) => sum + (r.totalAmount - r.paidAmount), 0))}</strong></p>
+                        
+                        <hr style="margin: 1rem 0;">
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                            <button onclick="downloadFullReport()" class="btn-secondary" style="padding: 0.7rem;">
+                                <i class="fas fa-file-excel"></i> تقرير مفصل
+                            </button>
+                            <button onclick="clearAllReservations()" class="btn-secondary" style="padding: 0.7rem; background: #f8d7da; color: #721c24;">
+                                <i class="fas fa-broom"></i> تنظيف الأرشيف
+                            </button>
+                        </div>
                     </div>
-                    <p style="margin-top: 30px;">شكراً لاختياركم قاعة النخيل</p>
-                </div>
-            `;
+                `,
+                width: 500,
+                showConfirmButton: false,
+                showCloseButton: true
+            });
+        }
+        
+        // تقرير مفصل
+        function downloadFullReport() {
+            if (reservations.length === 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'لا توجد بيانات',
+                    confirmButtonColor: 'var(--dark-red)'
+                });
+                return;
+            }
             
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(printContent);
-            printWindow.document.close();
-            printWindow.print();
+            // إنشاء تقرير مفصل
+            const report = reservations.map(res => ({
+                'رقم الحجز': res.id,
+                'تاريخ التسجيل': new Date(res.timestamp).toLocaleString('ar-IQ'),
+                'تاريخ المناسبة': formatDate(res.eventDate),
+                'نوع المناسبة': res.eventType,
+                'القاعة': res.hall,
+                'الوقت': res.time,
+                'المبلغ الكلي': res.totalAmount,
+                'المبلغ المدفوع': res.paidAmount,
+                'المبلغ المتبقي': res.totalAmount - res.paidAmount,
+                'حالة الدفع': (res.totalAmount - res.paidAmount) === 0 ? 'مسدد' : 'قيد الدفع',
+                'تم الإرسال للإدارة': res.telegramSent?.bot1Success ? 'نعم' : 'لا',
+                'تم الإرسال للمالية': res.telegramSent?.bot2Success ? 'نعم' : 'لا'
+            }));
+            
+            // تحويل إلى JSON
+            const json = JSON.stringify(report, null, 2);
+            const blob = new Blob(['\uFEFF' + json], { type: 'application/json;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `تقرير_حجوزات_قاعة_النخيل_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // اختبار الاتصال بالبوتات
+        function testTelegramConnection() {
+            Swal.fire({
+                title: 'جاري اختبار الاتصال...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'وضع الاختبار',
+                    text: 'لتفعيل الإرسال الفعلي، يرجى إضافة التوكنات في إعدادات الكود',
+                    confirmButtonColor: 'var(--dark-red)'
+                });
+            }, 1000);
+        }
+        
+        // حذف الحجز
+        function deleteReservation(id) {
+            Swal.fire({
+                title: 'تأكيد الحذف',
+                text: 'هل أنت متأكد من حذف هذا الحجز؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: 'var(--dark-red)',
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    reservations = reservations.filter(r => r.id !== id);
+                    localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
+                    updateStatistics();
+                    loadReservations();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم الحذف',
+                        text: 'تم حذف الحجز بنجاح',
+                        confirmButtonColor: 'var(--dark-red)'
+                    });
+                }
+            });
+        }
+        
+        // مسح جميع الحجوزات
+        function clearAllReservations() {
+            Swal.fire({
+                title: 'تحذير!',
+                text: 'سيتم حذف جميع الحجوزات بشكل دائم. هل أنت متأكد؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: 'var(--dark-red)',
+                confirmButtonText: 'نعم، امسح الكل',
+                cancelButtonText: 'إلغاء',
+                input: 'text',
+                inputLabel: 'اكتب "تأكيد" للمتابعة',
+                inputPlaceholder: 'تأكيد'
+            }).then((result) => {
+                if (result.isConfirmed && result.value === 'تأكيد') {
+                    localStorage.removeItem('nakhilReservations');
+                    reservations = [];
+                    updateStatistics();
+                    loadReservations();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم التنظيف',
+                        text: 'تم حذف جميع الحجوزات',
+                        confirmButtonColor: 'var(--dark-red)'
+                    });
+                }
+            });
         }
     </script>
 </body>
