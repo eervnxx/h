@@ -3,2442 +3,1192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قاعة النخيل للمناسبات - نظام الحجوزات</title>
+    <title>قاعة النخيل للمناسبات - نظام إدارة الحجوزات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- خط النسخ للعربية -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2c5f2d;
+            --primary-light: #4a8c4a;
+            --secondary: #d4af37;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: #f5f7fa;
+            color: var(--dark);
             line-height: 1.6;
+            padding-bottom: 50px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 15px;
         }
         
-        /* ترويسة الموقع - ألوان بنية فاتحة */
+        /* ترويسة الموقع */
         header {
-            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
             padding: 20px 0;
-            text-align: center;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         
-        .logo {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+        .header-content {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        
-        .logo i {
-            color: #FFD700;
-        }
-        
-        .tagline {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-top: 3px;
-        }
-        
-        /* التنقل - ألوان بنية */
-        nav {
-            background-color: white;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-            display: flex;
-            justify-content: center;
-            gap: 15px;
             flex-wrap: wrap;
         }
         
-        .nav-btn {
-            background: linear-gradient(to right, #A0522D, #D2691E);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        .logo {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-weight: 500;
         }
         
-        .nav-btn:hover {
-            background: linear-gradient(to right, #8B4513, #A0522D);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.2);
+        .logo i {
+            font-size: 2.5rem;
+            margin-left: 15px;
+            color: var(--secondary);
         }
         
-        .nav-btn.active {
-            background: linear-gradient(to right, #8B4513, #A0522D);
-            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+        .logo h1 {
+            font-size: 1.8rem;
         }
         
-        /* الأقسام */
-        .section {
+        .logo p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* التنقل بين الصفحات */
+        .nav-tabs {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tab:hover {
+            background-color: var(--gray-light);
+        }
+        
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        /* محتوى الصفحات */
+        .page {
             display: none;
             background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
-        .section.active {
+        .page.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.5s ease;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .section-title {
-            color: #8B4513;
-            border-bottom: 2px solid #D2691E;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            font-size: 1.6rem;
+        .page-title {
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray-light);
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 600;
         }
         
-        /* نموذج الحجز */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+        .page-title i {
+            margin-left: 10px;
+            color: var(--secondary);
+        }
+        
+        /* تصميم النماذج */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px 20px;
         }
         
         .form-group {
-            margin-bottom: 16px;
+            flex: 1;
+            min-width: 250px;
+            padding: 0 10px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            flex: 0 0 100%;
         }
         
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #8B4513;
-            font-size: 0.95rem;
+            color: var(--dark);
+        }
+        
+        .required::after {
+            content: " *";
+            color: var(--danger);
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 0.95rem;
-            transition: border 0.3s;
-            font-family: 'Noto Naskh Arabic', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
         
         input:focus, select:focus, textarea:focus {
-            border-color: #D2691E;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
         }
         
-        /* خيارات القاعة */
+        /* أزرار اختيار القاعة */
         .hall-options {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 8px;
+            gap: 10px;
         }
         
         .hall-option {
             flex: 1;
-            min-width: 140px;
+            min-width: 200px;
         }
         
-        .hall-option input {
+        .hall-option input[type="checkbox"] {
             display: none;
         }
         
         .hall-option label {
             display: block;
-            padding: 12px;
-            background-color: #f8f9fa;
-            border: 2px solid #ddd;
+            padding: 15px;
+            background-color: var(--gray-light);
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: normal;
-            margin: 0;
+            transition: all 0.3s;
+            border: 2px solid transparent;
         }
         
-        .hall-option input:checked + label {
-            background-color: #F5DEB3;
-            border-color: #D2691E;
-            color: #8B4513;
-            font-weight: 600;
-        }
-        
-        /* المبالغ المالية */
-        .amount-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 16px;
-        }
-        
-        .amount-box {
-            background-color: #f8f9fa;
-            padding: 16px;
-            border-radius: 8px;
-            border-left: 4px solid #D2691E;
-        }
-        
-        .amount-label {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 4px;
-        }
-        
-        .amount-value {
-            font-size: 1.3rem;
+        .hall-option input[type="checkbox"]:checked + label {
+            background-color: rgba(44, 95, 45, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
             font-weight: bold;
-            color: #8B4513;
-        }
-        
-        .currency {
-            color: #D2691E;
-            font-size: 0.9rem;
-        }
-        
-        /* شريط حالة القاعة */
-        .hall-status {
-            display: flex;
-            gap: 8px;
-            margin: 16px 0;
-            flex-wrap: wrap;
         }
         
         .hall-badge {
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-weight: 600;
-            background-color: #e9ecef;
-            color: #495057;
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 20px;
             font-size: 0.85rem;
+            margin-top: 5px;
         }
         
-        .hall-badge.active {
-            background-color: #8B4513;
-            color: white;
-        }
-        
-        /* التقويم */
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            margin-top: 16px;
-        }
-        
-        .calendar-header {
-            background-color: #8B4513;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: 600;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        
-        .calendar-day {
-            padding: 12px;
-            text-align: center;
-            background-color: #f8f9fa;
-            border-radius: 4px;
-            min-height: 70px;
-            position: relative;
-        }
-        
-        .calendar-day.reserved {
-            background-color: #F5DEB3;
-            border: 2px solid #D2691E;
-        }
-        
-        .calendar-day.reserved::after {
-            content: "محجوز";
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            font-size: 0.65rem;
-            background-color: #D2691E;
-            color: white;
-            padding: 2px 4px;
-            border-radius: 2px;
-        }
-        
-        .calendar-day.reserved.hall1::after {
-            content: "قاعة 1";
-            background-color: #8B4513;
-        }
-        
-        .calendar-day.reserved.hall2::after {
-            content: "قاعة 2";
-            background-color: #A0522D;
-        }
-        
-        .calendar-day.reserved.both::after {
-            content: "1/2";
-            background-color: #D2691E;
-        }
-        
-        .calendar-day.today {
-            border: 2px solid #D2691E;
-            background-color: #F5DEB3;
-        }
-        
-        .day-number {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #8B4513;
-        }
-        
-        /* صفحة المعاينة المحسنة للطباعة - صفحة A4 واحدة احترافية */
-        .preview-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .preview-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 21cm; /* عرض A4 */
-            min-height: 29.7cm; /* ارتفاع A4 */
-            max-height: 29.7cm;
-            margin: 0 auto;
-            position: relative;
-            border: 1px solid #ddd;
-            overflow: hidden;
-            box-sizing: border-box;
-            font-family: 'Noto Naskh Arabic', serif;
-        }
-        
-        /* أنماط جديدة للمعاينة المحسنة */
-        .preview-header {
-            text-align: center;
+        /* حقل تحديد الكل */
+        .select-all {
             margin-bottom: 15px;
-            padding: 25px 30px 15px;
-            border-bottom: 3px solid #8B4513;
-            position: relative;
-            background: linear-gradient(to bottom, #FFF8F0, white);
         }
         
-        .preview-logo {
-            font-size: 28px;
-            color: #8B4513;
-            margin-bottom: 8px;
+        /* أزرار المبلغ */
+        .amount-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-weight: 700;
-        }
-        
-        .preview-title {
-            font-size: 24px;
-            color: #8B4513;
-            margin-bottom: 6px;
-            font-weight: 700;
-        }
-        
-        .preview-header-details {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 15px;
+            gap: 15px;
             flex-wrap: wrap;
         }
         
-        .header-detail {
-            background: rgba(139, 69, 19, 0.1);
-            padding: 8px 15px;
-            border-radius: 6px;
-            border: 1px solid rgba(139, 69, 19, 0.2);
+        .amount-item {
+            flex: 1;
+            min-width: 200px;
         }
         
-        .detail-label {
-            font-weight: 600;
-            color: #8B4513;
-            font-size: 12px;
-            margin-left: 5px;
+        .amount-item input {
+            background-color: var(--gray-light);
         }
         
-        .detail-value {
-            font-weight: 700;
-            color: #333;
-            font-size: 13px;
-        }
-        
-        .preview-content {
-            padding: 0 30px;
-            height: calc(100% - 250px);
-            overflow: hidden;
-        }
-        
-        .section-subtitle {
-            color: #8B4513;
-            border-bottom: 2px solid #D2691E;
-            padding-bottom: 10px;
-            margin: 20px 0 15px;
-            font-size: 18px;
+        /* أزرار الإجراءات */
+        .action-buttons {
             display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .info-section {
-            margin-bottom: 25px;
-        }
-        
-        .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            justify-content: center;
             gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .preview-item {
-            margin-bottom: 15px;
-        }
-        
-        .preview-label {
-            font-weight: 700;
-            color: #8B4513;
-            margin-bottom: 5px;
-            font-size: 14px;
-            padding-right: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .preview-value {
-            padding: 12px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            border-right: 3px solid #D2691E;
-            font-size: 15px;
-            min-height: 45px;
-            display: flex;
-            align-items: center;
-            line-height: 1.5;
-            font-weight: 500;
-        }
-        
-        /* أنماط الدفع المحسنة */
-        .payment-summary {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .payment-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #D2691E;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        
-        .payment-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .payment-item.total {
-            border-left-color: #8B4513;
-        }
-        
-        .payment-item.paid {
-            border-left-color: #28a745;
-        }
-        
-        .payment-item.remaining {
-            border-left-color: #dc3545;
-        }
-        
-        .payment-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        
-        .payment-amount {
-            font-size: 18px;
-            font-weight: 700;
-            color: #8B4513;
-        }
-        
-        .payment-progress {
-            margin-top: 25px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        
-        .progress-bar {
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #28a745, #20c997);
-            width: 0%;
-            transition: width 1s ease;
-        }
-        
-        .progress-text {
-            text-align: center;
-            font-weight: 600;
-            color: #8B4513;
-            font-size: 14px;
-        }
-        
-        /* الملاحظات المحسنة */
-        .notes-box {
-            min-height: 80px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border: 1px dashed #D2691E;
-            font-style: italic;
-        }
-        
-        .no-notes {
-            color: #999;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        /* الشروط والأحكام المعدلة */
-        .terms-box {
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .terms-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        
-        .term-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 8px;
-            background: rgba(139, 69, 19, 0.05);
-            border-radius: 6px;
-        }
-        
-        .term-item i {
-            color: #28a745;
-            margin-top: 3px;
-        }
-        
-        /* منطقة التوقيع المعدلة */
-        .signature-area {
-            margin-top: 25px;
-            padding: 20px 30px;
-            border-top: 3px solid #D2691E;
-            text-align: center;
-            position: absolute;
-            bottom: 70px;
-            left: 0;
-            right: 0;
-            background-color: white;
-        }
-        
-        .signature-statement {
-            text-align: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            border: 1px solid #eee;
-        }
-        
-        .signature-fields {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin-bottom: 20px;
-        }
-        
-        .signature-field {
-            text-align: center;
-        }
-        
-        .field-label {
-            font-weight: 600;
-            color: #8B4513;
-            margin-bottom: 10px;
-        }
-        
-        .signature-line {
-            width: 200px;
-            height: 1px;
-            background-color: #333;
-            margin: 10px auto;
-        }
-        
-        .field-value {
-            margin-top: 10px;
-            font-size: 14px;
-            min-height: 25px;
-        }
-        
-        .acknowledgment {
-            text-align: center;
-            padding: 15px;
-            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(210, 105, 30, 0.1));
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid rgba(139, 69, 19, 0.2);
-        }
-        
-        .acknowledgment i {
-            color: #28a745;
-            margin-left: 5px;
-        }
-        
-        /* معلومات الاتصال المعدلة */
-        .footer-info {
-            text-align: center;
-            padding: 10px 30px;
-            font-size: 11px;
-            color: #666;
-            border-top: 1px solid #eee;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #f8f9fa;
-        }
-        
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-        }
-        
-        .contact-item i {
-            color: #8B4513;
-        }
-        
-        .copyright {
-            text-align: center;
-            font-size: 11px;
-            color: #666;
-            margin-top: 10px;
-        }
-        
-        /* الأزرار */
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
+            margin-top: 30px;
             flex-wrap: wrap;
         }
         
         .btn {
-            padding: 12px 24px;
+            padding: 12px 30px;
             border: none;
             border-radius: 6px;
-            cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            font-family: 'Noto Naskh Arabic', sans-serif;
         }
         
         .btn-primary {
-            background: linear-gradient(to right, #8B4513, #D2691E);
+            background-color: var(--primary);
             color: white;
         }
         
         .btn-primary:hover {
-            background: linear-gradient(to right, #A0522D, #8B4513);
+            background-color: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(139, 69, 19, 0.25);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .btn-secondary {
-            background-color: #6c757d;
-            color: white;
+            background-color: var(--gray-light);
+            color: var(--dark);
         }
         
         .btn-secondary:hover {
-            background-color: #545b62;
-            transform: translateY(-2px);
+            background-color: #dde0e3;
         }
         
         .btn-success {
-            background-color: #28a745;
+            background-color: var(--success);
             color: white;
         }
         
         .btn-success:hover {
             background-color: #218838;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
+        /* صفحة المعاينة */
+        .preview-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .btn-danger:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
+        .preview-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--secondary);
         }
         
-        /* قائمة الحجوزات */
-        .reservations-list {
-            margin-top: 16px;
+        .preview-header h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
         }
         
-        .reservation-item {
-            background-color: #f8f9fa;
+        .preview-logo {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .preview-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-section {
+            padding: 15px;
+            background-color: #f9f9f9;
             border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 4px solid #D2691E;
-            transition: transform 0.3s;
-            position: relative;
+            border-right: 4px solid var(--primary);
         }
         
-        .reservation-item:hover {
-            transform: translateX(-4px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-        }
-        
-        .reservation-header {
+        .detail-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
             align-items: center;
+            gap: 8px;
         }
         
-        .reservation-hall {
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-        
-        .hall-1 {
-            background-color: #8B4513;
-        }
-        
-        .hall-2 {
-            background-color: #A0522D;
-        }
-        
-        .hall-both {
-            background-color: #D2691E;
-        }
-        
-        /* زر الحذف في قائمة الحجوزات */
-        .delete-btn {
-            position: absolute;
-            left: 12px;
-            top: 12px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            transition: background-color 0.3s;
-            font-family: 'Noto Naskh Arabic', sans-serif;
-        }
-        
-        .delete-btn:hover {
-            background-color: #c82333;
-        }
-        
-        /* تذييل الصفحة */
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 25px;
-            color: #666;
-            border-top: 1px solid #eee;
-            font-size: 0.85rem;
-        }
-        
-        /* أنماط لحالة الدفع */
-        .payment-status {
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        
-        .payment-status.complete {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .payment-status.partial {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .payment-status.overpaid {
-            background: #cce5ff;
-            color: #004085;
-        }
-        
-        /* إعدادات الطباعة المحسنة لورق A4 - صفحة واحدة فقط */
-        @media print {
-            /* إخفاء جميع العناصر ما عدا قسم المعاينة */
-            body * {
-                visibility: hidden !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                font-family: 'Noto Naskh Arabic', serif !important;
-            }
-            
-            /* إظهار قسم المعاينة فقط */
-            .preview-section, 
-            .preview-section * {
-                visibility: visible !important;
-            }
-            
-            /* إخفاء العناصر غير المرغوب فيها في الطباعة */
-            .no-print, 
-            .buttons, 
-            nav, 
-            header, 
-            footer, 
-            .section-title {
-                display: none !important;
-            }
-            
-            /* تصميم صفحة الطباعة - صفحة A4 واحدة */
-            body {
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                width: 21cm !important;
-                height: 29.7cm !important;
-                font-family: 'Noto Naskh Arabic', serif !important;
-            }
-            
-            .preview-section {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                box-shadow: none !important;
-                border: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                background: white !important;
-                display: block !important;
-            }
-            
-            .container {
-                width: 100% !important;
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            
-            .preview-card {
-                width: 21cm !important;
-                min-height: 29.7cm !important;
-                max-height: 29.7cm !important;
-                margin: 0 auto !important;
-                padding: 0 !important;
-                box-shadow: none !important;
-                border: 1px solid #ccc !important;
-                border-radius: 0 !important;
-                overflow: hidden !important;
-                page-break-inside: avoid !important;
-                page-break-after: avoid !important;
-                position: relative !important;
-                font-family: 'Noto Naskh Arabic', serif !important;
-            }
-            
-            /* إصلاح مشكلة الصفحة البيضاء */
-            @page {
-                size: A4 portrait;
-                margin: 1cm;
-            }
-            
-            /* تحسين التنسيق للطباعة */
-            .preview-header {
-                margin: 0 !important;
-                padding: 1.2cm 1.5cm 0.6cm !important;
-                border-bottom: 2px solid #8B4513 !important;
-            }
-            
-            .preview-content {
-                padding: 0 1.5cm !important;
-                height: auto !important;
-                margin-bottom: 1.5cm !important;
-            }
-            
-            .preview-logo {
-                font-size: 22pt !important;
-                margin-bottom: 0.3cm !important;
-            }
-            
-            .preview-title {
-                font-size: 20pt !important;
-                margin-bottom: 0.2cm !important;
-            }
-            
-            .preview-header-details {
-                gap: 15px !important;
-            }
-            
-            .section-subtitle {
-                font-size: 14pt !important;
-                margin: 0.5cm 0 0.3cm !important;
-            }
-            
-            .preview-grid {
-                margin-bottom: 0.5cm !important;
-                gap: 0.5cm !important;
-            }
-            
-            .preview-label {
-                font-size: 11pt !important;
-                margin-bottom: 0.2cm !important;
-            }
-            
-            .preview-value {
-                font-size: 10pt !important;
-                padding: 0.3cm !important;
-                min-height: 0.8cm !important;
-                border-right: 2px solid #D2691E !important;
-            }
-            
-            .payment-summary {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 0.4cm !important;
-                margin: 0.5cm 0 !important;
-            }
-            
-            .payment-item {
-                padding: 0.4cm !important;
-            }
-            
-            .payment-label {
-                font-size: 10pt !important;
-            }
-            
-            .payment-amount {
-                font-size: 12pt !important;
-            }
-            
-            .payment-progress {
-                padding: 0.4cm !important;
-                margin-top: 0.5cm !important;
-            }
-            
-            .terms-list {
-                grid-template-columns: 1fr !important;
-            }
-            
-            .terms-box {
-                padding: 0.4cm !important;
-                margin: 0.5cm 0 !important;
-            }
-            
-            .signature-area {
-                margin-top: 0.5cm !important;
-                padding: 0.6cm 1.5cm !important;
-                border-top: 2px solid #D2691E !important;
-                position: absolute !important;
-                bottom: 1.2cm !important;
-            }
-            
-            .signature-fields {
-                gap: 1cm !important;
-            }
-            
-            .signature-line {
-                width: 6cm !important;
-            }
-            
-            .footer-info {
-                padding: 0.3cm 1.5cm !important;
-                font-size: 8pt !important;
-                position: absolute !important;
-                bottom: 0 !important;
-            }
-            
-            .contact-info {
-                gap: 15px !important;
-            }
-            
-            /* ضبط الألوان للطباعة */
-            .preview-value {
-                background-color: white !important;
-                border: 1px solid #ddd !important;
-            }
-            
-            .preview-label, .preview-title, .preview-logo {
-                color: black !important;
-            }
-            
-            /* منع تقسيم المحتوى بين صفحات */
-            .preview-card {
-                break-inside: avoid;
-            }
-        }
-        
-        /* نمط لتحميل PDF */
-        .pdf-download-btn {
-            background: linear-gradient(to right, #d9534f, #c9302c);
-        }
-        
-        .pdf-download-btn:hover {
-            background: linear-gradient(to right, #c9302c, #ac2925);
-        }
-        
-        /* تحسينات عامة */
-        .reservation-id {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 600;
-        }
-        
-        .no-reservations-msg {
-            text-align: center;
-            padding: 30px;
-            color: #666;
+        .detail-content {
             font-size: 1.1rem;
         }
         
-        .calendar-month-title {
-            text-align: center;
-            font-size: 1.4rem;
-            color: #8B4513;
-            margin: 15px 0;
+        .hall-preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .hall-tag {
+            padding: 5px 15px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .signature-area {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .signature-box {
+            height: 100px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .signature-box:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .terms {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .terms h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .terms ul {
+            padding-right: 20px;
+        }
+        
+        .terms li {
+            margin-bottom: 8px;
+        }
+        
+        /* قائمة الحجوزات */
+        .reservations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .reservations-table th, .reservations-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .reservations-table th {
+            background-color: var(--primary);
+            color: white;
             font-weight: 600;
         }
         
-        /* التجاوب مع الشاشات */
-        @media (max-width: 768px) {
-            .form-grid, .preview-grid, .payment-grid {
-                grid-template-columns: 1fr;
+        .reservations-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .hall-badge-list {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 5px;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-box input {
+            flex: 1;
+        }
+        
+        /* التقويم */
+        .calendar {
+            margin-top: 20px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #ddd;
+            border: 1px solid #ddd;
+        }
+        
+        .calendar-day {
+            background-color: white;
+            padding: 10px;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .calendar-day-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--gray-light);
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .event {
+            background-color: var(--primary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .event.hall1 {
+            background-color: #4a8c4a;
+        }
+        
+        .event.hall2 {
+            background-color: #d4af37;
+            color: var(--dark);
+        }
+        
+        .event.both {
+            background: linear-gradient(to right, #4a8c4a 50%, #d4af37 50%);
+            color: white;
+        }
+        
+        /* الطباعة */
+        @media print {
+            body * {
+                visibility: hidden;
             }
             
-            .payment-summary {
-                grid-template-columns: 1fr;
+            .preview-container, .preview-container * {
+                visibility: visible;
             }
             
-            .terms-list {
-                grid-template-columns: 1fr;
-            }
-            
-            .signature-fields {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .hall-options {
-                flex-direction: column;
-            }
-            
-            nav {
-                flex-direction: column;
-            }
-            
-            .buttons {
-                flex-direction: column;
-            }
-            
-            .btn {
+            .preview-container {
+                position: absolute;
+                left: 0;
+                top: 0;
                 width: 100%;
+                box-shadow: none;
             }
             
-            .preview-card {
-                width: 100%;
-                min-height: auto;
-                max-height: none;
-            }
-            
-            .signature-area {
-                position: relative;
-                bottom: auto;
-            }
-            
-            .footer-info {
-                position: relative;
-                bottom: auto;
-            }
-            
-            .contact-info {
-                flex-direction: column;
-                gap: 8px;
+            .no-print {
+                display: none !important;
             }
         }
+        
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            .nav-tab {
+                flex: 1 0 50%;
+            }
+            
+            .form-group {
+                flex: 0 0 100%;
+            }
+            
+            .hall-option {
+                flex: 0 0 100%;
+            }
+            
+            .amount-item {
+                flex: 0 0 100%;
+            }
+            
+            .preview-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-body {
+                grid-template-columns: repeat(7, 1fr);
+                font-size: 0.8rem;
+            }
+            
+            .calendar-day {
+                min-height: 70px;
+                padding: 5px;
+            }
+        }
+        
+        /* رسائل التنبيه */
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+        
+        /* العلامات المائية */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(0, 0, 0, 0.1);
+            font-size: 1.5rem;
+            z-index: -1;
+            transform: rotate(-30deg);
+        }
     </style>
-    <!-- إضافة مكتبة html2pdf.js لتحويل HTML إلى PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-    <header class="no-print">
-        <div class="container">
+    <!-- ترويسة الموقع -->
+    <header>
+        <div class="container header-content">
             <div class="logo">
-                <i class="fas fa-palm-tree"></i>
-                <span>قاعة النخيل للمناسبات</span>
+                <i class="fas fa-palette"></i>
+                <div>
+                    <h1>قاعة النخيل للمناسبات</h1>
+                    <p>نظام إدارة الحجوزات الإلكتروني</p>
+                </div>
             </div>
-            <p class="tagline">نظام إدارة الحجوزات - أجمل لحظاتكم تبدأ معنا</p>
+            <div class="date-display" id="currentDate">
+                <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
+            </div>
         </div>
     </header>
     
     <div class="container">
-        <nav class="no-print">
-            <button class="nav-btn active" data-section="booking">
-                <i class="fas fa-calendar-plus"></i> نموذج حجز جديد
-            </button>
-            <button class="nav-btn" data-section="preview">
+        <!-- أشرطة التنقل -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-page="booking-form">
+                <i class="fas fa-calendar-plus"></i> حجز جديد
+            </div>
+            <div class="nav-tab" data-page="preview-page">
                 <i class="fas fa-eye"></i> معاينة الحجز
-            </button>
-            <button class="nav-btn" data-section="calendar">
-                <i class="fas fa-calendar-alt"></i> تقويم الحجوزات
-            </button>
-            <button class="nav-btn" data-section="reservations">
+            </div>
+            <div class="nav-tab" data-page="reservations-list">
                 <i class="fas fa-list"></i> قائمة الحجوزات
-            </button>
-        </nav>
+            </div>
+            <div class="nav-tab" data-page="calendar-page">
+                <i class="fas fa-calendar-alt"></i> تقويم الحجوزات
+            </div>
+        </div>
         
-        <!-- قسم نموذج الحجز -->
-        <section id="booking" class="section active">
-            <h2 class="section-title"><i class="fas fa-file-contract"></i> نموذج حجز قاعة النخيل</h2>
-            
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="clientName">اسم السيد *</label>
-                    <input type="text" id="clientName" placeholder="أدخل الاسم الثلاثي">
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">رقم الهاتف *</label>
-                    <input type="tel" id="phone" placeholder="07XX-XXX-XXXX">
-                </div>
-                
-                <div class="form-group">
-                    <label for="eventDate">تاريخ الحفل *</label>
-                    <input type="date" id="eventDate">
-                </div>
-                
-                <div class="form-group">
-                    <label>نوع المناسبة *</label>
-                    <select id="eventType">
-                        <option value="">اختر نوع المناسبة</option>
-                        <option value="عرس">عرس</option>
-                        <option value="خطوبة">خطوبة</option>
-                        <option value="حفلة خاصة">حفلة خاصة</option>
-                        <option value="عيد ميلاد">عيد ميلاد</option>
-                        <option value="مناسبة أخرى">مناسبة أخرى</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>اختيار القاعة *</label>
-                <div class="hall-options">
-                    <div class="hall-option">
-                        <input type="checkbox" id="hall1" value="hall1">
-                        <label for="hall1">القاعة رقم 1 (300 شخص)</label>
-                    </div>
-                    <div class="hall-option">
-                        <input type="checkbox" id="hall2" value="hall2">
-                        <label for="hall2">القاعة رقم 2 (250 شخص)</label>
-                    </div>
-                    <div class="hall-option">
-                        <input type="checkbox" id="hallBoth" value="both">
-                        <label for="hallBoth">حجز القاعتين معاً</label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="totalAmount">المبلغ الكلي (دينار عراقي) *</label>
-                <input type="number" id="totalAmount" placeholder="أدخل المبلغ الكلي">
-            </div>
-            
-            <div class="amount-grid">
-                <div class="amount-box">
-                    <div class="amount-label">المبلغ الكلي</div>
-                    <div class="amount-value"><span id="totalDisplay">0</span> <span class="currency">دينار عراقي</span></div>
-                </div>
-                
-                <div class="amount-box">
-                    <div class="amount-label">المبلغ الواصل</div>
-                    <div class="amount-value"><span id="paidDisplay">0</span> <span class="currency">دينار عراقي</span></div>
-                </div>
-                
-                <div class="amount-box">
-                    <div class="amount-label">المبلغ المتبقي</div>
-                    <div class="amount-value"><span id="remainingDisplay">0</span> <span class="currency">دينار عراقي</span></div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="paidAmount">المبلغ الواصل (دينار عراقي) *</label>
-                <input type="number" id="paidAmount" placeholder="أدخل المبلغ الواصل">
-            </div>
-            
-            <div class="form-group">
-                <label for="notes">ملاحظات إضافية</label>
-                <textarea id="notes" rows="3" placeholder="أي ملاحظات إضافية أو طلبات خاصة..."></textarea>
-            </div>
-            
-            <div class="buttons">
-                <button class="btn btn-primary" id="previewBtn">
-                    <i class="fas fa-eye"></i> معاينة الحجز
-                </button>
-                <button class="btn btn-success" id="saveBtn">
-                    <i class="fas fa-save"></i> حفظ الحجز
-                </button>
-                <button class="btn btn-secondary" id="resetBtn">
-                    <i class="fas fa-redo"></i> تفريغ الحقول
-                </button>
-            </div>
-        </section>
+        <!-- رسائل التنبيه -->
+        <div id="alertMessage" class="alert"></div>
         
-        <!-- قسم معاينة الحجز - صفحة A4 واحدة ديناميكية احترافية -->
-        <section id="preview" class="section preview-section">
-            <h2 class="section-title no-print"><i class="fas fa-print"></i> معاينة وتوثيق الحجز</h2>
+        <!-- نموذج الحجز -->
+        <div id="booking-form" class="page active">
+            <h2 class="page-title"><i class="fas fa-edit"></i> نموذج حجز جديد</h2>
             
-            <div class="preview-card" id="previewContent">
+            <form id="reservationForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerName" class="required">اسم السيد المحجِز</label>
+                        <input type="text" id="customerName" required placeholder="أدخل الاسم الكامل">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="required">رقم الهاتف</label>
+                        <input type="tel" id="phone" required placeholder="مثال: 07701234567">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="groomName">اسم العريس</label>
+                        <input type="text" id="groomName" placeholder="لحفلات الزفاف">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="brideName">اسم العروس</label>
+                        <input type="text" id="brideName" placeholder="لحفلات الزفاف">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventDate" class="required">تاريخ الحفل</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventType" class="required">نوع المناسبة</label>
+                        <select id="eventType" required>
+                            <option value="">اختر نوع المناسبة</option>
+                            <option value="عرس">عرس</option>
+                            <option value="خطوبة">خطوبة</option>
+                            <option value="حفلة خاصة">حفلة خاصة</option>
+                            <option value="عيد ميلاد">عيد ميلاد</option>
+                            <option value="مناسبة رسمية">مناسبة رسمية</option>
+                            <option value="مؤتمر">مؤتمر</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventTime" class="required">وقت المناسبة</label>
+                        <select id="eventTime" required>
+                            <option value="">اختر وقت المناسبة</option>
+                            <option value="صباحي">صباحي</option>
+                            <option value="عصري">عصري</option>
+                            <option value="مسائي">مسائي</option>
+                            <option value="كامل اليوم">كامل اليوم</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">القاعة المطلوبة</label>
+                        <div class="select-all">
+                            <input type="checkbox" id="selectAllHalls">
+                            <label for="selectAllHalls">تحديد الكل (حجز القاعتين معاً)</label>
+                        </div>
+                        <div class="hall-options">
+                            <div class="hall-option">
+                                <input type="checkbox" id="hall1" name="hall" value="القاعة رقم 1">
+                                <label for="hall1">
+                                    القاعة رقم 1
+                                    <div class="hall-badge">سعة 300 شخص</div>
+                                </label>
+                            </div>
+                            <div class="hall-option">
+                                <input type="checkbox" id="hall2" name="hall" value="القاعة رقم 2">
+                                <label for="hall2">
+                                    القاعة رقم 2
+                                    <div class="hall-badge">سعة 250 شخص</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalAmount" class="required">المبلغ الكلي (دينار عراقي)</label>
+                        <input type="number" id="totalAmount" required placeholder="أدخل المبلغ الكلي">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paidAmount" class="required">المبلغ الواصل (دينار عراقي)</label>
+                        <input type="number" id="paidAmount" required placeholder="أدخل المبلغ المدفوع">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="remainingAmount">المبلغ المتبقي (دينار عراقي)</label>
+                        <input type="number" id="remainingAmount" readonly placeholder="سيتم حسابه تلقائياً">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="notes">ملاحظات إضافية</label>
+                        <textarea id="notes" rows="4" placeholder="أي ملاحظات أو متطلبات خاصة"></textarea>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-secondary" id="clearForm">
+                        <i class="fas fa-eraser"></i> مسح النموذج
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitForm">
+                        <i class="fas fa-save"></i> حفظ الحجز
+                    </button>
+                    <button type="button" class="btn btn-success" id="previewBtn">
+                        <i class="fas fa-eye"></i> معاينة الحجز
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- صفحة المعاينة -->
+        <div id="preview-page" class="page">
+            <h2 class="page-title"><i class="fas fa-print"></i> معاينة الحجز وطباعته</h2>
+            
+            <div class="preview-container" id="printableContent">
                 <div class="preview-header">
                     <div class="preview-logo">
-                        <i class="fas fa-palm-tree"></i> قاعة النخيل للمناسبات
+                        <i class="fas fa-palette"></i>
                     </div>
-                    <h1 class="preview-title">تعهد وتوثيق حجز القاعة</h1>
-                    <div class="preview-header-details">
-                        <div class="header-detail">
-                            <span class="detail-label">رقم الحجز:</span>
-                            <span class="detail-value" id="previewReservationId">NL-2023-001</span>
+                    <h2>قاعة النخيل للمناسبات</h2>
+                    <p>عقد حجز قاعة للمناسبات</p>
+                </div>
+                
+                <div class="preview-details">
+                    <div class="detail-section">
+                        <div class="detail-title">
+                            <i class="fas fa-user"></i> معلومات الحجز
                         </div>
-                        <div class="header-detail">
-                            <span class="detail-label">تاريخ الإصدار:</span>
-                            <span class="detail-value" id="previewIssueDate"></span>
+                        <div class="detail-content">
+                            <div><strong>اسم المحجِز:</strong> <span id="previewCustomerName">-</span></div>
+                            <div><strong>رقم الهاتف:</strong> <span id="previewPhone">-</span></div>
+                            <div><strong>تاريخ الحجز:</strong> <span id="previewBookingDate">-</span></div>
                         </div>
-                        <div class="header-detail">
-                            <span class="detail-label">حالة الدفع:</span>
-                            <span class="detail-value payment-status" id="previewPaymentStatusBadge">غير محدد</span>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">
+                            <i class="fas fa-calendar-check"></i> تفاصيل المناسبة
+                        </div>
+                        <div class="detail-content">
+                            <div><strong>نوع المناسبة:</strong> <span id="previewEventType">-</span></div>
+                            <div><strong>التاريخ:</strong> <span id="previewEventDate">-</span></div>
+                            <div><strong>الوقت:</strong> <span id="previewEventTime">-</span></div>
+                            <div id="previewCoupleNames" style="display:none;">
+                                <div><strong>اسم العريس:</strong> <span id="previewGroomName">-</span></div>
+                                <div><strong>اسم العروس:</strong> <span id="previewBrideName">-</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">
+                            <i class="fas fa-building"></i> القاعة المختارة
+                        </div>
+                        <div class="detail-content">
+                            <div id="previewHallSelection">لم يتم اختيار قاعة</div>
+                            <div class="hall-preview" id="previewHallBadges"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">
+                            <i class="fas fa-money-bill-wave"></i> التفاصيل المالية
+                        </div>
+                        <div class="detail-content">
+                            <div><strong>المبلغ الكلي:</strong> <span id="previewTotalAmount">0</span> دينار عراقي</div>
+                            <div><strong>المبلغ الواصل:</strong> <span id="previewPaidAmount">0</span> دينار عراقي</div>
+                            <div><strong>المبلغ المتبقي:</strong> <span id="previewRemainingAmount">0</span> دينار عراقي</div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section full-width">
+                        <div class="detail-title">
+                            <i class="fas fa-sticky-note"></i> ملاحظات
+                        </div>
+                        <div class="detail-content">
+                            <span id="previewNotes">لا توجد ملاحظات</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="preview-content">
-                    <!-- معلومات العميل في شبكة 2 أعمدة -->
-                    <div class="info-section">
-                        <h3 class="section-subtitle">
-                            <i class="fas fa-user-circle"></i> معلومات العميل والحجز
-                        </h3>
-                        <div class="preview-grid">
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-user-tie"></i> اسم السيد
-                                </div>
-                                <div class="preview-value" id="previewClientName">غير محدد</div>
-                            </div>
-                            
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-phone"></i> رقم الهاتف
-                                </div>
-                                <div class="preview-value" id="previewPhone">غير محدد</div>
-                            </div>
-                            
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-calendar-day"></i> تاريخ الحفل
-                                </div>
-                                <div class="preview-value" id="previewEventDate">غير محدد</div>
-                            </div>
-                            
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-star"></i> نوع المناسبة
-                                </div>
-                                <div class="preview-value" id="previewEventType">غير محدد</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- معلومات القاعة -->
-                    <div class="info-section">
-                        <h3 class="section-subtitle">
-                            <i class="fas fa-building"></i> معلومات القاعة
-                        </h3>
-                        <div class="preview-grid">
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-door-open"></i> القاعة المحجوزة
-                                </div>
-                                <div class="preview-value" id="previewHall">غير محدد</div>
-                            </div>
-                            
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-users"></i> السعة
-                                </div>
-                                <div class="preview-value" id="previewCapacity">غير محدد</div>
-                            </div>
-                            
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-clock"></i> وقت الحفل
-                                </div>
-                                <div class="preview-value" id="previewEventTime">16:00 - 00:00</div>
-                            </div>
-                            
-                            <div class="preview-item">
-                                <div class="preview-label">
-                                    <i class="fas fa-hashtag"></i> رقم الحجز
-                                </div>
-                                <div class="preview-value" id="previewReservationIdCopy">NL-2023-001</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- معلومات الدفع المحسنة -->
-                    <div class="info-section">
-                        <h3 class="section-subtitle">
-                            <i class="fas fa-money-bill-wave"></i> تفاصيل الدفع
-                        </h3>
-                        <div class="payment-summary">
-                            <div class="payment-item total">
-                                <div class="payment-label">
-                                    <i class="fas fa-receipt"></i> المبلغ الكلي
-                                </div>
-                                <div class="payment-amount" id="previewTotalAmount">0 دينار عراقي</div>
-                            </div>
-                            
-                            <div class="payment-item paid">
-                                <div class="payment-label">
-                                    <i class="fas fa-check-circle"></i> المبلغ الواصل
-                                </div>
-                                <div class="payment-amount" id="previewPaidAmount">0 دينار عراقي</div>
-                            </div>
-                            
-                            <div class="payment-item remaining">
-                                <div class="payment-label">
-                                    <i class="fas fa-hourglass-half"></i> المبلغ المتبقي
-                                </div>
-                                <div class="payment-amount" id="previewRemainingAmount">0 دينار عراقي</div>
-                            </div>
-                        </div>
-                        
-                        <div class="payment-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressFill"></div>
-                            </div>
-                            <div class="progress-text" id="progressText">0% تم الدفع</div>
-                        </div>
-                    </div>
-                    
-                    <!-- الملاحظات المحسنة -->
-                    <div class="info-section">
-                        <div class="preview-item">
-                            <div class="preview-label">
-                                <i class="fas fa-sticky-note"></i> ملاحظات إضافية
-                            </div>
-                            <div class="preview-value notes-box" id="previewNotes">
-                                <div class="no-notes">لا توجد ملاحظات</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- الشروط والأحكام المعدلة -->
-                    <div class="terms-box">
-                        <h3 class="section-subtitle">
-                            <i class="fas fa-file-contract"></i> الشروط والأحكام
-                        </h3>
-                        <div class="terms-content">
-                            <div class="terms-list">
-                                <div class="term-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>يلتزم العميل بدفع المبلغ المتبقي قبل أسبوع من تاريخ الحفل</span>
-                                </div>
-                                <div class="term-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>في حال الإلغاء، يتم خصم 25% من المبلغ المدفوع إذا كان الإلغاء قبل 30 يوم</span>
-                                </div>
-                                <div class="term-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>القاعة متاحة من الساعة 4 مساءً حتى 12 منتصف الليل</span>
-                                </div>
-                                <div class="term-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>يتحمل العميل أي تلفيات تحدث للقاعة أو محتوياتها خلال فترة الحجز</span>
-                                </div>
-                                <div class="term-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>يمنع إحضار أي مواد خطرة أو ممنوعة داخل القاعة</span>
-                                </div>
-                                <div class="term-item">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>يجب الالتزام بموعد انتهاء الحفل، وإلا سيتم تطبيق غرامة تأخير</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="terms">
+                    <h4>الشروط والأحكام:</h4>
+                    <ul>
+                        <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع.</li>
+                        <li>في حال الإلغاء قبل 30 يوم من الموعد، يسترد 75% من العربون.</li>
+                        <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                        <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
+                    </ul>
                 </div>
                 
-                <!-- منطقة التوقيع المعدلة -->
                 <div class="signature-area">
-                    <div class="signature-statement">
-                        <p>أقرّ بأن جميع المعلومات المذكورة أعلاه صحيحة، وقد اطلعت على شروط وأحكام الحجز وأوافق عليها، وأتعهد بالالتزام بكافة بنود هذه الوثيقة.</p>
+                    <div class="detail-title">
+                        <i class="fas fa-signature"></i> توقيع الطرفين
                     </div>
                     
-                    <div class="signature-fields">
-                        <div class="signature-field">
-                            <p class="field-label">توقيع السيد</p>
-                            <div class="signature-line"></div>
-                            <p class="field-value">________________________</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>توقيع الزبون</label>
+                            <div class="signature-box" id="customerSignatureBox">
+                                <span>انقر لإضافة التوقيع</span>
+                            </div>
                         </div>
                         
-                        <div class="signature-field">
-                            <p class="field-label">التاريخ</p>
-                            <div class="signature-line"></div>
-                            <p class="field-value" id="previewTodayDate"></p>
+                        <div class="form-group">
+                            <label>توقيع المسؤول</label>
+                            <div class="signature-box">
+                                <span>توقيع إدارة قاعة النخيل</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="acknowledgment">
-                        <p><i class="fas fa-check-double"></i> تم التحقق والتوثيق من قبل نظام حجوزات قاعة النخيل للمناسبات</p>
+                    <div class="agreement">
+                        <input type="checkbox" id="agreeTerms">
+                        <label for="agreeTerms">أوافق على جميع الشروط والأحكام المذكورة أعلاه</label>
                     </div>
-                </div>
-                
-                <!-- معلومات الاتصال المعدلة -->
-                <div class="footer-info">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <span>0770-123-4567</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>info@alnakhilhall.com</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>بغداد، المنصور، شارع النخيل</span>
-                        </div>
-                    </div>
-                    <p class="copyright">© قاعة النخيل للمناسبات | نظام إدارة الحجوزات الإلكتروني</p>
                 </div>
             </div>
             
-            <div class="buttons no-print">
-                <button class="btn btn-primary" id="printBtn">
-                    <i class="fas fa-print"></i> طباعة الحجز (صفحة A4)
-                </button>
-                <button class="btn btn-success" id="confirmBtn">
-                    <i class="fas fa-check-circle"></i> تأكيد الحجز
-                </button>
-                <button class="btn pdf-download-btn" id="downloadPdfBtn">
-                    <i class="fas fa-file-pdf"></i> تحميل PDF
-                </button>
-                <button class="btn btn-secondary" id="backToFormBtn">
+            <div class="action-buttons no-print">
+                <button class="btn btn-secondary" id="backToForm">
                     <i class="fas fa-arrow-right"></i> العودة للنموذج
                 </button>
+                <button class="btn btn-success" id="printBtn">
+                    <i class="fas fa-print"></i> طباعة الحجز
+                </button>
+                <button class="btn btn-primary" id="saveReservation">
+                    <i class="fas fa-save"></i> حفظ الحجز
+                </button>
             </div>
-        </section>
+        </div>
         
-        <!-- قسم تقويم الحجوزات -->
-        <section id="calendar" class="section">
-            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> تقويم حجوزات قاعة النخيل</h2>
+        <!-- قائمة الحجوزات -->
+        <div id="reservations-list" class="page">
+            <h2 class="page-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات</h2>
             
-            <div class="hall-status">
-                <div class="hall-badge hall-1">القاعة 1 (300 شخص)</div>
-                <div class="hall-badge hall-2">القاعة 2 (250 شخص)</div>
-                <div class="hall-badge hall-both">القاعتين معاً</div>
-                <div class="hall-badge active">اليوم</div>
-            </div>
-            
-            <div class="calendar-month-title" id="calendarMonthTitle"></div>
-            
-            <div class="calendar" id="calendarContainer">
-                <!-- سيتم إنشاء التقويم ديناميكيًا باستخدام JavaScript -->
-            </div>
-            
-            <div class="buttons">
-                <button class="btn btn-secondary" id="prevMonthBtn">
-                    <i class="fas fa-chevron-right"></i> الشهر السابق
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث بالاسم أو رقم الهاتف أو نوع المناسبة...">
+                <button class="btn btn-secondary" id="searchBtn">
+                    <i class="fas fa-search"></i> بحث
                 </button>
-                <button class="btn btn-secondary" id="nextMonthBtn">
-                    الشهر التالي <i class="fas fa-chevron-left"></i>
+                <button class="btn" id="clearSearch">
+                    <i class="fas fa-times"></i> مسح
                 </button>
             </div>
-        </section>
+            
+            <div class="table-responsive">
+                <table class="reservations-table">
+                    <thead>
+                        <tr>
+                            <th>رقم الحجز</th>
+                            <th>اسم المحجِز</th>
+                            <th>رقم الهاتف</th>
+                            <th>تاريخ الحفل</th>
+                            <th>نوع المناسبة</th>
+                            <th>القاعة</th>
+                            <th>المبلغ الكلي</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservationsTableBody">
+                        <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="exportReservations">
+                    <i class="fas fa-file-export"></i> تصدير البيانات
+                </button>
+            </div>
+        </div>
         
-        <!-- قسم قائمة الحجوزات -->
-        <section id="reservations" class="section">
-            <h2 class="section-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات المسجلة</h2>
+        <!-- صفحة التقويم -->
+        <div id="calendar-page" class="page">
+            <h2 class="page-title"><i class="fas fa-calendar-alt"></i> تقويم الحجوزات الشهري</h2>
             
-            <div class="reservations-list" id="reservationsList">
-                <!-- سيتم عرض الحجوزات هنا ديناميكيًا -->
-                <p class="no-reservations-msg" id="noReservationsMsg">لا توجد حجوزات مسجلة بعد. قم بإضافة حجز جديد من خلال نموذج الحجز.</p>
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="btn btn-secondary" id="prevMonth">
+                        <i class="fas fa-chevron-right"></i> الشهر السابق
+                    </button>
+                    <h3 id="currentMonthYear">شهر 2023</h3>
+                    <button class="btn btn-secondary" id="nextMonth">
+                        الشهر التالي <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <div class="calendar-body" id="calendarBody">
+                    <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
+                </div>
             </div>
-            
-            <div class="buttons no-print">
-                <button class="btn btn-secondary" id="exportReservationsBtn">
-                    <i class="fas fa-file-excel"></i> تصدير الحجوزات
-                </button>
-            </div>
-        </section>
+        </div>
     </div>
     
-    <footer class="no-print">
-        <div class="container">
-            <p>© 2023 قاعة النخيل للمناسبات - جميع الحقوق محفوظة</p>
-            <p>هاتف: 0770-123-4567 | البريد الإلكتروني: info@alnakhilhall.com</p>
-            <p>تم تطوير هذا النظام خصيصاً لإدارة حجوزات قاعة النخيل للمناسبات</p>
-        </div>
-    </footer>
+    <!-- علامة مائية -->
+    <div class="watermark">قاعة النخيل للمناسبات</div>
 
     <script>
-        // عناصر DOM
-        const navBtns = document.querySelectorAll('.nav-btn');
-        const sections = document.querySelectorAll('.section');
-        const hallCheckboxes = document.querySelectorAll('.hall-option input');
-        const hallBothCheckbox = document.getElementById('hallBoth');
-        const totalAmountInput = document.getElementById('totalAmount');
-        const paidAmountInput = document.getElementById('paidAmount');
-        const totalDisplay = document.getElementById('totalDisplay');
-        const paidDisplay = document.getElementById('paidDisplay');
-        const remainingDisplay = document.getElementById('remainingDisplay');
-        const previewBtn = document.getElementById('previewBtn');
-        const printBtn = document.getElementById('printBtn');
-        const saveBtn = document.getElementById('saveBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const confirmBtn = document.getElementById('confirmBtn');
-        const backToFormBtn = document.getElementById('backToFormBtn');
-        const prevMonthBtn = document.getElementById('prevMonthBtn');
-        const nextMonthBtn = document.getElementById('nextMonthBtn');
-        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-        const exportReservationsBtn = document.getElementById('exportReservationsBtn');
-        
-        // بيانات التطبيق
+        // بيانات الحجوزات المخزنة
         let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
+        let reservationCounter = reservations.length > 0 ? Math.max(...reservations.map(r => r.id)) : 0;
         
-        // تبديل الأقسام
-        navBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const sectionId = btn.getAttribute('data-section');
+        // التاريخ الحالي
+        const today = new Date();
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('ar-IQ', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // تعيين الحد الأدنى لتاريخ الحفل إلى اليوم
+        document.getElementById('eventDate').min = today.toISOString().split('T')[0];
+        
+        // التنقل بين الصفحات
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
                 
-                // تحديث الأزرار النشطة
-                navBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                // تحديث التبويب النشط
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
                 
-                // إظهار القسم المحدد وإخفاء البقية
-                sections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === sectionId) {
-                        section.classList.add('active');
-                    }
+                // إظهار الصفحة المطلوبة وإخفاء الباقي
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
                 });
+                document.getElementById(pageId).classList.add('active');
                 
-                // إذا كان القسم هو التقويم، قم بتحديثه
-                if (sectionId === 'calendar') {
-                    generateCalendar(currentMonth, currentYear);
+                // إذا كانت صفحة المعاينة، قم بتحديث البيانات
+                if (pageId === 'preview-page') {
+                    updatePreview();
                 }
                 
-                // إذا كان القسم هو قائمة الحجوزات، قم بتحديثها
-                if (sectionId === 'reservations') {
-                    displayReservations();
+                // إذا كانت صفحة قائمة الحجوزات، قم بتحديث الجدول
+                if (pageId === 'reservations-list') {
+                    updateReservationsTable();
+                }
+                
+                // إذا كانت صفحة التقويم، قم بتحديثه
+                if (pageId === 'calendar-page') {
+                    updateCalendar();
                 }
             });
         });
         
-        // التحكم في خيارات القاعات
-        hallCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                if (e.target.id === 'hallBoth') {
-                    // إذا تم تحديد "كلا القاعتين"، قم بتحديد القاعتين الأخريين
-                    document.getElementById('hall1').checked = e.target.checked;
-                    document.getElementById('hall2').checked = e.target.checked;
-                } else {
-                    // إذا تم إلغاء تحديد إحدى القاعتين، قم بإلغاء تحديد "كلا القاعتين"
-                    if (!e.target.checked) {
-                        hallBothCheckbox.checked = false;
-                    }
-                    // إذا تم تحديد القاعتين، قم بتحديد "كلا القاعتين"
-                    if (document.getElementById('hall1').checked && document.getElementById('hall2').checked) {
-                        hallBothCheckbox.checked = true;
-                    }
-                }
+        // اختيار جميع القاعات
+        document.getElementById('selectAllHalls').addEventListener('change', function() {
+            const hallCheckboxes = document.querySelectorAll('input[name="hall"]');
+            hallCheckboxes.forEach(cb => {
+                cb.checked = this.checked;
             });
         });
         
-        // حساب المبالغ المالية تلقائياً
-        totalAmountInput.addEventListener('input', calculateAmounts);
-        paidAmountInput.addEventListener('input', calculateAmounts);
+        // تحديث حقل المبلغ المتبقي تلقائياً
+        document.getElementById('totalAmount').addEventListener('input', updateRemainingAmount);
+        document.getElementById('paidAmount').addEventListener('input', updateRemainingAmount);
         
-        function calculateAmounts() {
-            const total = parseFloat(totalAmountInput.value) || 0;
-            const paid = parseFloat(paidAmountInput.value) || 0;
+        function updateRemainingAmount() {
+            const total = parseFloat(document.getElementById('totalAmount').value) || 0;
+            const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
             const remaining = total - paid;
             
-            totalDisplay.textContent = formatNumber(total);
-            paidDisplay.textContent = formatNumber(paid);
-            remainingDisplay.textContent = formatNumber(remaining);
-            
-            // تحديث لون المبلغ المتبقي
-            if (remaining > 0) {
-                remainingDisplay.style.color = '#e63946';
-            } else if (remaining === 0) {
-                remainingDisplay.style.color = '#8B4513';
-            } else {
-                remainingDisplay.style.color = '#D2691E';
-            }
+            document.getElementById('remainingAmount').value = remaining > 0 ? remaining : 0;
         }
         
-        function formatNumber(num) {
-            return new Intl.NumberFormat('ar-IQ').format(num);
-        }
-        
-        // زر معاينة الحجز
-        previewBtn.addEventListener('click', () => {
-            if (validateForm()) {
-                updatePreview();
-                // الانتقال إلى قسم المعاينة
-                document.querySelector('[data-section="preview"]').click();
+        // مسح النموذج
+        document.getElementById('clearForm').addEventListener('click', function() {
+            if (confirm('هل تريد مسح جميع بيانات النموذج؟')) {
+                document.getElementById('reservationForm').reset();
+                updateRemainingAmount();
             }
         });
         
-        // زر حفظ الحجز
-        saveBtn.addEventListener('click', () => {
-            if (validateForm()) {
-                saveReservation();
-                alert('تم حفظ الحجز بنجاح!');
-                resetForm();
-                // الانتقال إلى قسم قائمة الحجوزات
-                document.querySelector('[data-section="reservations"]').click();
-            }
-        });
-        
-        // زر تأكيد وتثبيت الحجز
-        confirmBtn.addEventListener('click', () => {
-            if (validateForm()) {
-                saveReservation();
-                alert('تم تأكيد وتثبيت الحجز بنجاح!');
-                resetForm();
-                // الانتقال إلى قسم قائمة الحجوزات
-                document.querySelector('[data-section="reservations"]').click();
-            }
-        });
-        
-        // زر العودة للنموذج
-        backToFormBtn.addEventListener('click', () => {
-            document.querySelector('[data-section="booking"]').click();
-        });
-        
-        // زر تفريغ الحقول
-        resetBtn.addEventListener('click', resetForm);
-        
-        // زر الطباعة
-        printBtn.addEventListener('click', () => {
-            // تحديث المعاينة قبل الطباعة
-            updatePreview();
-            
-            // إضافة تاريخ الطباعة
-            const today = new Date();
-            const printDate = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`;
-            
-            // إنشاء نافذة طباعة جديدة
-            const printWindow = window.open('', '_blank', 'width=800,height=600');
-            
-            // إعداد محتوى الطباعة - صفحة A4 واحدة احترافية
-            const printContent = `
-                <!DOCTYPE html>
-                <html dir="rtl" lang="ar">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>قاعة النخيل - حجز ${document.getElementById('previewReservationId').textContent}</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                    <style>
-                        @page {
-                            size: A4 portrait;
-                            margin: 1cm;
-                        }
-                        body {
-                            font-family: 'Noto Naskh Arabic', serif;
-                            line-height: 1.5;
-                            color: #000;
-                            direction: rtl;
-                            margin: 0;
-                            padding: 0;
-                            background: white;
-                            width: 21cm;
-                            min-height: 29.7cm;
-                            font-size: 11pt;
-                            -webkit-print-color-adjust: exact;
-                            print-color-adjust: exact;
-                        }
-                        .print-container {
-                            width: 100%;
-                            height: 100%;
-                            padding: 0;
-                            margin: 0;
-                            box-sizing: border-box;
-                        }
-                        .print-header {
-                            text-align: center;
-                            padding: 1cm 1.5cm 0.5cm;
-                            border-bottom: 2px solid #8B4513;
-                            margin-bottom: 0.8cm;
-                        }
-                        .print-logo {
-                            font-size: 22pt;
-                            color: #8B4513;
-                            margin-bottom: 0.3cm;
-                            font-weight: 700;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            gap: 10px;
-                        }
-                        .print-title {
-                            font-size: 20pt;
-                            color: #8B4513;
-                            margin-bottom: 0.2cm;
-                            font-weight: 700;
-                        }
-                        .header-details {
-                            display: flex;
-                            justify-content: center;
-                            gap: 15px;
-                            margin-top: 0.5cm;
-                            flex-wrap: wrap;
-                        }
-                        .header-detail {
-                            background: #f8f9fa;
-                            padding: 5px 10px;
-                            border-radius: 4px;
-                            border: 1px solid #ddd;
-                            font-size: 10pt;
-                        }
-                        .detail-label {
-                            font-weight: 600;
-                            color: #8B4513;
-                        }
-                        .section-subtitle {
-                            color: #8B4513;
-                            border-bottom: 1px solid #D2691E;
-                            padding-bottom: 0.3cm;
-                            margin: 0.5cm 0 0.3cm;
-                            font-size: 14pt;
-                            display: flex;
-                            align-items: center;
-                            gap: 8px;
-                        }
-                        .preview-grid {
-                            display: grid;
-                            grid-template-columns: repeat(2, 1fr);
-                            gap: 0.5cm;
-                            margin-bottom: 0.5cm;
-                        }
-                        .print-item {
-                            margin-bottom: 0.3cm;
-                        }
-                        .print-label {
-                            font-weight: 700;
-                            font-size: 11pt;
-                            margin-bottom: 0.2cm;
-                            color: #8B4513;
-                            display: flex;
-                            align-items: center;
-                            gap: 8px;
-                        }
-                        .print-value {
-                            padding: 0.3cm;
-                            border: 1px solid #ddd;
-                            border-radius: 4px;
-                            border-right: 2px solid #D2691E;
-                            font-size: 10pt;
-                            min-height: 0.8cm;
-                            display: flex;
-                            align-items: center;
-                        }
-                        .payment-summary {
-                            display: grid;
-                            grid-template-columns: repeat(3, 1fr);
-                            gap: 0.4cm;
-                            margin: 0.5cm 0;
-                        }
-                        .payment-item {
-                            background: #f8f9fa;
-                            padding: 0.4cm;
-                            border-radius: 5px;
-                            border-left: 3px solid #D2691E;
-                            text-align: center;
-                        }
-                        .payment-item.total { border-left-color: #8B4513; }
-                        .payment-item.paid { border-left-color: #28a745; }
-                        .payment-item.remaining { border-left-color: #dc3545; }
-                        .payment-label {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            gap: 8px;
-                            font-weight: 600;
-                            color: #555;
-                            margin-bottom: 0.2cm;
-                            font-size: 10pt;
-                        }
-                        .payment-amount {
-                            font-size: 12pt;
-                            font-weight: 700;
-                            color: #8B4513;
-                        }
-                        .terms-box {
-                            padding: 0.4cm;
-                            background-color: #f8f9fa;
-                            border-radius: 5px;
-                            border: 1px solid #ddd;
-                            margin: 0.5cm 0;
-                        }
-                        .terms-list {
-                            display: grid;
-                            grid-template-columns: 1fr;
-                            gap: 8px;
-                        }
-                        .term-item {
-                            display: flex;
-                            align-items: flex-start;
-                            gap: 8px;
-                            padding: 5px;
-                            font-size: 9pt;
-                        }
-                        .term-item i {
-                            color: #28a745;
-                            margin-top: 2px;
-                        }
-                        .signature-area {
-                            margin-top: 0.8cm;
-                            padding: 0.6cm 1.5cm;
-                            border-top: 2px solid #D2691E;
-                            text-align: center;
-                        }
-                        .signature-fields {
-                            display: grid;
-                            grid-template-columns: repeat(2, 1fr);
-                            gap: 1cm;
-                            margin: 0.5cm 0;
-                        }
-                        .signature-field {
-                            text-align: center;
-                        }
-                        .field-label {
-                            font-weight: 600;
-                            color: #8B4513;
-                            margin-bottom: 0.2cm;
-                            font-size: 10pt;
-                        }
-                        .signature-line {
-                            width: 6cm;
-                            height: 0.5px;
-                            background-color: #333;
-                            margin: 0.3cm auto;
-                        }
-                        .footer-info {
-                            text-align: center;
-                            padding: 0.3cm 1.5cm;
-                            font-size: 8pt;
-                            color: #666;
-                            border-top: 1px solid #eee;
-                            position: absolute;
-                            bottom: 0;
-                            left: 0;
-                            right: 0;
-                        }
-                        .contact-info {
-                            display: flex;
-                            justify-content: center;
-                            gap: 15px;
-                            margin-bottom: 5px;
-                            flex-wrap: wrap;
-                        }
-                        .contact-item {
-                            display: flex;
-                            align-items: center;
-                            gap: 5px;
-                            font-size: 8pt;
-                        }
-                        @media print {
-                            body {
-                                width: 21cm;
-                                height: 29.7cm;
-                                margin: 0;
-                                padding: 0;
-                            }
-                            .print-container {
-                                page-break-inside: avoid;
-                                break-inside: avoid;
-                            }
-                        }
-                    </style>
-                </head>
-                <body onload="window.print(); setTimeout(() => window.close(), 500);">
-                    <div class="print-container">
-                        <div class="print-header">
-                            <div class="print-logo">
-                                <i class="fas fa-palm-tree"></i> قاعة النخيل للمناسبات
-                            </div>
-                            <h1 class="print-title">تعهد وتوثيق حجز القاعة</h1>
-                            <div class="header-details">
-                                <div class="header-detail">
-                                    <span class="detail-label">رقم الحجز:</span>
-                                    <span>${document.getElementById('previewReservationId').textContent}</span>
-                                </div>
-                                <div class="header-detail">
-                                    <span class="detail-label">تاريخ الإصدار:</span>
-                                    <span>${document.getElementById('previewIssueDate').textContent}</span>
-                                </div>
-                                <div class="header-detail">
-                                    <span class="detail-label">حالة الدفع:</span>
-                                    <span>${document.getElementById('previewPaymentStatusBadge').textContent}</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 0 1.5cm;">
-                            <!-- معلومات العميل -->
-                            <h3 class="section-subtitle">
-                                <i class="fas fa-user-circle"></i> معلومات العميل والحجز
-                            </h3>
-                            <div class="preview-grid">
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-user-tie"></i> اسم السيد
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewClientName').textContent}</div>
-                                </div>
-                                
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-phone"></i> رقم الهاتف
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewPhone').textContent}</div>
-                                </div>
-                                
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-calendar-day"></i> تاريخ الحفل
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewEventDate').textContent}</div>
-                                </div>
-                                
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-star"></i> نوع المناسبة
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewEventType').textContent}</div>
-                                </div>
-                            </div>
-                            
-                            <!-- معلومات القاعة -->
-                            <h3 class="section-subtitle">
-                                <i class="fas fa-building"></i> معلومات القاعة
-                            </h3>
-                            <div class="preview-grid">
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-door-open"></i> القاعة المحجوزة
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewHall').textContent}</div>
-                                </div>
-                                
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-users"></i> السعة
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewCapacity').textContent}</div>
-                                </div>
-                                
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-clock"></i> وقت الحفل
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewEventTime').textContent}</div>
-                                </div>
-                                
-                                <div class="print-item">
-                                    <div class="print-label">
-                                        <i class="fas fa-hashtag"></i> رقم الحجز
-                                    </div>
-                                    <div class="print-value">${document.getElementById('previewReservationIdCopy').textContent}</div>
-                                </div>
-                            </div>
-                            
-                            <!-- معلومات الدفع -->
-                            <h3 class="section-subtitle">
-                                <i class="fas fa-money-bill-wave"></i> تفاصيل الدفع
-                            </h3>
-                            <div class="payment-summary">
-                                <div class="payment-item total">
-                                    <div class="payment-label">
-                                        <i class="fas fa-receipt"></i> المبلغ الكلي
-                                    </div>
-                                    <div class="payment-amount">${document.getElementById('previewTotalAmount').textContent}</div>
-                                </div>
-                                
-                                <div class="payment-item paid">
-                                    <div class="payment-label">
-                                        <i class="fas fa-check-circle"></i> المبلغ الواصل
-                                    </div>
-                                    <div class="payment-amount">${document.getElementById('previewPaidAmount').textContent}</div>
-                                </div>
-                                
-                                <div class="payment-item remaining">
-                                    <div class="payment-label">
-                                        <i class="fas fa-hourglass-half"></i> المبلغ المتبقي
-                                    </div>
-                                    <div class="payment-amount">${document.getElementById('previewRemainingAmount').textContent}</div>
-                                </div>
-                            </div>
-                            
-                            <!-- الملاحظات -->
-                            <div class="print-item">
-                                <div class="print-label">
-                                    <i class="fas fa-sticky-note"></i> ملاحظات إضافية
-                                </div>
-                                <div class="print-value" style="min-height: 1.2cm;">
-                                    ${document.getElementById('previewNotes').innerHTML.includes('لا توجد ملاحظات') ? 'لا توجد ملاحظات' : document.getElementById('previewNotes').textContent}
-                                </div>
-                            </div>
-                            
-                            <!-- الشروط والأحكام -->
-                            <div class="terms-box">
-                                <h3 class="section-subtitle">
-                                    <i class="fas fa-file-contract"></i> الشروط والأحكام
-                                </h3>
-                                <div class="terms-list">
-                                    <div class="term-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>يلتزم العميل بدفع المبلغ المتبقي قبل أسبوع من تاريخ الحفل</span>
-                                    </div>
-                                    <div class="term-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>في حال الإلغاء، يتم خصم 25% من المبلغ المدفوع إذا كان الإلغاء قبل 30 يوم</span>
-                                    </div>
-                                    <div class="term-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>القاعة متاحة من الساعة 4 مساءً حتى 12 منتصف الليل</span>
-                                    </div>
-                                    <div class="term-item">
-                                        <i class="fas fa-check-circle"></i>
-                                        <span>يتحمل العميل أي تلفيات تحدث للقاعة أو محتوياتها خلال فترة الحجز</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- التوقيع -->
-                        <div class="signature-area">
-                            <p style="font-size: 10pt; margin-bottom: 0.5cm; line-height: 1.5;">أقرّ بأن جميع المعلومات المذكورة أعلاه صحيحة، وقد اطلعت على شروط وأحكام الحجز وأوافق عليها، وأتعهد بالالتزام بكافة بنود هذه الوثيقة.</p>
-                            
-                            <div class="signature-fields">
-                                <div class="signature-field">
-                                    <p class="field-label">توقيع السيد</p>
-                                    <div class="signature-line"></div>
-                                    <p style="margin-top: 0.3cm; font-size: 10pt;">________________________</p>
-                                </div>
-                                
-                                <div class="signature-field">
-                                    <p class="field-label">التاريخ</p>
-                                    <div class="signature-line"></div>
-                                    <p style="margin-top: 0.3cm; font-size: 10pt;">${document.getElementById('previewTodayDate').textContent}</p>
-                                </div>
-                            </div>
-                            
-                            <div style="text-align: center; margin-top: 0.5cm; padding: 0.3cm; background: #f8f9fa; border-radius: 4px; border: 1px solid #ddd;">
-                                <p style="font-size: 9pt; margin: 0;"><i class="fas fa-check-double"></i> تم التحقق والتوثيق من قبل نظام حجوزات قاعة النخيل للمناسبات</p>
-                            </div>
-                        </div>
-                        
-                        <!-- التذييل -->
-                        <div class="footer-info">
-                            <div class="contact-info">
-                                <div class="contact-item">
-                                    <i class="fas fa-phone"></i>
-                                    <span>0770-123-4567</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>info@alnakhilhall.com</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>بغداد، المنصور، شارع النخيل</span>
-                                </div>
-                            </div>
-                            <p style="margin: 5px 0 0; font-size: 8pt;">© قاعة النخيل للمناسبات | نظام إدارة الحجوزات الإلكتروني</p>
-                        </div>
-                    </div>
-                    
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                        };
-                        window.onafterprint = function() {
-                            setTimeout(function() {
-                                window.close();
-                            }, 500);
-                        };
-                    <\/script>
-                </body>
-                </html>
-            `;
-            
-            printWindow.document.open();
-            printWindow.document.write(printContent);
-            printWindow.document.close();
-        });
-        
-        // زر تحميل PDF باستخدام html2pdf.js
-        downloadPdfBtn.addEventListener('click', () => {
-            updatePreview();
-            
-            const element = document.getElementById('previewContent');
-            const opt = {
-                margin:       0.5,
-                filename:     `حجز_قاعة_النخيل_${document.getElementById('previewReservationId').textContent}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true,
-                    width: 794,
-                    height: 1123
-                },
-                jsPDF:        { 
-                    unit: 'cm', 
-                    format: 'a4', 
-                    orientation: 'portrait',
-                    compress: true
-                }
-            };
-            
-            // تحويل HTML إلى PDF
-            html2pdf().set(opt).from(element).save().then(() => {
-                console.log('تم تحميل PDF بنجاح');
-            }).catch(err => {
-                console.error('خطأ في تحميل PDF:', err);
-                alert('حدث خطأ أثناء تحميل PDF. الرجاء المحاولة مرة أخرى.');
-            });
-        });
-        
-        // زر تصدير الحجوزات
-        exportReservationsBtn.addEventListener('click', () => {
-            if (reservations.length === 0) {
-                alert('لا توجد حجوزات لتصديرها');
+        // معاينة الحجز
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            // التحقق من صحة النموذج أولاً
+            if (!validateForm()) {
+                showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
                 return;
             }
             
-            // إنشاء بيانات CSV
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            // التبديل إلى صفحة المعاينة
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-page="preview-page"]').classList.add('active');
             
-            // رأس الجدول
-            csvContent += "رقم الحجز,اسم السيد,رقم الهاتف,تاريخ الحفل,نوع المناسبة,القاعة,المبلغ الكلي,المبلغ الواصل,المبلغ المتبقي,تاريخ الإنشاء\n";
-            
-            // البيانات
-            reservations.forEach(reservation => {
-                const row = [
-                    reservation.id,
-                    reservation.clientName,
-                    reservation.phone,
-                    reservation.eventDate,
-                    reservation.eventType,
-                    reservation.hallType === 'hall1' ? 'قاعة 1' : reservation.hallType === 'hall2' ? 'قاعة 2' : 'القاعتين',
-                    reservation.totalAmount,
-                    reservation.paidAmount,
-                    reservation.remainingAmount,
-                    reservation.createdAt
-                ].map(field => `"${field}"`).join(',');
-                
-                csvContent += row + "\n";
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
             });
+            document.getElementById('preview-page').classList.add('active');
             
-            // إنشاء رابط التحميل
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `حجوزات_قاعة_النخيل_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            updatePreview();
         });
         
-        // التحكم في التقويم
-        prevMonthBtn.addEventListener('click', () => {
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            generateCalendar(currentMonth, currentYear);
+        // العودة للنموذج من صفحة المعاينة
+        document.getElementById('backToForm').addEventListener('click', function() {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-page="booking-form"]').classList.add('active');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('booking-form').classList.add('active');
         });
         
-        nextMonthBtn.addEventListener('click', () => {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            generateCalendar(currentMonth, currentYear);
-        });
-        
-        // تحقق من صحة النموذج
-        function validateForm() {
-            const clientName = document.getElementById('clientName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const eventDate = document.getElementById('eventDate').value;
-            const eventType = document.getElementById('eventType').value;
-            const hall1 = document.getElementById('hall1').checked;
-            const hall2 = document.getElementById('hall2').checked;
-            const totalAmount = document.getElementById('totalAmount').value;
-            
-            let isValid = true;
-            let errorMessage = '';
-            
-            if (!clientName) {
-                isValid = false;
-                errorMessage += '• اسم السيد مطلوب\n';
-            }
-            
-            if (!phone) {
-                isValid = false;
-                errorMessage += '• رقم الهاتف مطلوب\n';
-            }
-            
-            if (!eventDate) {
-                isValid = false;
-                errorMessage += '• تاريخ الحفل مطلوب\n';
-            }
-            
-            if (!eventType) {
-                isValid = false;
-                errorMessage += '• نوع المناسبة مطلوب\n';
-            }
-            
-            if (!hall1 && !hall2) {
-                isValid = false;
-                errorMessage += '• يجب اختيار قاعة واحدة على الأقل\n';
-            }
-            
-            if (!totalAmount || parseFloat(totalAmount) <= 0) {
-                isValid = false;
-                errorMessage += '• المبلغ الكلي مطلوب ويجب أن يكون أكبر من صفر\n';
-            }
-            
-            if (!isValid) {
-                alert('يرجى تصحيح الأخطاء التالية:\n\n' + errorMessage);
-            }
-            
-            return isValid;
-        }
-        
-        // تحديث معاينة الحجز
+        // تحديث صفحة المعاينة
         function updatePreview() {
-            // الحصول على القيم من النموذج
-            const clientName = document.getElementById('clientName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const eventDate = document.getElementById('eventDate').value;
+            // معلومات الحجز
+            document.getElementById('previewCustomerName').textContent = document.getElementById('customerName').value;
+            document.getElementById('previewPhone').textContent = document.getElementById('phone').value;
+            document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
+            
+            // تفاصيل المناسبة
+            document.getElementById('previewEventType').textContent = document.getElementById('eventType').value;
+            document.getElementById('previewEventDate').textContent = formatDate(document.getElementById('eventDate').value);
+            document.getElementById('previewEventTime').textContent = document.getElementById('eventTime').value;
+            
+            // أسماء العريس والعروس (إذا كانت مناسبة زفاف)
             const eventType = document.getElementById('eventType').value;
-            const hall1 = document.getElementById('hall1').checked;
-            const hall2 = document.getElementById('hall2').checked;
-            const hallBoth = document.getElementById('hallBoth').checked;
-            const totalAmount = parseFloat(document.getElementById('totalAmount').value) || 0;
-            const paidAmount = parseFloat(document.getElementById('paidAmount').value) || 0;
-            const remainingAmount = totalAmount - paidAmount;
-            const notes = document.getElementById('notes').value.trim();
+            const coupleNamesDiv = document.getElementById('previewCoupleNames');
             
-            // تحديث عناصر المعاينة
-            document.getElementById('previewClientName').textContent = clientName || 'غير محدد';
-            document.getElementById('previewPhone').textContent = phone || 'غير محدد';
-            document.getElementById('previewEventDate').textContent = eventDate ? formatDate(eventDate) : 'غير محدد';
-            document.getElementById('previewEventType').textContent = eventType || 'غير محدد';
-            
-            // تحديث معلومات القاعة
-            let hallText = '';
-            let capacityText = '';
-            
-            if (hallBoth) {
-                hallText = 'القاعتين رقم 1 ورقم 2';
-                capacityText = '550 شخص (300 + 250)';
-            } else if (hall1 && !hall2) {
-                hallText = 'القاعة رقم 1';
-                capacityText = '300 شخص';
-            } else if (!hall1 && hall2) {
-                hallText = 'القاعة رقم 2';
-                capacityText = '250 شخص';
-            }
-            
-            document.getElementById('previewHall').textContent = hallText || 'غير محدد';
-            document.getElementById('previewCapacity').textContent = capacityText || 'غير محدد';
-            
-            // تحديث المبالغ المالية
-            document.getElementById('previewTotalAmount').textContent = formatNumber(totalAmount) + ' دينار عراقي';
-            document.getElementById('previewPaidAmount').textContent = formatNumber(paidAmount) + ' دينار عراقي';
-            document.getElementById('previewRemainingAmount').textContent = formatNumber(remainingAmount) + ' دينار عراقي';
-            
-            // تحديث شريط التقدم
-            const progressPercentage = totalAmount > 0 ? Math.min(100, (paidAmount / totalAmount) * 100) : 0;
-            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
-            document.getElementById('progressText').textContent = `${Math.round(progressPercentage)}% تم الدفع`;
-            
-            // تحديث حالة الدفع
-            let paymentStatus = '';
-            let statusClass = '';
-            
-            if (remainingAmount > 0) {
-                paymentStatus = 'جزئي';
-                statusClass = 'partial';
-            } else if (remainingAmount === 0) {
-                paymentStatus = 'مكتمل';
-                statusClass = 'complete';
+            if (eventType === 'عرس' || eventType === 'خطوبة') {
+                coupleNamesDiv.style.display = 'block';
+                document.getElementById('previewGroomName').textContent = document.getElementById('groomName').value || '-';
+                document.getElementById('previewBrideName').textContent = document.getElementById('brideName').value || '-';
             } else {
-                paymentStatus = 'زائد';
-                statusClass = 'overpaid';
+                coupleNamesDiv.style.display = 'none';
             }
             
-            const statusBadge = document.getElementById('previewPaymentStatusBadge');
-            statusBadge.textContent = paymentStatus;
-            statusBadge.className = 'detail-value payment-status ' + statusClass;
+            // القاعة المختارة
+            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            const hallSelection = document.getElementById('previewHallSelection');
+            const hallBadges = document.getElementById('previewHallBadges');
             
-            // تحديث الملاحظات
-            const notesBox = document.getElementById('previewNotes');
-            if (notes) {
-                notesBox.innerHTML = `<div class="notes-content">${notes}</div>`;
-                notesBox.classList.remove('no-notes');
+            hallBadges.innerHTML = '';
+            
+            if (selectedHalls.length === 0) {
+                hallSelection.textContent = 'لم يتم اختيار قاعة';
+            } else if (selectedHalls.length === 2) {
+                hallSelection.textContent = 'تم حجز القاعتين معاً';
+                hallBadges.innerHTML = '<span class="hall-tag">القاعة 1 (300 شخص)</span><span class="hall-tag">القاعة 2 (250 شخص)</span>';
             } else {
-                notesBox.innerHTML = '<div class="no-notes">لا توجد ملاحظات</div>';
+                hallSelection.textContent = selectedHalls.join(', ');
+                selectedHalls.forEach(hall => {
+                    const badge = document.createElement('span');
+                    badge.className = 'hall-tag';
+                    badge.textContent = hall === 'القاعة رقم 1' ? 'القاعة 1 (300 شخص)' : 'القاعة 2 (250 شخص)';
+                    hallBadges.appendChild(badge);
+                });
             }
             
-            // تحديث رقم الحجز والتاريخ
-            const reservationId = generateReservationId();
-            document.getElementById('previewReservationId').textContent = reservationId;
-            document.getElementById('previewReservationIdCopy').textContent = reservationId;
-            document.getElementById('previewIssueDate').textContent = formatDate(new Date().toISOString().split('T')[0]);
-            document.getElementById('previewTodayDate').textContent = formatDate(new Date().toISOString().split('T')[0]);
+            // التفاصيل المالية
+            document.getElementById('previewTotalAmount').textContent = document.getElementById('totalAmount').value || '0';
+            document.getElementById('previewPaidAmount').textContent = document.getElementById('paidAmount').value || '0';
+            document.getElementById('previewRemainingAmount').textContent = document.getElementById('remainingAmount').value || '0';
+            
+            // الملاحظات
+            const notes = document.getElementById('notes').value;
+            document.getElementById('previewNotes').textContent = notes || 'لا توجد ملاحظات';
+            
+            // إضافة توقيع الزبون (محاكاة)
+            const signatureBox = document.getElementById('customerSignatureBox');
+            signatureBox.innerHTML = '<span>انقر لإضافة التوقيع</span>';
+            signatureBox.addEventListener('click', function() {
+                this.innerHTML = '<span style="font-family: cursive; font-size: 24px;">توقيع الزبون</span>';
+            });
         }
+        
+        // طباعة الحجز
+        document.getElementById('printBtn').addEventListener('click', function() {
+            if (!document.getElementById('agreeTerms').checked) {
+                showAlert('يرجى الموافقة على الشروط والأحكام قبل الطباعة', 'error');
+                return;
+            }
+            
+            window.print();
+        });
         
         // حفظ الحجز
+        document.getElementById('saveReservation').addEventListener('click', saveReservation);
+        document.getElementById('submitForm').addEventListener('click', function(e) {
+            e.preventDefault();
+            saveReservation();
+        });
+        
         function saveReservation() {
-            // الحصول على القيم من النموذج
-            const clientName = document.getElementById('clientName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const eventDate = document.getElementById('eventDate').value;
-            const eventType = document.getElementById('eventType').value;
-            const hall1 = document.getElementById('hall1').checked;
-            const hall2 = document.getElementById('hall2').checked;
-            const hallBoth = document.getElementById('hallBoth').checked;
-            const totalAmount = parseFloat(document.getElementById('totalAmount').value) || 0;
-            const paidAmount = parseFloat(document.getElementById('paidAmount').value) || 0;
-            const remainingAmount = totalAmount - paidAmount;
-            const notes = document.getElementById('notes').value.trim();
-            
-            // تحديد نوع القاعة
-            let hallType = '';
-            if (hallBoth) {
-                hallType = 'both';
-            } else if (hall1 && !hall2) {
-                hallType = 'hall1';
-            } else if (!hall1 && hall2) {
-                hallType = 'hall2';
+            // التحقق من صحة النموذج
+            if (!validateForm()) {
+                showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
+                return;
             }
             
             // إنشاء كائن الحجز
+            reservationCounter++;
+            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            
             const reservation = {
-                id: generateReservationId(),
-                clientName,
-                phone,
-                eventDate,
-                eventType,
-                hallType,
-                totalAmount,
-                paidAmount,
-                remainingAmount,
-                notes,
-                createdAt: new Date().toISOString()
+                id: reservationCounter,
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                groomName: document.getElementById('groomName').value,
+                brideName: document.getElementById('brideName').value,
+                eventDate: document.getElementById('eventDate').value,
+                eventType: document.getElementById('eventType').value,
+                eventTime: document.getElementById('eventTime').value,
+                halls: selectedHalls,
+                totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
+                paidAmount: parseFloat(document.getElementById('paidAmount').value) || 0,
+                remainingAmount: parseFloat(document.getElementById('remainingAmount').value) || 0,
+                notes: document.getElementById('notes').value,
+                bookingDate: new Date().toISOString().split('T')[0],
+                status: 'مؤكد'
             };
             
             // إضافة الحجز إلى القائمة
@@ -2447,223 +1197,308 @@
             // حفظ في localStorage
             localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
             
-            // تحديث التقويم وقائمة الحجوزات
-            generateCalendar(currentMonth, currentYear);
-            displayReservations();
+            // إظهار رسالة نجاح
+            showAlert('تم حفظ الحجز بنجاح! رقم الحجز: ' + reservationCounter, 'success');
+            
+            // تحديث قائمة الحجوزات
+            updateReservationsTable();
+            
+            // تحديث التقويم
+            updateCalendar();
+            
+            // مسح النموذج
+            document.getElementById('reservationForm').reset();
+            updateRemainingAmount();
+            
+            // العودة إلى صفحة الحجز
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-page="booking-form"]').classList.add('active');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('booking-form').classList.add('active');
         }
         
-        // عرض الحجوزات في القائمة مع إضافة زر الحذف
-        function displayReservations() {
-            const reservationsList = document.getElementById('reservationsList');
-            const noReservationsMsg = document.getElementById('noReservationsMsg');
+        // التحقق من صحة النموذج
+        function validateForm() {
+            const requiredFields = [
+                'customerName',
+                'phone',
+                'eventDate',
+                'eventType',
+                'eventTime',
+                'totalAmount',
+                'paidAmount'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    return false;
+                }
+            }
+            
+            // التحقق من اختيار قاعة على الأقل
+            const selectedHalls = document.querySelectorAll('input[name="hall"]:checked');
+            if (selectedHalls.length === 0) {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // تحديث قائمة الحجوزات
+        function updateReservationsTable() {
+            const tableBody = document.getElementById('reservationsTableBody');
+            tableBody.innerHTML = '';
             
             if (reservations.length === 0) {
-                noReservationsMsg.style.display = 'block';
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px;">لا توجد حجوزات مسجلة بعد</td></tr>';
                 return;
             }
             
-            noReservationsMsg.style.display = 'none';
-            
             // فرز الحجوزات حسب التاريخ (الأحدث أولاً)
-            const sortedReservations = [...reservations].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const sortedReservations = [...reservations].sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate));
             
-            // إنشاء عناصر الحجوزات
-            let reservationsHTML = '';
-            
-            sortedReservations.forEach((reservation, index) => {
-                let hallClass = '';
-                let hallText = '';
+            sortedReservations.forEach(reservation => {
+                const row = document.createElement('tr');
                 
-                if (reservation.hallType === 'hall1') {
-                    hallClass = 'hall-1';
-                    hallText = 'قاعة 1';
-                } else if (reservation.hallType === 'hall2') {
-                    hallClass = 'hall-2';
-                    hallText = 'قاعة 2';
-                } else if (reservation.hallType === 'both') {
-                    hallClass = 'hall-both';
-                    hallText = 'القاعتين 1/2';
+                // إنشاء علامة القاعة
+                let hallBadge = '';
+                if (reservation.halls.length === 2) {
+                    hallBadge = '<span class="hall-badge-list">1/2</span>';
+                } else if (reservation.halls.includes('القاعة رقم 1')) {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
+                } else {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
                 }
                 
-                reservationsHTML += `
-                    <div class="reservation-item">
-                        <button class="delete-btn" data-index="${index}" title="حذف الحجز">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                        <div class="reservation-header">
-                            <div class="reservation-hall ${hallClass}">${hallText}</div>
-                            <div class="reservation-id">${reservation.id}</div>
-                        </div>
-                        <p><strong>اسم السيد:</strong> ${reservation.clientName}</p>
-                        <p><strong>رقم الهاتف:</strong> ${reservation.phone}</p>
-                        <p><strong>تاريخ الحفل:</strong> ${formatDate(reservation.eventDate)}</p>
-                        <p><strong>نوع المناسبة:</strong> ${reservation.eventType}</p>
-                        <p><strong>المبلغ:</strong> ${formatNumber(reservation.totalAmount)} دينار عراقي (واصل: ${formatNumber(reservation.paidAmount)} دينار)</p>
-                        ${reservation.notes ? `<p><strong>ملاحظات:</strong> ${reservation.notes}</p>` : ''}
-                    </div>
+                row.innerHTML = `
+                    <td>${reservation.id}</td>
+                    <td>${reservation.customerName}</td>
+                    <td>${reservation.phone}</td>
+                    <td>${formatDate(reservation.eventDate)}</td>
+                    <td>${reservation.eventType}</td>
+                    <td>${reservation.halls.join(', ')} ${hallBadge}</td>
+                    <td>${reservation.totalAmount.toLocaleString()} د.ع</td>
+                    <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
                 `;
-            });
-            
-            reservationsList.innerHTML = reservationsHTML;
-            
-            // إضافة مستمعي الأحداث لأزرار الحذف
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const index = parseInt(this.getAttribute('data-index'));
-                    if (confirm('هل أنت متأكد من حذف هذا الحجز؟')) {
-                        deleteReservation(index);
-                    }
-                });
+                
+                tableBody.appendChild(row);
             });
         }
         
-        // حذف الحجز
-        function deleteReservation(index) {
-            if (index >= 0 && index < reservations.length) {
-                reservations.splice(index, 1);
-                localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
-                displayReservations();
-                generateCalendar(currentMonth, currentYear);
-                alert('تم حذف الحجز بنجاح');
+        // البحث في الحجوزات
+        document.getElementById('searchBtn').addEventListener('click', searchReservations);
+        document.getElementById('searchInput').addEventListener('input', searchReservations);
+        
+        function searchReservations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tableBody = document.getElementById('reservationsTableBody');
+            tableBody.innerHTML = '';
+            
+            const filteredReservations = reservations.filter(reservation => 
+                reservation.customerName.toLowerCase().includes(searchTerm) ||
+                reservation.phone.includes(searchTerm) ||
+                reservation.eventType.toLowerCase().includes(searchTerm) ||
+                reservation.id.toString().includes(searchTerm)
+            );
+            
+            if (filteredReservations.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px;">لا توجد نتائج تطابق البحث</td></tr>';
+                return;
             }
+            
+            filteredReservations.forEach(reservation => {
+                const row = document.createElement('tr');
+                
+                // إنشاء علامة القاعة
+                let hallBadge = '';
+                if (reservation.halls.length === 2) {
+                    hallBadge = '<span class="hall-badge-list">1/2</span>';
+                } else if (reservation.halls.includes('القاعة رقم 1')) {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
+                } else {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
+                }
+                
+                row.innerHTML = `
+                    <td>${reservation.id}</td>
+                    <td>${reservation.customerName}</td>
+                    <td>${reservation.phone}</td>
+                    <td>${formatDate(reservation.eventDate)}</td>
+                    <td>${reservation.eventType}</td>
+                    <td>${reservation.halls.join(', ')} ${hallBadge}</td>
+                    <td>${reservation.totalAmount.toLocaleString()} د.ع</td>
+                    <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
         }
         
-        // إنشاء التقويم مع أسماء الأشهر العربية
-        function generateCalendar(month, year) {
-            const calendarContainer = document.getElementById('calendarContainer');
-            const calendarMonthTitle = document.getElementById('calendarMonthTitle');
+        // مسح البحث
+        document.getElementById('clearSearch').addEventListener('click', function() {
+            document.getElementById('searchInput').value = '';
+            updateReservationsTable();
+        });
+        
+        // تصدير البيانات
+        document.getElementById('exportReservations').addEventListener('click', function() {
+            if (reservations.length === 0) {
+                showAlert('لا توجد بيانات للتصدير', 'error');
+                return;
+            }
             
-            // أسماء الأشهر العربية بالترتيب
+            const csvContent = convertToCSV(reservations);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `حجوزات_قاعة_النخيل_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showAlert('تم تصدير بيانات الحجوزات بنجاح', 'success');
+        });
+        
+        // تحويل البيانات إلى CSV
+        function convertToCSV(data) {
+            const headers = ['رقم الحجز', 'اسم المحجِز', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'الحالة'];
+            const rows = data.map(item => [
+                item.id,
+                item.customerName,
+                item.phone,
+                item.groomName || '',
+                item.brideName || '',
+                item.eventDate,
+                item.eventType,
+                item.eventTime,
+                item.halls.join(' + '),
+                item.totalAmount,
+                item.paidAmount,
+                item.remainingAmount,
+                item.bookingDate,
+                item.status
+            ]);
+            
+            return [headers, ...rows].map(row => 
+                row.map(cell => `"${cell}"`).join(',')
+            ).join('\n');
+        }
+        
+        // إدارة التقويم
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+        
+        document.getElementById('prevMonth').addEventListener('click', function() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendar();
+        });
+        
+        document.getElementById('nextMonth').addEventListener('click', function() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendar();
+        });
+        
+        function updateCalendar() {
             const monthNames = [
-                "كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران",
-                "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"
+                'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+                'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
             ];
             
-            const dayNames = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+            document.getElementById('currentMonthYear').textContent = `${monthNames[currentMonth]} ${currentYear}`;
             
-            // تحديث عنوان الشهر والسنة
-            calendarMonthTitle.textContent = `تقويم ${monthNames[month]} ${year}`;
-            
-            // الحصول على اليوم الأول من الشهر وعدد الأيام
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
             const daysInMonth = lastDay.getDate();
-            const startingDay = firstDay.getDay(); // 0 = الأحد, 1 = الاثنين, إلخ
+            const startingDay = firstDay.getDay(); // 0 = الأحد, 6 = السبت
             
-            // إضافة رأس التقويم
+            // أسماء أيام الأسبوع
+            const dayNames = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+            
             let calendarHTML = '';
             
-            // رأس الأيام
+            // رؤوس الأيام
             for (let i = 0; i < 7; i++) {
-                calendarHTML += `<div class="calendar-header">${dayNames[i]}</div>`;
+                calendarHTML += `<div class="calendar-day-header">${dayNames[i]}</div>`;
             }
             
-            // إضافة خلايا فارغة قبل اليوم الأول
+            // الأيام الفارغة قبل بداية الشهر
             for (let i = 0; i < startingDay; i++) {
                 calendarHTML += `<div class="calendar-day"></div>`;
             }
             
-            // الحصول على تاريخ اليوم الحالي
-            const today = new Date();
-            const todayDate = today.getDate();
-            const todayMonth = today.getMonth();
-            const todayYear = today.getFullYear();
-            
-            // إضافة أيام الشهر
+            // أيام الشهر
             for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayEvents = reservations.filter(r => r.eventDate === dateStr);
                 
-                // التحقق مما إذا كان هذا التاريخ محجوزاً
-                let isReserved = false;
-                let reservationType = '';
-                
-                reservations.forEach(reservation => {
-                    if (reservation.eventDate === dateStr) {
-                        isReserved = true;
-                        reservationType = reservation.hallType;
+                let eventsHTML = '';
+                dayEvents.forEach(event => {
+                    let eventClass = '';
+                    if (event.halls.length === 2) {
+                        eventClass = 'both';
+                    } else if (event.halls.includes('القاعة رقم 1')) {
+                        eventClass = 'hall1';
+                    } else {
+                        eventClass = 'hall2';
                     }
+                    
+                    eventsHTML += `<div class="event ${eventClass}">${event.customerName} - ${event.eventType}</div>`;
                 });
                 
-                let dayClass = 'calendar-day';
-                if (isReserved) {
-                    dayClass += ' reserved';
-                    dayClass += ' ' + reservationType;
-                }
-                
-                if (day === todayDate && month === todayMonth && year === todayYear) {
-                    dayClass += ' today';
-                }
+                const isToday = today.getDate() === day && 
+                               today.getMonth() === currentMonth && 
+                               today.getFullYear() === currentYear;
                 
                 calendarHTML += `
-                    <div class="${dayClass}">
-                        <div class="day-number">${day}</div>
+                    <div class="calendar-day ${isToday ? 'today' : ''}">
+                        <div class="day-number ${isToday ? 'today' : ''}">${day}</div>
+                        ${eventsHTML}
                     </div>
                 `;
             }
             
-            calendarContainer.innerHTML = calendarHTML;
-        }
-        
-        // تفريغ النموذج
-        function resetForm() {
-            document.getElementById('clientName').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventType').value = '';
-            document.getElementById('hall1').checked = false;
-            document.getElementById('hall2').checked = false;
-            document.getElementById('hallBoth').checked = false;
-            document.getElementById('totalAmount').value = '';
-            document.getElementById('paidAmount').value = '';
-            document.getElementById('notes').value = '';
-            
-            // إعادة تعيين المبالغ المعروضة
-            totalDisplay.textContent = '0';
-            paidDisplay.textContent = '0';
-            remainingDisplay.textContent = '0';
-            remainingDisplay.style.color = '#8B4513';
-        }
-        
-        // توليد معرف فريد للحجز
-        function generateReservationId() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const random = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
-            
-            return `NL-${year}${month}${day}-${random}`;
+            document.getElementById('calendarBody').innerHTML = calendarHTML;
         }
         
         // تنسيق التاريخ
         function formatDate(dateStr) {
-            if (!dateStr) return '';
-            
+            if (!dateStr) return '-';
             const date = new Date(dateStr);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            
-            return `${year}/${month}/${day}`;
+            return date.toLocaleDateString('ar-IQ');
         }
         
-        // تهيئة الصفحة عند التحميل
-        document.addEventListener('DOMContentLoaded', () => {
-            // تعيين تاريخ اليوم كقيمة افتراضية لتاريخ الحفل
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('eventDate').value = today;
-            document.getElementById('eventDate').min = today;
+        // عرض رسائل التنبيه
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
             
-            // تحديث التاريخ في معاينة الحجز
-            document.getElementById('previewTodayDate').textContent = formatDate(today);
-            document.getElementById('previewIssueDate').textContent = formatDate(today);
-            
-            // إنشاء التقويم
-            generateCalendar(currentMonth, currentYear);
-            
-            // عرض الحجوزات
-            displayReservations();
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // تهيئة التطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            updateReservationsTable();
+            updateCalendar();
+            updateRemainingAmount();
         });
     </script>
 </body>
