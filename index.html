@@ -573,87 +573,125 @@
             background-color: #c82333;
         }
         
-        /* الطباعة - تصميم A4 */
+        /* الطباعة - تصميم A4 - تم التصحيح */
         @media print {
-            body * {
-                visibility: hidden;
-                margin: 0;
-                padding: 0;
+            body, body * {
+                visibility: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
             }
             
-            .preview-container, .preview-container * {
-                visibility: visible;
+            #printableContent, #printableContent * {
+                visibility: visible !important;
             }
             
-            .preview-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 21cm;
-                height: 29.7cm;
-                box-shadow: none;
-                padding: 0;
-                margin: 0;
-                background-color: white;
-                page-break-after: always;
+            #printableContent {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 100vh !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: white !important;
+                page-break-after: always !important;
+                font-size: 14px !important;
             }
             
             .preview-content {
-                display: flex;
-                flex-direction: row;
-                height: calc(100% - 100px);
-                padding: 0 25px 25px;
+                display: flex !important;
+                flex-direction: row !important;
+                padding: 0 20px 20px !important;
+                height: auto !important;
+                min-height: calc(100vh - 120px) !important;
             }
             
             .preview-left, .preview-right {
-                flex: 1;
-                height: 100%;
-                padding: 15px;
-                page-break-inside: avoid;
+                flex: 1 !important;
+                padding: 15px !important;
+                page-break-inside: avoid !important;
+                height: auto !important;
             }
             
             .preview-left {
-                border-left: 1px solid #ddd;
+                border-left: 1px solid #ddd !important;
             }
             
             .preview-header {
-                padding: 20px;
-                margin-bottom: 15px;
+                padding: 15px !important;
+                margin-bottom: 15px !important;
                 background-color: white !important;
                 color: black !important;
-                border-bottom: 2px solid #333;
+                border-bottom: 2px solid #333 !important;
             }
             
             .preview-header h2 {
                 color: black !important;
+                font-size: 1.8rem !important;
             }
             
-            .no-print {
+            .no-print, .btn, .action-buttons, .nav-tabs, header, .page-title, .alert,
+            .nav-tab, .container, .watermark, .telegram-badge {
                 display: none !important;
             }
             
             .signature-box {
-                border: 1px solid #999;
+                border: 1px solid #999 !important;
             }
             
-            /* تخصيص لحجم A4 */
+            /* إصلاح مشكلة الهاتف */
             @page {
-                size: A4;
-                margin: 0.8cm;
+                size: auto !important;
+                margin: 5mm !important;
             }
             
-            body {
-                margin: 0;
-                padding: 0;
-                background-color: white;
-            }
-            
-            .btn, .action-buttons, .nav-tabs, header, .page-title, .alert {
-                display: none !important;
+            html, body {
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background-color: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             
             .preview-logo {
                 color: black !important;
+            }
+            
+            /* إصلاح العرض على الهاتف */
+            .detail-section {
+                page-break-inside: avoid !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .terms, .notes-section {
+                page-break-inside: avoid !important;
+            }
+            
+            .signature-area {
+                page-break-inside: avoid !important;
+            }
+            
+            /* حجم الخطوط للطباعة */
+            .detail-title {
+                font-size: 1rem !important;
+            }
+            
+            .detail-content {
+                font-size: 0.9rem !important;
+            }
+            
+            .terms li {
+                font-size: 0.85rem !important;
+            }
+            
+            /* منع انكسار العناصر */
+            .preview-container {
+                break-inside: avoid !important;
             }
         }
         
@@ -670,6 +708,7 @@
             
             .nav-tab {
                 flex: 1 0 50%;
+                font-size: 0.9rem;
             }
             
             .form-group {
@@ -686,6 +725,12 @@
             
             .preview-content {
                 flex-direction: column;
+                padding: 0 15px 15px;
+            }
+            
+            .preview-left, .preview-right {
+                padding: 15px;
+                min-width: 100%;
             }
             
             .preview-left {
@@ -696,11 +741,49 @@
             .reservations-table {
                 display: block;
                 overflow-x: auto;
+                font-size: 0.85rem;
             }
             
             .action-cell {
                 flex-direction: column;
                 gap: 5px;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .detail-label {
+                min-width: 110px;
+                font-size: 0.9rem;
+            }
+            
+            /* تحسين الطباعة على الهاتف */
+            @media print and (max-width: 768px) {
+                .preview-content {
+                    flex-direction: column !important;
+                }
+                
+                .preview-left {
+                    border-left: none !important;
+                    border-top: 1px solid #ddd !important;
+                }
+                
+                .detail-row {
+                    flex-direction: column;
+                    margin-bottom: 5px;
+                }
+                
+                .detail-label, .detail-value {
+                    width: 100%;
+                    min-width: 100%;
+                }
             }
         }
         
@@ -774,6 +857,79 @@
             background-color: rgba(255, 193, 7, 0.1);
             color: var(--warning);
             border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+        
+        /* علامة مائية */
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(0, 0, 0, 0.1);
+            font-size: 1.5rem;
+            z-index: -1;
+            transform: rotate(-30deg);
+        }
+        
+        /* إصلاحات للهواتف */
+        .mobile-print-fix {
+            display: none;
+        }
+        
+        @media (max-width: 480px) {
+            .page {
+                padding: 20px 15px;
+            }
+            
+            .page-title {
+                font-size: 1.2rem;
+                margin-bottom: 20px;
+            }
+            
+            .preview-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .preview-header p {
+                font-size: 1rem;
+            }
+            
+            .hall-tag {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+        }
+        
+        /* تحسينات الوصول للطباعة على الهواتف */
+        @media print {
+            /* إصلاح كامل للطباعة على الهواتف */
+            body {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            /* ضمان ظهور كل المحتوى */
+            .preview-container {
+                position: static !important;
+                width: auto !important;
+                height: auto !important;
+                max-width: none !important;
+            }
+            
+            /* تحسين توزيع المحتوى */
+            .preview-content {
+                display: block !important;
+            }
+            
+            .preview-left, .preview-right {
+                width: 100% !important;
+                float: none !important;
+            }
+            
+            /* منع تقطيع الصفحة */
+            .preview-header, .detail-section, .terms, .signature-area {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
         }
     </style>
 </head>
@@ -942,6 +1098,11 @@
         <!-- صفحة المعاينة -->
         <div id="preview-page" class="page">
             <h2 class="page-title"><i class="fas fa-print"></i> معاينة الحجز وطباعته</h2>
+            
+            <!-- تحذير الطباعة على الهاتف -->
+            <div class="alert alert-info no-print" id="mobilePrintAlert" style="display: none;">
+                <i class="fas fa-mobile-alt"></i> ملاحظة: للطباعة على الهاتف، يرجى استخدام خيار "طباعة إلى PDF" أو "حفظ كـ PDF" في نافذة الطباعة
+            </div>
             
             <div class="preview-container" id="printableContent">
                 <div class="preview-header">
@@ -1179,6 +1340,9 @@
         </div>
     </div>
 
+    <!-- علامة مائية -->
+    <div class="watermark">قاعة النخيل للمناسبات</div>
+
     <script>
         // بيانات الحجوزات المخزنة
         let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
@@ -1186,7 +1350,7 @@
         
         // إعدادات تليجرام المعدلة
         const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
-        const ADMIN_CHAT_IDS = ['5627350311', '8256049330']; // الحسابان المعدلان
+        const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
         
         // التاريخ الحالي
         const today = new Date();
@@ -1199,6 +1363,14 @@
         
         // تعيين الحد الأدنى لتاريخ الحفل إلى اليوم
         document.getElementById('eventDate').min = today.toISOString().split('T')[0];
+        
+        // التحقق من نوع الجهاز
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // إظهار تحذير الطباعة للهواتف
+        if (isMobile) {
+            document.getElementById('mobilePrintAlert').style.display = 'block';
+        }
         
         // التنقل بين الصفحات
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1340,7 +1512,7 @@
             });
         }
         
-        // طباعة الحجز
+        // طباعة الحجز - تم التصحيح للهواتف
         document.getElementById('printBtn').addEventListener('click', function() {
             if (!document.getElementById('agreeTerms').checked) {
                 showAlert('يرجى الموافقة على الشروط والأحكام قبل الطباعة', 'error');
@@ -1350,10 +1522,30 @@
             // تحديث البيانات قبل الطباعة
             updatePreview();
             
-            // تأخير قليل لضمان تحديث البيانات
+            // إعداد الطباعة للهواتف
+            if (isMobile) {
+                showAlert('جارٍ فتح نافذة الطباعة... يرجى اختيار "طباعة إلى PDF" للحصول على أفضل نتيجة', 'info');
+            }
+            
+            // تأخير قليل لضمان تحديث البيانات ثم الطباعة
             setTimeout(() => {
+                // حفظ الوضع الحالي للتخطيط
+                const originalDisplay = document.getElementById('printableContent').style.display;
+                const originalWidth = document.getElementById('printableContent').style.width;
+                
+                // إعداد التخطيط للطباعة
+                document.getElementById('printableContent').style.display = 'block';
+                document.getElementById('printableContent').style.width = '100%';
+                
+                // بدء الطباعة
                 window.print();
-            }, 100);
+                
+                // استعادة التخطيط الأصلي
+                setTimeout(() => {
+                    document.getElementById('printableContent').style.display = originalDisplay;
+                    document.getElementById('printableContent').style.width = originalWidth;
+                }, 500);
+            }, 300);
         });
         
         // إرسال للتليجرام
@@ -1967,6 +2159,14 @@ ${notes}
                 console.error('❌ خطأ في اتصال تليجرام:', error);
             }
         }
+        
+        // معالجة الطباعة بعد الإغلاق
+        window.addEventListener('afterprint', function() {
+            // إعادة تحميل الصفحة بلطف بعد الطباعة
+            setTimeout(() => {
+                location.reload();
+            }, 100);
+        });
     </script>
 </body>
 </html>
