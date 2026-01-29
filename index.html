@@ -306,71 +306,100 @@
         /* صفحة المعاينة */
         .preview-container {
             background-color: white;
-            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+            overflow: hidden;
         }
         
         .preview-header {
             text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--secondary);
-        }
-        
-        .preview-header h2 {
-            color: var(--primary);
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .preview-logo {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .preview-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
             margin-bottom: 30px;
         }
         
+        .preview-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .preview-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .preview-logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .preview-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 20px 30px;
+        }
+        
+        .preview-left {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            border-left: 1px solid #eee;
+        }
+        
+        .preview-right {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
         .detail-section {
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-right: 4px solid var(--primary);
+            margin-bottom: 25px;
         }
         
         .detail-title {
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-light);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         .detail-content {
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
-        .hall-preview {
+        .detail-row {
+            margin-bottom: 10px;
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            min-width: 140px;
+            color: var(--dark);
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: var(--gray);
         }
         
         .hall-tag {
-            padding: 5px 15px;
+            display: inline-block;
+            padding: 6px 15px;
             background-color: var(--primary);
             color: white;
             border-radius: 20px;
             font-weight: bold;
+            margin-left: 8px;
+            font-size: 0.9rem;
         }
         
         .signature-area {
@@ -407,6 +436,7 @@
         .terms h4 {
             color: var(--primary);
             margin-bottom: 15px;
+            text-align: center;
         }
         
         .terms ul {
@@ -415,6 +445,14 @@
         
         .terms li {
             margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .notes-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
         }
         
         /* قائمة الحجوزات */
@@ -544,10 +582,43 @@
                 top: 0;
                 width: 100%;
                 box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .preview-content {
+                display: flex;
+                flex-direction: row;
+                height: 100%;
+            }
+            
+            .preview-left, .preview-right {
+                flex: 1;
+                height: 100%;
+                padding: 20px;
+            }
+            
+            .preview-left {
+                border-left: 1px solid #ddd;
             }
             
             .no-print {
                 display: none !important;
+            }
+            
+            .signature-box {
+                border: 1px solid #999;
+            }
+            
+            /* تخصيص لحجم A4 */
+            @page {
+                size: A4;
+                margin: 0.5cm;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
             }
         }
         
@@ -578,8 +649,13 @@
                 flex: 0 0 100%;
             }
             
-            .preview-details {
-                grid-template-columns: 1fr;
+            .preview-content {
+                flex-direction: column;
+            }
+            
+            .preview-left {
+                border-left: none;
+                border-top: 1px solid #eee;
             }
             
             .calendar-body {
@@ -622,6 +698,30 @@
             font-size: 1.5rem;
             z-index: -1;
             transform: rotate(-30deg);
+        }
+        
+        /* تحسينات للطباعة */
+        .print-optimized {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .print-header {
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .amount-display {
+            background-color: #f0f8f0;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .amount-display .detail-row {
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -799,98 +899,147 @@
                     <p>عقد حجز قاعة للمناسبات</p>
                 </div>
                 
-                <div class="preview-details">
-                    <div class="detail-section">
-                        <div class="detail-title">
-                            <i class="fas fa-user"></i> معلومات الحجز
-                        </div>
-                        <div class="detail-content">
-                            <div><strong>اسم المحجِز:</strong> <span id="previewCustomerName">-</span></div>
-                            <div><strong>رقم الهاتف:</strong> <span id="previewPhone">-</span></div>
-                            <div><strong>تاريخ الحجز:</strong> <span id="previewBookingDate">-</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <div class="detail-title">
-                            <i class="fas fa-calendar-check"></i> تفاصيل المناسبة
-                        </div>
-                        <div class="detail-content">
-                            <div><strong>نوع المناسبة:</strong> <span id="previewEventType">-</span></div>
-                            <div><strong>التاريخ:</strong> <span id="previewEventDate">-</span></div>
-                            <div><strong>الوقت:</strong> <span id="previewEventTime">-</span></div>
-                            <div id="previewCoupleNames" style="display:none;">
-                                <div><strong>اسم العريس:</strong> <span id="previewGroomName">-</span></div>
-                                <div><strong>اسم العروس:</strong> <span id="previewBrideName">-</span></div>
+                <div class="preview-content print-optimized">
+                    <!-- الجانب الأيمن - تفاصيل الحجز -->
+                    <div class="preview-right">
+                        <div class="detail-section">
+                            <div class="detail-title">
+                                <i class="fas fa-user"></i> معلومات الحجز
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <div class="detail-title">
-                            <i class="fas fa-building"></i> القاعة المختارة
-                        </div>
-                        <div class="detail-content">
-                            <div id="previewHallSelection">لم يتم اختيار قاعة</div>
-                            <div class="hall-preview" id="previewHallBadges"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <div class="detail-title">
-                            <i class="fas fa-money-bill-wave"></i> التفاصيل المالية
-                        </div>
-                        <div class="detail-content">
-                            <div><strong>المبلغ الكلي:</strong> <span id="previewTotalAmount">0</span> دينار عراقي</div>
-                            <div><strong>المبلغ الواصل:</strong> <span id="previewPaidAmount">0</span> دينار عراقي</div>
-                            <div><strong>المبلغ المتبقي:</strong> <span id="previewRemainingAmount">0</span> دينار عراقي</div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section full-width">
-                        <div class="detail-title">
-                            <i class="fas fa-sticky-note"></i> ملاحظات
-                        </div>
-                        <div class="detail-content">
-                            <span id="previewNotes">لا توجد ملاحظات</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="terms">
-                    <h4>الشروط والأحكام:</h4>
-                    <ul>
-                        <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع.</li>
-                        <li>في حال الإلغاء قبل 30 يوم من الموعد، يسترد 75% من العربون.</li>
-                        <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
-                        <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
-                    </ul>
-                </div>
-                
-                <div class="signature-area">
-                    <div class="detail-title">
-                        <i class="fas fa-signature"></i> توقيع الطرفين
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>توقيع الزبون</label>
-                            <div class="signature-box" id="customerSignatureBox">
-                                <span>انقر لإضافة التوقيع</span>
+                            <div class="detail-content">
+                                <div class="detail-row">
+                                    <span class="detail-label">اسم السيد المحجِز:</span>
+                                    <span class="detail-value" id="previewCustomerName">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">تاريخ الحجز:</span>
+                                    <span class="detail-value" id="previewBookingDate">-</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label>توقيع المسؤول</label>
-                            <div class="signature-box">
-                                <span>توقيع إدارة قاعة النخيل</span>
+                        <div class="detail-section">
+                            <div class="detail-title">
+                                <i class="fas fa-calendar-check"></i> تفاصيل المناسبة
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-row">
+                                    <span class="detail-label">نوع المناسبة:</span>
+                                    <span class="detail-value" id="previewEventType">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">التاريخ:</span>
+                                    <span class="detail-value" id="previewEventDate">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">الوقت:</span>
+                                    <span class="detail-value" id="previewEventTime">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">
+                                <i class="fas fa-building"></i> القاعة المختارة
+                            </div>
+                            <div class="detail-content">
+                                <div id="previewHallSelection">لم يتم اختيار قاعة</div>
+                                <div id="previewHallBadges" style="margin-top: 10px;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section amount-display">
+                            <div class="detail-title">
+                                <i class="fas fa-money-bill-wave"></i> التفاصيل المالية
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-row">
+                                    <span class="detail-label">المبلغ الكلي:</span>
+                                    <span class="detail-value" id="previewTotalAmount">0</span> دينار عراقي
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">المبلغ الواصل:</span>
+                                    <span class="detail-value" id="previewPaidAmount">0</span> دينار عراقي
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">المبلغ المتبقي:</span>
+                                    <span class="detail-value" id="previewRemainingAmount">0</span> دينار عراقي
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="signature-area">
+                            <div class="detail-title">
+                                <i class="fas fa-signature"></i> توقيع الطرفين
+                            </div>
+                            
+                            <div style="margin-top: 15px;">
+                                <div class="detail-row" style="margin-bottom: 15px;">
+                                    <span class="detail-label">توقيع الزبون:</span>
+                                    <span class="detail-value">
+                                        <div class="signature-box" id="customerSignatureBox" style="height: 80px; margin-top: 5px;">
+                                            <span>.......................</span>
+                                        </div>
+                                    </span>
+                                </div>
+                                
+                                <div class="detail-row">
+                                    <span class="detail-label">توقيع المسؤول:</span>
+                                    <span class="detail-value">
+                                        <div class="signature-box" style="height: 80px; margin-top: 5px;">
+                                            <span>إدارة قاعة النخيل</span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <input type="checkbox" id="agreeTerms">
+                                <label for="agreeTerms">أوافق على جميع الشروط والأحكام المذكورة</label>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="agreement">
-                        <input type="checkbox" id="agreeTerms">
-                        <label for="agreeTerms">أوافق على جميع الشروط والأحكام المذكورة أعلاه</label>
+                    <!-- الجانب الأيسر - الشروط والملاحظات -->
+                    <div class="preview-left">
+                        <div class="terms">
+                            <h4>الشروط والأحكام:</h4>
+                            <ul>
+                                <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
+                                <li>في حال الإلغاء قبل 30 يوم من الموعد، يسترد 75% من العربون.</li>
+                                <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                                <li>في حال الإلغاء قبل 7 أيام من الموعد، لا يسترد أي مبلغ.</li>
+                                <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
+                                <li>يجب الالتزام بموعد انتهاء الحفل حسب العقد المتفق عليه.</li>
+                                <li>يجب الحفاظ على نظافة القاعة والمعدات المستخدمة.</li>
+                                <li>أي تلفيات في معدات القاعة تتحملها الجهة المحجِزة.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="notes-section">
+                            <div class="detail-title">
+                                <i class="fas fa-sticky-note"></i> الملاحظات
+                            </div>
+                            <div class="detail-content" style="margin-top: 10px;">
+                                <span id="previewNotes">لا توجد ملاحظات</span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 30px; padding: 15px; background-color: #f0f0f0; border-radius: 8px;">
+                            <div class="detail-title" style="border-bottom: none; margin-bottom: 10px;">
+                                <i class="fas fa-info-circle"></i> معلومات هامة
+                            </div>
+                            <div class="detail-content">
+                                <p style="margin-bottom: 8px;"><strong>رقم الحجز:</strong> <span id="previewReservationId">-</span></p>
+                                <p style="margin-bottom: 8px;"><strong>حالة الحجز:</strong> <span style="color: var(--success); font-weight: bold;">مؤكد</span></p>
+                                <p><strong>رقم الهاتف للاستفسار:</strong> 07701234567</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 40px; text-align: center; font-size: 0.9rem; color: var(--gray);">
+                            <p>شكراً لاختياركم قاعة النخيل للمناسبات</p>
+                            <p>نتمنى لكم مناسبة سعيدة ونجاح باهر</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -913,7 +1062,7 @@
             <h2 class="page-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات</h2>
             
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ابحث بالاسم أو رقم الهاتف أو نوع المناسبة...">
+                <input type="text" id="searchInput" placeholder="ابحث باسم السيد أو رقم الهاتف أو نوع المناسبة...">
                 <button class="btn btn-secondary" id="searchBtn">
                     <i class="fas fa-search"></i> بحث
                 </button>
@@ -927,7 +1076,7 @@
                     <thead>
                         <tr>
                             <th>رقم الحجز</th>
-                            <th>اسم المحجِز</th>
+                            <th>اسم السيد</th>
                             <th>رقم الهاتف</th>
                             <th>تاريخ الحفل</th>
                             <th>نوع المناسبة</th>
@@ -1084,27 +1233,14 @@
         
         // تحديث صفحة المعاينة
         function updatePreview() {
-            // معلومات الحجز
+            // معلومات الحجز - فقط اسم السيد وتاريخ الحجز
             document.getElementById('previewCustomerName').textContent = document.getElementById('customerName').value;
-            document.getElementById('previewPhone').textContent = document.getElementById('phone').value;
             document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
             
             // تفاصيل المناسبة
             document.getElementById('previewEventType').textContent = document.getElementById('eventType').value;
             document.getElementById('previewEventDate').textContent = formatDate(document.getElementById('eventDate').value);
             document.getElementById('previewEventTime').textContent = document.getElementById('eventTime').value;
-            
-            // أسماء العريس والعروس (إذا كانت مناسبة زفاف)
-            const eventType = document.getElementById('eventType').value;
-            const coupleNamesDiv = document.getElementById('previewCoupleNames');
-            
-            if (eventType === 'عرس' || eventType === 'خطوبة') {
-                coupleNamesDiv.style.display = 'block';
-                document.getElementById('previewGroomName').textContent = document.getElementById('groomName').value || '-';
-                document.getElementById('previewBrideName').textContent = document.getElementById('brideName').value || '-';
-            } else {
-                coupleNamesDiv.style.display = 'none';
-            }
             
             // القاعة المختارة
             const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
@@ -1129,19 +1265,22 @@
             }
             
             // التفاصيل المالية
-            document.getElementById('previewTotalAmount').textContent = document.getElementById('totalAmount').value || '0';
-            document.getElementById('previewPaidAmount').textContent = document.getElementById('paidAmount').value || '0';
-            document.getElementById('previewRemainingAmount').textContent = document.getElementById('remainingAmount').value || '0';
+            document.getElementById('previewTotalAmount').textContent = formatCurrency(document.getElementById('totalAmount').value || '0');
+            document.getElementById('previewPaidAmount').textContent = formatCurrency(document.getElementById('paidAmount').value || '0');
+            document.getElementById('previewRemainingAmount').textContent = formatCurrency(document.getElementById('remainingAmount').value || '0');
             
             // الملاحظات
             const notes = document.getElementById('notes').value;
             document.getElementById('previewNotes').textContent = notes || 'لا توجد ملاحظات';
             
+            // رقم الحجز
+            document.getElementById('previewReservationId').textContent = reservationCounter + 1;
+            
             // إضافة توقيع الزبون (محاكاة)
             const signatureBox = document.getElementById('customerSignatureBox');
-            signatureBox.innerHTML = '<span>انقر لإضافة التوقيع</span>';
+            signatureBox.innerHTML = '<span>.......................</span>';
             signatureBox.addEventListener('click', function() {
-                this.innerHTML = '<span style="font-family: cursive; font-size: 24px;">توقيع الزبون</span>';
+                this.innerHTML = '<span style="font-family: cursive; font-size: 20px;">توقيع الزبون</span>';
             });
         }
         
@@ -1152,7 +1291,13 @@
                 return;
             }
             
-            window.print();
+            // تحديث البيانات قبل الطباعة
+            updatePreview();
+            
+            // تأخير قليل لضمان تحديث البيانات
+            setTimeout(() => {
+                window.print();
+            }, 100);
         });
         
         // حفظ الحجز
@@ -1281,7 +1426,7 @@
                     <td>${formatDate(reservation.eventDate)}</td>
                     <td>${reservation.eventType}</td>
                     <td>${reservation.halls.join(', ')} ${hallBadge}</td>
-                    <td>${reservation.totalAmount.toLocaleString()} د.ع</td>
+                    <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
                     <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
                 `;
                 
@@ -1330,7 +1475,7 @@
                     <td>${formatDate(reservation.eventDate)}</td>
                     <td>${reservation.eventType}</td>
                     <td>${reservation.halls.join(', ')} ${hallBadge}</td>
-                    <td>${reservation.totalAmount.toLocaleString()} د.ع</td>
+                    <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
                     <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
                 `;
                 
@@ -1368,7 +1513,7 @@
         
         // تحويل البيانات إلى CSV
         function convertToCSV(data) {
-            const headers = ['رقم الحجز', 'اسم المحجِز', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'الحالة'];
+            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'الحالة'];
             const rows = data.map(item => [
                 item.id,
                 item.customerName,
@@ -1457,7 +1602,7 @@
                         eventClass = 'hall2';
                     }
                     
-                    eventsHTML += `<div class="event ${eventClass}">${event.customerName} - ${event.eventType}</div>`;
+                    eventsHTML += `<div class="event ${eventClass}">${event.customerName}</div>`;
                 });
                 
                 const isToday = today.getDate() === day && 
@@ -1480,6 +1625,11 @@
             if (!dateStr) return '-';
             const date = new Date(dateStr);
             return date.toLocaleDateString('ar-IQ');
+        }
+        
+        // تنسيق العملة
+        function formatCurrency(amount) {
+            return parseFloat(amount).toLocaleString('ar-IQ');
         }
         
         // عرض رسائل التنبيه
