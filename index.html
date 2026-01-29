@@ -316,6 +316,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
         .btn-telegram {
             background-color: #0088cc;
             color: white;
@@ -525,6 +536,43 @@
             flex: 1;
         }
         
+        /* أزرار الإجراءات في الجدول */
+        .action-cell {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn.view {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .action-btn.view:hover {
+            background-color: #138496;
+        }
+        
+        .action-btn.delete {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn.delete:hover {
+            background-color: #c82333;
+        }
+        
         /* الطباعة - تصميم A4 */
         @media print {
             body * {
@@ -648,6 +696,11 @@
             .reservations-table {
                 display: block;
                 overflow-x: auto;
+            }
+            
+            .action-cell {
+                flex-direction: column;
+                gap: 5px;
             }
         }
         
@@ -1106,7 +1159,7 @@
                             <th>القاعة</th>
                             <th>المبلغ الكلي</th>
                             <th>التليجرام</th>
-                            <th>الحالة</th>
+                            <th>الإجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="reservationsTableBody">
@@ -1119,6 +1172,9 @@
                 <button class="btn btn-primary" id="exportReservations">
                     <i class="fas fa-file-export"></i> تصدير البيانات
                 </button>
+                <button class="btn btn-danger" id="deleteAllBtn">
+                    <i class="fas fa-trash-alt"></i> حذف الكل
+                </button>
             </div>
         </div>
     </div>
@@ -1128,9 +1184,9 @@
         let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
         let reservationCounter = reservations.length > 0 ? Math.max(...reservations.map(r => r.id)) : 0;
         
-        // إعدادات تليجرام
+        // إعدادات تليجرام المعدلة
         const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
-        const ADMIN_CHAT_IDS = ['5627350311', '718075907'];
+        const ADMIN_CHAT_IDS = ['5627350311', '8256049330']; // الحسابان المعدلان
         
         // التاريخ الحالي
         const today = new Date();
@@ -1559,6 +1615,18 @@ ${notes}
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
+                // أزرار الإجراءات
+                const actions = `
+                    <div class="action-cell">
+                        <button class="action-btn view" onclick="viewReservation(${reservation.id})">
+                            <i class="fas fa-eye"></i> معاينة
+                        </button>
+                        <button class="action-btn delete" onclick="deleteReservation(${reservation.id})">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
                 row.innerHTML = `
                     <td>${reservation.id}</td>
                     <td>${reservation.customerName}</td>
@@ -1570,11 +1638,155 @@ ${notes}
                     <td>${reservation.halls.join(', ')} ${hallBadge}</td>
                     <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
                     <td>${telegramStatus}</td>
-                    <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
+                    <td>${actions}</td>
                 `;
                 
                 tableBody.appendChild(row);
             });
+        }
+        
+        // عرض تفاصيل الحجز
+        window.viewReservation = function(id) {
+            const reservation = reservations.find(r => r.id === id);
+            if (!reservation) return;
+            
+            // تعبئة النموذج بالبيانات
+            document.getElementById('customerName').value = reservation.customerName;
+            document.getElementById('phone').value = reservation.phone;
+            document.getElementById('groomName').value = reservation.groomName;
+            document.getElementById('brideName').value = reservation.brideName;
+            document.getElementById('eventDate').value = reservation.eventDate;
+            document.getElementById('eventType').value = reservation.eventType;
+            document.getElementById('eventTime').value = reservation.eventTime;
+            document.getElementById('totalAmount').value = reservation.totalAmount;
+            document.getElementById('paidAmount').value = reservation.paidAmount;
+            document.getElementById('remainingAmount').value = reservation.remainingAmount;
+            document.getElementById('notes').value = reservation.notes;
+            
+            // تحديد القاعات
+            document.querySelectorAll('input[name="hall"]').forEach(cb => {
+                cb.checked = reservation.halls.includes(cb.value);
+            });
+            
+            // تحديث المبلغ المتبقي
+            updateRemainingAmount();
+            
+            // الانتقال إلى صفحة المعاينة
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-page="preview-page"]').classList.add('active');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('preview-page').classList.add('active');
+            
+            updatePreview();
+            
+            showAlert(`تم تحميل بيانات الحجز رقم ${id}`, 'info');
+        };
+        
+        // حذف الحجز
+        window.deleteReservation = function(id) {
+            if (!confirm(`هل أنت متأكد من حذف الحجز رقم ${id}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+                return;
+            }
+            
+            // البحث عن الحجز وحذفه
+            const index = reservations.findIndex(r => r.id === id);
+            if (index !== -1) {
+                const deletedReservation = reservations[index];
+                reservations.splice(index, 1);
+                
+                // تحديث localStorage
+                localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
+                
+                // تحديث العداد إذا كان الحذف هو الأخير
+                if (reservations.length === 0) {
+                    reservationCounter = 0;
+                } else if (id === reservationCounter) {
+                    reservationCounter = Math.max(...reservations.map(r => r.id));
+                }
+                
+                // تحديث الجدول
+                updateReservationsTable();
+                
+                // إرسال إشعار تليجرام للحذف
+                sendDeleteNotificationToTelegram(deletedReservation);
+                
+                showAlert(`تم حذف الحجز رقم ${id} بنجاح`, 'success');
+            }
+        };
+        
+        // إرسال إشعار حذف للتليجرام
+        async function sendDeleteNotificationToTelegram(reservation) {
+            const message = `
+⚠️ *حذف حجز - قاعة النخيل للمناسبات* ⚠️
+
+🔢 *رقم الحجز المحذوف:* ${reservation.id}
+👤 *اسم السيد:* ${reservation.customerName}
+📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
+💒 *نوع المناسبة:* ${reservation.eventType}
+
+🕒 *تم الحذف في:* ${new Date().toLocaleTimeString('ar-IQ')}
+📅 *تاريخ الحذف:* ${new Date().toLocaleDateString('ar-IQ')}
+
+🔔 *تم إرسال إشعار الحذف للأدمنين*
+            `;
+            
+            try {
+                await sendToAllAdmins(message);
+            } catch (error) {
+                console.error('خطأ في إرسال إشعار الحذف:', error);
+            }
+        }
+        
+        // حذف جميع الحجوزات
+        document.getElementById('deleteAllBtn').addEventListener('click', function() {
+            if (reservations.length === 0) {
+                showAlert('لا توجد حجوزات لحذفها', 'info');
+                return;
+            }
+            
+            if (!confirm(`هل أنت متأكد من حذف جميع الحجوزات (${reservations.length} حجز)؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+                return;
+            }
+            
+            // إرسال إشعار تليجرام لحذف الكل
+            sendDeleteAllNotificationToTelegram(reservations.length);
+            
+            // حذف جميع الحجوزات
+            reservations = [];
+            reservationCounter = 0;
+            
+            // تحديث localStorage
+            localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
+            
+            // تحديث الجدول
+            updateReservationsTable();
+            
+            showAlert('تم حذف جميع الحجوزات بنجاح', 'success');
+        });
+        
+        // إرسال إشعار حذف الكل للتليجرام
+        async function sendDeleteAllNotificationToTelegram(count) {
+            const message = `
+🚨 *حذف جميع الحجوزات - قاعة النخيل للمناسبات* 🚨
+
+🔢 *عدد الحجوزات المحذوفة:* ${count}
+
+🕒 *تم الحذف في:* ${new Date().toLocaleTimeString('ar-IQ')}
+📅 *تاريخ الحذف:* ${new Date().toLocaleDateString('ar-IQ')}
+
+⚠️ *تحذير:* تم حذف جميع بيانات الحجوزات من النظام
+
+🔔 *تم إرسال إشعار الحذف للأدمنين*
+            `;
+            
+            try {
+                await sendToAllAdmins(message);
+            } catch (error) {
+                console.error('خطأ في إرسال إشعار حذف الكل:', error);
+            }
         }
         
         // البحث في الحجوزات
@@ -1622,6 +1834,18 @@ ${notes}
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
+                // أزرار الإجراءات
+                const actions = `
+                    <div class="action-cell">
+                        <button class="action-btn view" onclick="viewReservation(${reservation.id})">
+                            <i class="fas fa-eye"></i> معاينة
+                        </button>
+                        <button class="action-btn delete" onclick="deleteReservation(${reservation.id})">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
                 row.innerHTML = `
                     <td>${reservation.id}</td>
                     <td>${reservation.customerName}</td>
@@ -1633,7 +1857,7 @@ ${notes}
                     <td>${reservation.halls.join(', ')} ${hallBadge}</td>
                     <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
                     <td>${telegramStatus}</td>
-                    <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
+                    <td>${actions}</td>
                 `;
                 
                 tableBody.appendChild(row);
