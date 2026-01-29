@@ -17,6 +17,7 @@
             --success: #28a745;
             --warning: #ffc107;
             --danger: #dc3545;
+            --info: #17a2b8;
         }
         
         * {
@@ -73,6 +74,18 @@
         .logo p {
             font-size: 0.9rem;
             opacity: 0.9;
+        }
+        
+        .telegram-badge {
+            background-color: #0088cc;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
         }
         
         /* التنقل بين الصفحات */
@@ -303,6 +316,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
+        .btn-telegram {
+            background-color: #0088cc;
+            color: white;
+        }
+        
+        .btn-telegram:hover {
+            background-color: #0077b5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
         /* صفحة المعاينة */
         .preview-container {
             background-color: white;
@@ -501,71 +525,6 @@
             flex: 1;
         }
         
-        /* التقويم */
-        .calendar {
-            margin-top: 20px;
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .calendar-body {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background-color: #ddd;
-            border: 1px solid #ddd;
-        }
-        
-        .calendar-day {
-            background-color: white;
-            padding: 10px;
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .calendar-day-header {
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            background-color: var(--gray-light);
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .day-number {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .event {
-            background-color: var(--primary);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-        
-        .event.hall1 {
-            background-color: #4a8c4a;
-        }
-        
-        .event.hall2 {
-            background-color: #d4af37;
-            color: var(--dark);
-        }
-        
-        .event.both {
-            background: linear-gradient(to right, #4a8c4a 50%, #d4af37 50%);
-            color: white;
-        }
-        
         /* الطباعة - تصميم A4 */
         @media print {
             body * {
@@ -648,37 +607,6 @@
             .preview-logo {
                 color: black !important;
             }
-            
-            /* تحسينات الطباعة */
-            .detail-section {
-                page-break-inside: avoid;
-                margin-bottom: 15px;
-            }
-            
-            .terms, .notes-section {
-                page-break-inside: avoid;
-            }
-            
-            .signature-area {
-                page-break-inside: avoid;
-            }
-            
-            /* حجم الخطوط للطباعة */
-            .preview-header h2 {
-                font-size: 1.8rem;
-            }
-            
-            .detail-title {
-                font-size: 1rem;
-            }
-            
-            .detail-content {
-                font-size: 0.9rem;
-            }
-            
-            .terms li {
-                font-size: 0.85rem;
-            }
         }
         
         /* تصميم متجاوب */
@@ -717,16 +645,6 @@
                 border-top: 1px solid #eee;
             }
             
-            .calendar-body {
-                grid-template-columns: repeat(7, 1fr);
-                font-size: 0.8rem;
-            }
-            
-            .calendar-day {
-                min-height: 70px;
-                padding: 5px;
-            }
-            
             .reservations-table {
                 display: block;
                 overflow-x: auto;
@@ -753,15 +671,10 @@
             color: var(--danger);
         }
         
-        /* العلامات المائية */
-        .watermark {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            color: rgba(0, 0, 0, 0.1);
-            font-size: 1.5rem;
-            z-index: -1;
-            transform: rotate(-30deg);
+        .alert-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            border: 1px solid var(--info);
+            color: var(--info);
         }
         
         /* تحسينات للطباعة */
@@ -781,55 +694,33 @@
             margin-bottom: 6px;
         }
         
-        /* تحسين عرض الحجوزات */
-        .compact-table {
-            font-size: 0.9rem;
-        }
-        
-        .compact-table td, .compact-table th {
-            padding: 10px 8px;
-        }
-        
-        .status-badge {
-            padding: 4px 10px;
+        /* تيلجرام ستاتس */
+        .telegram-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.85rem;
-            font-weight: bold;
+            font-weight: 600;
         }
         
-        .status-confirmed {
-            background-color: #d4edda;
-            color: #155724;
+        .telegram-sent {
+            background-color: rgba(0, 136, 204, 0.1);
+            color: #0088cc;
+            border: 1px solid rgba(0, 136, 204, 0.2);
         }
         
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
+        .telegram-failed {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 53, 69, 0.2);
         }
         
-        /* تحسينات A4 */
-        .a4-container {
-            width: 21cm;
-            min-height: 29.7cm;
-            background-color: white;
-            margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        .a4-content {
-            padding: 1.5cm;
-            height: 100%;
-        }
-        
-        .print-watermark {
-            position: absolute;
-            opacity: 0.1;
-            font-size: 120px;
-            transform: rotate(-45deg);
-            top: 40%;
-            left: 20%;
-            z-index: -1;
-            color: #aaa;
+        .telegram-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 193, 7, 0.2);
         }
     </style>
 </head>
@@ -842,6 +733,10 @@
                 <div>
                     <h1>قاعة النخيل للمناسبات</h1>
                     <p>نظام إدارة الحجوزات الإلكتروني</p>
+                    <div class="telegram-badge">
+                        <i class="fab fa-telegram"></i>
+                        متصل ببوت تليجرام
+                    </div>
                 </div>
             </div>
             <div class="date-display" id="currentDate">
@@ -861,9 +756,6 @@
             </div>
             <div class="nav-tab" data-page="reservations-list">
                 <i class="fas fa-list"></i> قائمة الحجوزات
-            </div>
-            <div class="nav-tab" data-page="calendar-page">
-                <i class="fas fa-calendar-alt"></i> تقويم الحجوزات
             </div>
         </div>
         
@@ -998,9 +890,7 @@
         <div id="preview-page" class="page">
             <h2 class="page-title"><i class="fas fa-print"></i> معاينة الحجز وطباعته</h2>
             
-            <div class="preview-container a4-container" id="printableContent">
-                <div class="print-watermark">قاعة النخيل</div>
-                
+            <div class="preview-container" id="printableContent">
                 <div class="preview-header">
                     <div class="preview-logo">
                         <i class="fas fa-palette"></i>
@@ -1052,10 +942,6 @@
                                 <div class="detail-row">
                                     <span class="detail-label">الوقت:</span>
                                     <span class="detail-value" id="previewEventTime">-</span>
-                                </div>
-                                <div class="detail-row" id="previewCoupleNames" style="display: none;">
-                                    <span class="detail-label">أسماء:</span>
-                                    <span class="detail-value" id="previewNames">-</span>
                                 </div>
                             </div>
                         </div>
@@ -1183,6 +1069,9 @@
                 <button class="btn btn-success" id="printBtn">
                     <i class="fas fa-print"></i> طباعة الحجز
                 </button>
+                <button class="btn btn-telegram" id="sendToTelegram">
+                    <i class="fab fa-telegram"></i> إرسال للتليجرام
+                </button>
                 <button class="btn btn-primary" id="saveReservation">
                     <i class="fas fa-save"></i> حفظ الحجز
                 </button>
@@ -1216,6 +1105,7 @@
                             <th>نوع المناسبة</th>
                             <th>القاعة</th>
                             <th>المبلغ الكلي</th>
+                            <th>التليجرام</th>
                             <th>الحالة</th>
                         </tr>
                     </thead>
@@ -1231,36 +1121,16 @@
                 </button>
             </div>
         </div>
-        
-        <!-- صفحة التقويم -->
-        <div id="calendar-page" class="page">
-            <h2 class="page-title"><i class="fas fa-calendar-alt"></i> تقويم الحجوزات الشهري</h2>
-            
-            <div class="calendar">
-                <div class="calendar-header">
-                    <button class="btn btn-secondary" id="prevMonth">
-                        <i class="fas fa-chevron-right"></i> الشهر السابق
-                    </button>
-                    <h3 id="currentMonthYear">شهر 2023</h3>
-                    <button class="btn btn-secondary" id="nextMonth">
-                        الشهر التالي <i class="fas fa-chevron-left"></i>
-                    </button>
-                </div>
-                
-                <div class="calendar-body" id="calendarBody">
-                    <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
-                </div>
-            </div>
-        </div>
     </div>
-    
-    <!-- علامة مائية -->
-    <div class="watermark">قاعة النخيل للمناسبات</div>
 
     <script>
         // بيانات الحجوزات المخزنة
         let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
         let reservationCounter = reservations.length > 0 ? Math.max(...reservations.map(r => r.id)) : 0;
+        
+        // إعدادات تليجرام
+        const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
+        const ADMIN_CHAT_IDS = ['5627350311', '718075907'];
         
         // التاريخ الحالي
         const today = new Date();
@@ -1297,11 +1167,6 @@
                 // إذا كانت صفحة قائمة الحجوزات، قم بتحديث الجدول
                 if (pageId === 'reservations-list') {
                     updateReservationsTable();
-                }
-                
-                // إذا كانت صفحة التقويم، قم بتحديثه
-                if (pageId === 'calendar-page') {
-                    updateCalendar();
                 }
             });
         });
@@ -1367,7 +1232,7 @@
         
         // تحديث صفحة المعاينة
         function updatePreview() {
-            // معلومات الحجز
+            // معلومات الحجز (بدون أسماء العرسان)
             document.getElementById('previewCustomerName').textContent = document.getElementById('customerName').value;
             document.getElementById('previewPhone').textContent = document.getElementById('phone').value;
             document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
@@ -1376,26 +1241,6 @@
             document.getElementById('previewEventType').textContent = document.getElementById('eventType').value;
             document.getElementById('previewEventDate').textContent = formatDate(document.getElementById('eventDate').value);
             document.getElementById('previewEventTime').textContent = document.getElementById('eventTime').value;
-            
-            // أسماء العريس والعروس إذا كانت موجودة
-            const groomName = document.getElementById('groomName').value;
-            const brideName = document.getElementById('brideName').value;
-            const coupleNamesDiv = document.getElementById('previewCoupleNames');
-            
-            if (groomName || brideName) {
-                coupleNamesDiv.style.display = 'flex';
-                let namesText = '';
-                if (groomName && brideName) {
-                    namesText = `${groomName} & ${brideName}`;
-                } else if (groomName) {
-                    namesText = groomName;
-                } else {
-                    namesText = brideName;
-                }
-                document.getElementById('previewNames').textContent = namesText;
-            } else {
-                coupleNamesDiv.style.display = 'none';
-            }
             
             // القاعة المختارة
             const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
@@ -1455,6 +1300,127 @@
             }, 100);
         });
         
+        // إرسال للتليجرام
+        document.getElementById('sendToTelegram').addEventListener('click', function() {
+            if (!validateForm()) {
+                showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
+                return;
+            }
+            
+            // إعداد رسالة التليجرام
+            const telegramMessage = formatTelegramMessage();
+            
+            // إرسال الرسالة لجميع الأدمن
+            sendToAllAdmins(telegramMessage);
+        });
+        
+        // تنسيق رسالة التليجرام
+        function formatTelegramMessage() {
+            const customerName = document.getElementById('customerName').value;
+            const phone = document.getElementById('phone').value;
+            const groomName = document.getElementById('groomName').value || 'غير محدد';
+            const brideName = document.getElementById('brideName').value || 'غير محدد';
+            const eventType = document.getElementById('eventType').value;
+            const eventDate = formatDate(document.getElementById('eventDate').value);
+            const eventTime = document.getElementById('eventTime').value;
+            
+            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            const hallText = selectedHalls.length === 2 ? 'القاعتين معاً' : selectedHalls.join(', ');
+            
+            const totalAmount = document.getElementById('totalAmount').value || '0';
+            const paidAmount = document.getElementById('paidAmount').value || '0';
+            const remainingAmount = document.getElementById('remainingAmount').value || '0';
+            
+            const notes = document.getElementById('notes').value || 'لا توجد ملاحظات';
+            
+            const message = `
+🎉 *حجز جديد - قاعة النخيل للمناسبات* 🎉
+
+🔢 *رقم الحجز:* ${reservationCounter + 1}
+📅 *تاريخ الحجز:* ${new Date().toLocaleDateString('ar-IQ')}
+
+👤 *معلومات السيد:*
+• الاسم: ${customerName}
+• الهاتف: ${phone}
+
+💒 *تفاصيل المناسبة:*
+• النوع: ${eventType}
+• التاريخ: ${eventDate}
+• الوقت: ${eventTime}
+
+${(groomName !== 'غير محدد' || brideName !== 'غير محدد') ? `👰‍♀️🤵‍♂️ *أسماء العرسان:*\n• العريس: ${groomName}\n• العروس: ${brideName}\n` : ''}
+
+🏛️ *القاعة المختارة:*
+• ${hallText}
+
+💰 *التفاصيل المالية:*
+• المبلغ الكلي: ${formatCurrency(totalAmount)} د.ع
+• المبلغ الواصل: ${formatCurrency(paidAmount)} د.ع
+• المبلغ المتبقي: ${formatCurrency(remainingAmount)} د.ع
+
+📝 *ملاحظات:*
+${notes}
+
+🕒 *تم الحفظ في:* ${new Date().toLocaleTimeString('ar-IQ')}
+
+✅ *حالة الحجز:* مؤكد
+
+🔔 *تم إرسال الإشعار للأدمنين*
+            `;
+            
+            return message;
+        }
+        
+        // إرسال الرسالة لجميع الأدمن
+        async function sendToAllAdmins(message) {
+            showAlert('جاري إرسال الإشعار للتليجرام...', 'info');
+            
+            let successCount = 0;
+            let failedCount = 0;
+            
+            for (const chatId of ADMIN_CHAT_IDS) {
+                try {
+                    const response = await sendTelegramMessage(chatId, message);
+                    if (response.ok) {
+                        successCount++;
+                    } else {
+                        failedCount++;
+                        console.error('خطأ في إرسال الرسالة:', response);
+                    }
+                } catch (error) {
+                    failedCount++;
+                    console.error('خطأ في الاتصال:', error);
+                }
+            }
+            
+            if (successCount > 0) {
+                showAlert(`تم إرسال الإشعار لـ ${successCount} من الأدمنين بنجاح ✅`, 'success');
+            }
+            
+            if (failedCount > 0) {
+                showAlert(`فشل إرسال الإشعار لـ ${failedCount} من الأدمنين ❌`, 'error');
+            }
+        }
+        
+        // دالة إرسال رسالة تليجرام
+        async function sendTelegramMessage(chatId, message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+            
+            return response.json();
+        }
+        
         // حفظ الحجز
         document.getElementById('saveReservation').addEventListener('click', saveReservation);
         document.getElementById('submitForm').addEventListener('click', function(e) {
@@ -1462,7 +1428,7 @@
             saveReservation();
         });
         
-        function saveReservation() {
+        async function saveReservation() {
             // التحقق من صحة النموذج
             if (!validateForm()) {
                 showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
@@ -1488,8 +1454,21 @@
                 remainingAmount: parseFloat(document.getElementById('remainingAmount').value) || 0,
                 notes: document.getElementById('notes').value,
                 bookingDate: new Date().toISOString().split('T')[0],
+                telegramSent: false,
+                telegramSentAt: null,
                 status: 'مؤكد'
             };
+            
+            // إرسال إشعار تليجرام
+            try {
+                const telegramMessage = formatTelegramMessage();
+                await sendToAllAdmins(telegramMessage);
+                reservation.telegramSent = true;
+                reservation.telegramSentAt = new Date().toISOString();
+            } catch (error) {
+                console.error('خطأ في إرسال تليجرام:', error);
+                reservation.telegramSent = false;
+            }
             
             // إضافة الحجز إلى القائمة
             reservations.push(reservation);
@@ -1498,13 +1477,10 @@
             localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
             
             // إظهار رسالة نجاح
-            showAlert('تم حفظ الحجز بنجاح! رقم الحجز: ' + reservationCounter, 'success');
+            showAlert(`تم حفظ الحجز بنجاح! رقم الحجز: ${reservationCounter} ${reservation.telegramSent ? '✅ (تم الإرسال للتليجرام)' : '⚠️ (لم يتم الإرسال للتليجرام)'}`, 'success');
             
             // تحديث قائمة الحجوزات
             updateReservationsTable();
-            
-            // تحديث التقويم
-            updateCalendar();
             
             // مسح النموذج
             document.getElementById('reservationForm').reset();
@@ -1554,7 +1530,7 @@
             tableBody.innerHTML = '';
             
             if (reservations.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">لا توجد حجوزات مسجلة بعد</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 30px;">لا توجد حجوزات مسجلة بعد</td></tr>';
                 return;
             }
             
@@ -1574,6 +1550,15 @@
                     hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
                 }
                 
+                // حالة التليجرام
+                let telegramStatus = '';
+                if (reservation.telegramSent) {
+                    const sentTime = reservation.telegramSentAt ? new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
+                    telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
+                } else {
+                    telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
+                }
+                
                 row.innerHTML = `
                     <td>${reservation.id}</td>
                     <td>${reservation.customerName}</td>
@@ -1584,7 +1569,8 @@
                     <td>${reservation.eventType}</td>
                     <td>${reservation.halls.join(', ')} ${hallBadge}</td>
                     <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
-                    <td><span class="status-badge status-confirmed">${reservation.status}</span></td>
+                    <td>${telegramStatus}</td>
+                    <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
                 `;
                 
                 tableBody.appendChild(row);
@@ -1610,7 +1596,7 @@
             );
             
             if (filteredReservations.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">لا توجد نتائج تطابق البحث</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 30px;">لا توجد نتائج تطابق البحث</td></tr>';
                 return;
             }
             
@@ -1627,6 +1613,15 @@
                     hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
                 }
                 
+                // حالة التليجرام
+                let telegramStatus = '';
+                if (reservation.telegramSent) {
+                    const sentTime = reservation.telegramSentAt ? new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
+                    telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
+                } else {
+                    telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
+                }
+                
                 row.innerHTML = `
                     <td>${reservation.id}</td>
                     <td>${reservation.customerName}</td>
@@ -1637,7 +1632,8 @@
                     <td>${reservation.eventType}</td>
                     <td>${reservation.halls.join(', ')} ${hallBadge}</td>
                     <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
-                    <td><span class="status-badge status-confirmed">${reservation.status}</span></td>
+                    <td>${telegramStatus}</td>
+                    <td><span style="color: var(--success); font-weight: bold;">${reservation.status}</span></td>
                 `;
                 
                 tableBody.appendChild(row);
@@ -1674,7 +1670,7 @@
         
         // تحويل البيانات إلى CSV
         function convertToCSV(data) {
-            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'الحالة'];
+            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
             const rows = data.map(item => [
                 item.id,
                 item.customerName,
@@ -1689,96 +1685,14 @@
                 item.paidAmount,
                 item.remainingAmount,
                 item.bookingDate,
+                item.telegramSent ? 'تم الإرسال' : 'لم يرسل',
+                item.telegramSentAt || '',
                 item.status
             ]);
             
             return [headers, ...rows].map(row => 
                 row.map(cell => `"${cell}"`).join(',')
             ).join('\n');
-        }
-        
-        // إدارة التقويم
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
-        
-        document.getElementById('prevMonth').addEventListener('click', function() {
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            updateCalendar();
-        });
-        
-        document.getElementById('nextMonth').addEventListener('click', function() {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            updateCalendar();
-        });
-        
-        function updateCalendar() {
-            const monthNames = [
-                'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-                'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-            ];
-            
-            document.getElementById('currentMonthYear').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-            
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startingDay = firstDay.getDay(); // 0 = الأحد, 6 = السبت
-            
-            // أسماء أيام الأسبوع
-            const dayNames = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
-            
-            let calendarHTML = '';
-            
-            // رؤوس الأيام
-            for (let i = 0; i < 7; i++) {
-                calendarHTML += `<div class="calendar-day-header">${dayNames[i]}</div>`;
-            }
-            
-            // الأيام الفارغة قبل بداية الشهر
-            for (let i = 0; i < startingDay; i++) {
-                calendarHTML += `<div class="calendar-day"></div>`;
-            }
-            
-            // أيام الشهر
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayEvents = reservations.filter(r => r.eventDate === dateStr);
-                
-                let eventsHTML = '';
-                dayEvents.forEach(event => {
-                    let eventClass = '';
-                    if (event.halls.length === 2) {
-                        eventClass = 'both';
-                    } else if (event.halls.includes('القاعة رقم 1')) {
-                        eventClass = 'hall1';
-                    } else {
-                        eventClass = 'hall2';
-                    }
-                    
-                    eventsHTML += `<div class="event ${eventClass}">${event.customerName}</div>`;
-                });
-                
-                const isToday = today.getDate() === day && 
-                               today.getMonth() === currentMonth && 
-                               today.getFullYear() === currentYear;
-                
-                calendarHTML += `
-                    <div class="calendar-day ${isToday ? 'today' : ''}">
-                        <div class="day-number ${isToday ? 'today' : ''}">${day}</div>
-                        ${eventsHTML}
-                    </div>
-                `;
-            }
-            
-            document.getElementById('calendarBody').innerHTML = calendarHTML;
         }
         
         // تنسيق التاريخ
@@ -1808,9 +1722,27 @@
         // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', function() {
             updateReservationsTable();
-            updateCalendar();
             updateRemainingAmount();
+            
+            // اختبار اتصال تليجرام
+            testTelegramConnection();
         });
+        
+        // اختبار اتصال تليجرام
+        async function testTelegramConnection() {
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`);
+                const data = await response.json();
+                
+                if (data.ok) {
+                    console.log('✅ اتصال تليجرام نشط:', data.result.username);
+                } else {
+                    console.warn('⚠️ مشكلة في اتصال تليجرام:', data.description);
+                }
+            } catch (error) {
+                console.error('❌ خطأ في اتصال تليجرام:', error);
+            }
+        }
     </script>
 </body>
 </html>
