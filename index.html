@@ -313,85 +313,95 @@
             color: #8B4513;
         }
         
-        /* صفحة المعاينة المحسنة للطباعة */
+        /* صفحة المعاينة المحسنة للطباعة - صفحة A4 واحدة */
         .preview-card {
             background-color: white;
             border-radius: 10px;
-            padding: 30px;
+            padding: 0;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+            width: 21cm; /* عرض A4 */
+            min-height: 29.7cm; /* ارتفاع A4 */
             margin: 0 auto;
             position: relative;
             border: 1px solid #eee;
+            overflow: hidden;
+            box-sizing: border-box;
         }
         
         .preview-header {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            padding: 25px 25px 15px;
             border-bottom: 3px solid #D2691E;
             position: relative;
         }
         
         .preview-logo {
-            font-size: 2.2rem;
+            font-size: 24px;
             color: #8B4513;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
         }
         
         .preview-title {
-            font-size: 1.6rem;
+            font-size: 20px;
             color: #8B4513;
             margin-bottom: 5px;
         }
         
         .preview-subtitle {
             color: #666;
-            font-size: 1rem;
+            font-size: 14px;
+        }
+        
+        .preview-content {
+            padding: 0 25px;
         }
         
         .preview-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
         .preview-item {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         .preview-label {
             font-weight: bold;
             color: #8B4513;
-            margin-bottom: 5px;
-            font-size: 1rem;
+            margin-bottom: 4px;
+            font-size: 13px;
         }
         
         .preview-value {
-            padding: 10px;
+            padding: 8px;
             background-color: #f8f9fa;
             border-radius: 5px;
             border-right: 3px solid #D2691E;
-            font-size: 0.95rem;
+            font-size: 12px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
         }
         
         .signature-area {
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 30px;
+            padding: 20px 25px 25px;
             border-top: 2px solid #D2691E;
             text-align: center;
         }
         
         .signature-line {
-            width: 300px;
+            width: 250px;
             height: 1px;
             background-color: #333;
-            margin: 40px auto 10px;
+            margin: 30px auto 8px;
         }
         
         /* الأزرار */
@@ -534,130 +544,175 @@
             font-size: 0.9rem;
         }
         
-        /* إعدادات الطباعة المحسنة لورق A4 */
+        /* إعدادات الطباعة المحسنة لورق A4 - صفحة واحدة فقط */
         @media print {
             /* إخفاء جميع العناصر ما عدا قسم المعاينة */
             body * {
-                visibility: hidden;
-                margin: 0;
-                padding: 0;
+                visibility: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             
             /* إظهار قسم المعاينة فقط */
-            .preview-section, .preview-section * {
-                visibility: visible;
-            }
-            
-            /* إعدادات الصفحة لورق A4 */
-            @page {
-                size: A4 portrait;
-                margin: 1.5cm;
+            .preview-section, 
+            .preview-section * {
+                visibility: visible !important;
             }
             
             /* إخفاء العناصر غير المرغوب فيها في الطباعة */
-            .no-print, .buttons, nav, header, footer, .section-title {
+            .no-print, 
+            .buttons, 
+            nav, 
+            header, 
+            footer, 
+            .section-title {
                 display: none !important;
             }
             
-            /* تصميم صفحة الطباعة */
+            /* تصميم صفحة الطباعة - صفحة A4 واحدة */
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
             .preview-section {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                box-shadow: none;
-                border: none;
-                padding: 0;
-                margin: 0;
-                background: white;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+                display: block !important;
+            }
+            
+            .container {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             
             .preview-card {
-                width: 100%;
-                max-width: none;
-                margin: 0;
-                padding: 0;
-                box-shadow: none;
-                border: none;
-                border-radius: 0;
-                page-break-inside: avoid;
-                page-break-after: avoid;
+                width: 21cm !important;
+                min-height: 29.7cm !important;
+                max-height: 29.7cm !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                border-radius: 0 !important;
+                overflow: hidden !important;
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+                position: relative !important;
             }
             
-            /* ضبط الهوامش للطباعة */
-            .preview-header {
-                margin-top: 1.5cm;
-                margin-left: 1.5cm;
-                margin-right: 1.5cm;
-                margin-bottom: 1cm;
-            }
-            
-            .preview-content {
-                margin-left: 1.5cm;
-                margin-right: 1.5cm;
-            }
-            
-            .signature-area {
-                margin-left: 1.5cm;
-                margin-right: 1.5cm;
-                margin-bottom: 1.5cm;
+            /* إصلاح مشكلة الصفحة البيضاء */
+            @page {
+                size: A4 portrait;
+                margin: 0.5cm;
             }
             
             /* تحسين التنسيق للطباعة */
+            .preview-header {
+                margin: 0 !important;
+                padding: 1cm 1.5cm 0.5cm !important;
+            }
+            
+            .preview-content {
+                padding: 0 1.5cm !important;
+            }
+            
             .preview-logo {
-                font-size: 24pt;
-                margin-bottom: 0.5cm;
+                font-size: 22pt !important;
+                margin-bottom: 0.3cm !important;
             }
             
             .preview-title {
-                font-size: 20pt;
-                margin-bottom: 0.3cm;
+                font-size: 18pt !important;
+                margin-bottom: 0.2cm !important;
             }
             
             .preview-subtitle {
-                font-size: 11pt;
+                font-size: 10pt !important;
             }
             
             .preview-grid {
-                margin-bottom: 0.8cm;
-                gap: 0.6cm;
+                margin-bottom: 0.8cm !important;
+                gap: 0.5cm !important;
             }
             
             .preview-label {
-                font-size: 10pt;
-                margin-bottom: 0.2cm;
+                font-size: 10pt !important;
+                margin-bottom: 0.1cm !important;
             }
             
             .preview-value {
-                font-size: 9pt;
-                padding: 0.3cm;
-                min-height: 1cm;
+                font-size: 9pt !important;
+                padding: 0.3cm !important;
+                min-height: 0.8cm !important;
             }
             
             .signature-area {
-                margin-top: 1.5cm;
-                padding-top: 0.8cm;
+                margin-top: 1.2cm !important;
+                padding: 0.8cm 1.5cm 1cm !important;
+                position: absolute;
+                bottom: 0.5cm;
+                left: 1.5cm;
+                right: 1.5cm;
             }
             
             .signature-line {
-                width: 7cm;
-                margin: 1cm auto 0.3cm;
+                width: 6cm !important;
+                margin: 0.8cm auto 0.3cm !important;
             }
             
             /* ضبط الألوان للطباعة */
-            .preview-value, .signature-area, .preview-card {
+            .preview-value {
                 background-color: white !important;
-                color: black !important;
+                border: 1px solid #ddd !important;
             }
             
             .preview-label, .preview-title, .preview-logo {
                 color: black !important;
             }
             
-            /* تجنب تقسيم العناصر بين صفحات */
-            .preview-item, .signature-area {
-                page-break-inside: avoid;
+            /* منع تقسيم المحتوى بين صفحات */
+            .preview-card {
+                break-inside: avoid;
+            }
+            
+            /* إضافة ترويسة للصفحة */
+            .preview-card::before {
+                content: "قاعة النخيل للمناسبات - وثيقة حجز رسمية";
+                display: block;
+                text-align: center;
+                font-size: 9pt;
+                color: #666;
+                padding-bottom: 0.3cm;
+                margin-bottom: 0.3cm;
+                border-bottom: 1px solid #eee;
+            }
+            
+            /* إضافة تذييلة للصفحة */
+            .preview-card::after {
+                content: "صفحة 1 من 1";
+                display: block;
+                text-align: center;
+                font-size: 8pt;
+                color: #666;
+                padding-top: 0.3cm;
+                margin-top: 0.3cm;
+                border-top: 1px solid #eee;
+                position: absolute;
+                bottom: 0.3cm;
+                left: 1.5cm;
+                right: 1.5cm;
             }
         }
         
@@ -681,6 +736,11 @@
             
             .btn {
                 width: 100%;
+            }
+            
+            .preview-card {
+                width: 100%;
+                min-height: auto;
             }
         }
         
@@ -829,7 +889,7 @@
             </div>
         </section>
         
-        <!-- قسم معاينة الحجز المحسن للطباعة -->
+        <!-- قسم معاينة الحجر - صفحة A4 واحدة -->
         <section id="preview" class="section preview-section">
             <h2 class="section-title no-print"><i class="fas fa-print"></i> معاينة وتوثيق الحجز</h2>
             
@@ -914,7 +974,7 @@
                     
                     <div class="preview-item">
                         <div class="preview-label">شروط وأحكام الحجز</div>
-                        <div class="preview-value">
+                        <div class="preview-value" style="font-size: 11px; line-height: 1.5;">
                             1. يلتزم العميل بدفع المبلغ المتبقي قبل أسبوع من تاريخ الحفل.<br>
                             2. في حال الإلغاء، يتم خصم 25% من المبلغ المدفوع إذا كان الإلغاء قبل 30 يوم.<br>
                             3. القاعة متاحة من الساعة 4 مساءً حتى 12 منتصف الليل.<br>
@@ -928,14 +988,14 @@
                     <div class="signature-line"></div>
                     <p>توقيع السيد: _______________________</p>
                     <p>التاريخ: <span id="previewTodayDate"></span></p>
-                    <div style="margin-top: 30px; border-top: 1px solid #ccc; padding-top: 15px;">
+                    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ccc;">
                         <p>ختم وتوقيع إدارة قاعة النخيل للمناسبات:</p>
-                        <div class="signature-line" style="width: 250px; margin: 20px auto 10px;"></div>
+                        <div class="signature-line" style="width: 200px; margin: 15px auto 8px;"></div>
                         <p>التاريخ: _______________________</p>
                     </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 30px; font-size: 0.8rem; color: #666; border-top: 1px solid #eee; padding-top: 15px;">
+                <div style="text-align: center; padding: 10px 25px; font-size: 10px; color: #666; border-top: 1px solid #eee; margin-top: 10px;">
                     <p>هاتف: 0770-123-4567 | البريد الإلكتروني: info@alnakhilhall.com</p>
                     <p>عنوان القاعة: بغداد، المنصور، شارع النخيل، قاعة النخيل للمناسبات</p>
                 </div>
@@ -943,7 +1003,7 @@
             
             <div class="buttons no-print">
                 <button class="btn btn-primary" id="printBtn">
-                    <i class="fas fa-print"></i> طباعة الحجز (A4)
+                    <i class="fas fa-print"></i> طباعة الحجز (صفحة A4 واحدة)
                 </button>
                 <button class="btn btn-success" id="confirmBtn">
                     <i class="fas fa-check-circle"></i> تأكيد وتثبيت الحجز
@@ -1149,122 +1209,254 @@
         // زر تفريغ الحقول
         resetBtn.addEventListener('click', resetForm);
         
-        // زر الطباعة - حل مشكلة الطباعة الفارغة
+        // زر الطباعة - إصلاح مشكلة الصفحة البيضاء
         printBtn.addEventListener('click', () => {
             // تحديث المعاينة قبل الطباعة
             updatePreview();
             
             // إنشاء نافذة طباعة جديدة
-            const printWindow = window.open('', '_blank');
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
             
-            // إعداد محتوى الطباعة
+            // إعداد محتوى الطباعة - صفحة A4 واحدة
             const printContent = `
                 <!DOCTYPE html>
                 <html dir="rtl" lang="ar">
                 <head>
                     <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>قاعة النخيل - حجز ${document.getElementById('previewReservationId').textContent}</title>
                     <style>
                         @page {
                             size: A4 portrait;
-                            margin: 1.5cm;
+                            margin: 0.5cm;
                         }
                         body {
                             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                            line-height: 1.6;
+                            line-height: 1.5;
                             color: #000;
                             direction: rtl;
                             margin: 0;
                             padding: 0;
+                            background: white;
+                            width: 21cm;
+                            min-height: 29.7cm;
                         }
                         .print-container {
                             width: 100%;
-                            max-width: 21cm;
-                            margin: 0 auto;
+                            height: 100%;
+                            padding: 0;
+                            margin: 0;
+                            box-sizing: border-box;
                         }
                         .print-header {
                             text-align: center;
-                            margin-bottom: 1.5cm;
-                            padding-bottom: 0.8cm;
+                            padding: 1cm 1.5cm 0.5cm;
                             border-bottom: 3px solid #8B4513;
                         }
                         .print-logo {
-                            font-size: 24pt;
-                            color: #8B4513;
-                            margin-bottom: 0.5cm;
-                        }
-                        .print-title {
-                            font-size: 20pt;
+                            font-size: 22pt;
                             color: #8B4513;
                             margin-bottom: 0.3cm;
                         }
+                        .print-title {
+                            font-size: 18pt;
+                            color: #8B4513;
+                            margin-bottom: 0.2cm;
+                        }
                         .print-subtitle {
-                            font-size: 11pt;
+                            font-size: 10pt;
                             color: #666;
+                        }
+                        .print-content {
+                            padding: 0.5cm 1.5cm;
                         }
                         .print-grid {
                             display: grid;
                             grid-template-columns: repeat(2, 1fr);
-                            gap: 0.6cm;
+                            gap: 0.5cm;
                             margin-bottom: 0.8cm;
                         }
                         .print-item {
-                            margin-bottom: 0.5cm;
+                            margin-bottom: 0.3cm;
                         }
                         .print-label {
                             font-weight: bold;
                             font-size: 10pt;
-                            margin-bottom: 0.2cm;
+                            margin-bottom: 0.1cm;
                             color: #8B4513;
                         }
                         .print-value {
                             padding: 0.3cm;
-                            background-color: #f8f9fa;
-                            border-radius: 5px;
+                            border: 1px solid #ddd;
+                            border-radius: 3px;
                             border-right: 3px solid #D2691E;
                             font-size: 9pt;
-                            min-height: 1cm;
+                            min-height: 0.8cm;
                         }
                         .signature-area {
-                            margin-top: 1.5cm;
-                            padding-top: 0.8cm;
+                            margin-top: 1.2cm;
+                            padding: 0.8cm 1.5cm;
                             border-top: 2px solid #D2691E;
                             text-align: center;
                         }
                         .signature-line {
-                            width: 7cm;
+                            width: 6cm;
                             height: 1px;
                             background-color: #333;
-                            margin: 1cm auto 0.3cm;
+                            margin: 0.8cm auto 0.3cm;
                         }
                         .footer-info {
                             text-align: center;
-                            margin-top: 1.5cm;
-                            font-size: 9pt;
+                            margin-top: 0.5cm;
+                            font-size: 8pt;
                             color: #666;
+                            padding-top: 0.3cm;
                             border-top: 1px solid #eee;
-                            padding-top: 0.5cm;
+                        }
+                        .terms {
+                            font-size: 9pt;
+                            line-height: 1.4;
+                            margin-top: 0.5cm;
+                            padding: 0.3cm;
+                            border: 1px solid #ddd;
+                            border-radius: 3px;
                         }
                         @media print {
                             body {
                                 -webkit-print-color-adjust: exact;
                                 print-color-adjust: exact;
+                                width: 21cm;
+                                height: 29.7cm;
+                                margin: 0;
+                                padding: 0;
+                            }
+                            .print-container {
+                                page-break-inside: avoid;
+                                break-inside: avoid;
                             }
                         }
                     </style>
                 </head>
-                <body>
+                <body onload="window.print(); setTimeout(() => window.close(), 500);">
                     <div class="print-container">
-                        ${document.getElementById('previewContent').innerHTML}
+                        <div class="print-header">
+                            <div class="print-logo">
+                                <i class="fas fa-palm-tree"></i> قاعة النخيل للمناسبات
+                            </div>
+                            <h1 class="print-title">تعهد وتوثيق حجز القاعة</h1>
+                            <p class="print-subtitle">رقم الحجز: ${document.getElementById('previewReservationId').textContent} | تاريخ الإصدار: ${document.getElementById('previewIssueDate').textContent}</p>
+                        </div>
+                        
+                        <div class="print-content">
+                            <div class="print-grid">
+                                <div class="print-item">
+                                    <div class="print-label">اسم السيد</div>
+                                    <div class="print-value">${document.getElementById('previewClientName').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">اسم العريس</div>
+                                    <div class="print-value">${document.getElementById('previewGroomName').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">اسم العروس</div>
+                                    <div class="print-value">${document.getElementById('previewBrideName').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">رقم الهاتف</div>
+                                    <div class="print-value">${document.getElementById('previewPhone').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">تاريخ الحفل</div>
+                                    <div class="print-value">${document.getElementById('previewEventDate').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">نوع المناسبة</div>
+                                    <div class="print-value">${document.getElementById('previewEventType').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">القاعة المحجوزة</div>
+                                    <div class="print-value">${document.getElementById('previewHall').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">سعة القاعة</div>
+                                    <div class="print-value">${document.getElementById('previewCapacity').textContent}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="print-grid">
+                                <div class="print-item">
+                                    <div class="print-label">المبلغ الكلي</div>
+                                    <div class="print-value">${document.getElementById('previewTotalAmount').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">المبلغ الواصل</div>
+                                    <div class="print-value">${document.getElementById('previewPaidAmount').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">المبلغ المتبقي</div>
+                                    <div class="print-value">${document.getElementById('previewRemainingAmount').textContent}</div>
+                                </div>
+                                
+                                <div class="print-item">
+                                    <div class="print-label">حالة الدفع</div>
+                                    <div class="print-value">${document.getElementById('previewPaymentStatus').textContent}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="print-item">
+                                <div class="print-label">ملاحظات إضافية</div>
+                                <div class="print-value">${document.getElementById('previewNotes').textContent}</div>
+                            </div>
+                            
+                            <div class="terms">
+                                <strong>شروط وأحكام الحجز:</strong><br>
+                                1. يلتزم العميل بدفع المبلغ المتبقي قبل أسبوع من تاريخ الحفل.<br>
+                                2. في حال الإلغاء، يتم خصم 25% من المبلغ المدفوع إذا كان الإلغاء قبل 30 يوم.<br>
+                                3. القاعة متاحة من الساعة 4 مساءً حتى 12 منتصف الليل.<br>
+                                4. يتحمل العميل أي تلفيات تحدث للقاعة أو محتوياتها خلال فترة الحجز.
+                            </div>
+                        </div>
+                        
+                        <div class="signature-area">
+                            <p>أقرّ بأن جميع المعلومات المذكورة أعلاه صحيحة، وقد اطلعت على شروط وأحكام الحزو أوافق عليها.</p>
+                            <div class="signature-line"></div>
+                            <p>توقيع السيد: _______________________</p>
+                            <p>التاريخ: ${document.getElementById('previewTodayDate').textContent}</p>
+                            <div style="margin-top: 0.8cm; padding-top: 0.5cm; border-top: 1px solid #ccc;">
+                                <p>ختم وتوقيع إدارة قاعة النخيل للمناسبات:</p>
+                                <div class="signature-line" style="width: 5cm;"></div>
+                                <p>التاريخ: _______________________</p>
+                            </div>
+                        </div>
+                        
+                        <div class="footer-info">
+                            <p>هاتف: 0770-123-4567 | البريد الإلكتروني: info@alnakhilhall.com</p>
+                            <p>عنوان القاعة: بغداد، المنصور، شارع النخيل، قاعة النخيل للمناسبات</p>
+                        </div>
                     </div>
+                    
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"><\/script>
                     <script>
-                        // تأخير الطباعة حتى يتم تحميل الصفحة بالكامل
-                        setTimeout(() => {
+                        // تأكيد الطباعة عند تحميل الصفحة
+                        window.onload = function() {
                             window.print();
-                            setTimeout(() => {
+                        };
+                        
+                        // إغلاق النافذة بعد الطباعة
+                        window.onafterprint = function() {
+                            setTimeout(function() {
                                 window.close();
                             }, 500);
-                        }, 500);
+                        };
                     <\/script>
                 </body>
                 </html>
@@ -1281,16 +1473,18 @@
             
             const element = document.getElementById('previewContent');
             const opt = {
-                margin:       15,
+                margin:       0.5,
                 filename:     `حجز_قاعة_النخيل_${document.getElementById('previewReservationId').textContent}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
                     scale: 2,
                     useCORS: true,
-                    letterRendering: true
+                    letterRendering: true,
+                    width: 794, // عرض A4 بالبكسل
+                    height: 1123 // ارتفاع A4 بالبكسل
                 },
                 jsPDF:        { 
-                    unit: 'mm', 
+                    unit: 'cm', 
                     format: 'a4', 
                     orientation: 'portrait',
                     compress: true
