@@ -573,137 +573,6 @@
             background-color: #c82333;
         }
         
-        /* الطباعة - تصميم A4 */
-        @media print {
-            body * {
-                visibility: hidden;
-                margin: 0;
-                padding: 0;
-            }
-            
-            .preview-container, .preview-container * {
-                visibility: visible;
-            }
-            
-            .preview-container {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 21cm;
-                height: 29.7cm;
-                box-shadow: none;
-                padding: 0;
-                margin: 0;
-                background-color: white;
-                page-break-after: always;
-            }
-            
-            .preview-content {
-                display: flex;
-                flex-direction: row;
-                height: calc(100% - 100px);
-                padding: 0 25px 25px;
-            }
-            
-            .preview-left, .preview-right {
-                flex: 1;
-                height: 100%;
-                padding: 15px;
-                page-break-inside: avoid;
-            }
-            
-            .preview-left {
-                border-left: 1px solid #ddd;
-            }
-            
-            .preview-header {
-                padding: 20px;
-                margin-bottom: 15px;
-                background-color: white !important;
-                color: black !important;
-                border-bottom: 2px solid #333;
-            }
-            
-            .preview-header h2 {
-                color: black !important;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-            
-            .signature-box {
-                border: 1px solid #999;
-            }
-            
-            /* تخصيص لحجم A4 */
-            @page {
-                size: A4;
-                margin: 0.8cm;
-            }
-            
-            body {
-                margin: 0;
-                padding: 0;
-                background-color: white;
-            }
-            
-            .btn, .action-buttons, .nav-tabs, header, .page-title, .alert {
-                display: none !important;
-            }
-            
-            .preview-logo {
-                color: black !important;
-            }
-        }
-        
-        /* تصميم متجاوب */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .logo {
-                margin-bottom: 15px;
-            }
-            
-            .nav-tab {
-                flex: 1 0 50%;
-            }
-            
-            .form-group {
-                flex: 0 0 100%;
-            }
-            
-            .hall-option {
-                flex: 0 0 100%;
-            }
-            
-            .amount-item {
-                flex: 0 0 100%;
-            }
-            
-            .preview-content {
-                flex-direction: column;
-            }
-            
-            .preview-left {
-                border-left: none;
-                border-top: 1px solid #eee;
-            }
-            
-            .reservations-table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            .action-cell {
-                flex-direction: column;
-                gap: 5px;
-            }
-        }
-        
         /* رسائل التنبيه */
         .alert {
             padding: 15px;
@@ -774,6 +643,200 @@
             background-color: rgba(255, 193, 7, 0.1);
             color: var(--warning);
             border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+        
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            .nav-tab {
+                flex: 1 0 50%;
+            }
+            
+            .form-group {
+                flex: 0 0 100%;
+            }
+            
+            .hall-option {
+                flex: 0 0 100%;
+            }
+            
+            .amount-item {
+                flex: 0 0 100%;
+            }
+            
+            .preview-content {
+                flex-direction: column;
+            }
+            
+            .preview-left {
+                border-left: none;
+                border-top: 1px solid #eee;
+            }
+            
+            .reservations-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .action-cell {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+        
+        /* =========================================== */
+        /* إصلاح مشكلة الطباعة على الهاتف - التعديلات */
+        /* =========================================== */
+        @media print {
+            /* إصلاح 1: جعل الجسم كله غير مرئي */
+            body * {
+                visibility: hidden;
+                margin: 0;
+                padding: 0;
+            }
+            
+            /* إصلاح 2: إظهار محتوى المعاينة فقط */
+            #printableContent, #printableContent * {
+                visibility: visible !important;
+            }
+            
+            /* إصلاح 3: إصلاح موضع وعرض محتوى الطباعة */
+            #printableContent {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                z-index: 999999 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            
+            /* إصلاح 4: إخفاء كل شيء آخر */
+            .no-print, 
+            .action-buttons, 
+            .nav-tabs, 
+            header, 
+            .page-title, 
+            .alert,
+            .telegram-badge,
+            .search-box,
+            .watermark {
+                display: none !important;
+            }
+            
+            /* إصلاح 5: إعدادات الصفحة للهاتف */
+            @page {
+                size: auto;
+                margin: 10mm;
+            }
+            
+            html, body {
+                width: 100% !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+                background: white !important;
+            }
+            
+            /* إصلاح 6: تحسين تخطيط المحتوى للطباعة */
+            .preview-content {
+                display: flex !important;
+                flex-direction: row !important;
+                width: 100% !important;
+                padding: 15px !important;
+                margin: 0 !important;
+            }
+            
+            .preview-left, .preview-right {
+                flex: 1 !important;
+                padding: 10px !important;
+                page-break-inside: avoid !important;
+            }
+            
+            /* إصلاح 7: إخفاء رأس الموقع في الطباعة */
+            .preview-header {
+                background: white !important;
+                color: black !important;
+                border-bottom: 2px solid #333 !important;
+                padding: 20px !important;
+                margin-bottom: 20px !important;
+            }
+            
+            /* إصلاح 8: ضبط الألوان للطباعة */
+            .preview-logo {
+                color: black !important;
+            }
+            
+            .preview-header h2 {
+                color: black !important;
+            }
+            
+            /* إصلاح 9: منع انكسار العناصر المهمة */
+            .detail-section,
+            .terms,
+            .signature-area {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            
+            /* إصلاح 10: إصلاح الهوامش والأحجام */
+            .detail-title {
+                font-size: 16px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .detail-content {
+                font-size: 14px !important;
+            }
+            
+            /* إصلاح 11: إصلاح التوقيعات */
+            .signature-box {
+                border: 1px solid #666 !important;
+                height: 70px !important;
+            }
+            
+            /* إصلاح 12: لون النص في الطباعة */
+            * {
+                color: black !important;
+            }
+            
+            /* إصلاح 13: إصلاح خاص للهواتف */
+            @media (max-width: 768px) {
+                .preview-content {
+                    flex-direction: column !important;
+                }
+                
+                .preview-left {
+                    border-left: none !important;
+                    border-top: 1px solid #ddd !important;
+                    margin-top: 20px !important;
+                }
+                
+                .detail-row {
+                    flex-direction: column;
+                    margin-bottom: 5px;
+                }
+                
+                .detail-label, .detail-value {
+                    width: 100%;
+                    text-align: right;
+                }
+            }
         }
     </style>
 </head>
@@ -1340,7 +1403,9 @@
             });
         }
         
-        // طباعة الحجز
+        // ===========================================
+        // إصلاح مشكلة الطباعة على الهاتف - JavaScript
+        // ===========================================
         document.getElementById('printBtn').addEventListener('click', function() {
             if (!document.getElementById('agreeTerms').checked) {
                 showAlert('يرجى الموافقة على الشروط والأحكام قبل الطباعة', 'error');
@@ -1350,10 +1415,27 @@
             // تحديث البيانات قبل الطباعة
             updatePreview();
             
-            // تأخير قليل لضمان تحديث البيانات
-            setTimeout(() => {
-                window.print();
-            }, 100);
+            // إصلاح خاص للهواتف
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                // تأخير بسيط لضمان تحديث البيانات
+                setTimeout(function() {
+                    // طباعة مباشرة للهواتف
+                    window.print();
+                }, 300);
+            } else {
+                // الطباعة العادية للحاسوب
+                setTimeout(function() {
+                    window.print();
+                }, 100);
+            }
+        });
+        
+        // معالجة بعد الطباعة لإعادة تحميل المحتوى
+        window.addEventListener('afterprint', function() {
+            // إعادة تحميل بسيطة بعد الطباعة
+            setTimeout(function() {
+                location.reload();
+            }, 500);
         });
         
         // إرسال للتليجرام
