@@ -198,25 +198,23 @@
             box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
         }
         
-        /* خدمة التصوير - التصميم الجديد */
+        /* خدمة التصوير - التصميم البسيط */
         .photography-section {
             background-color: #f8f9fa;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
-            border: 2px solid #e9ecef;
+            border: 1px solid #e9ecef;
             margin-bottom: 20px;
         }
         
         .photography-options-simple {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
             margin-top: 10px;
         }
         
         .photography-option-simple {
             flex: 1;
-            min-width: 200px;
         }
         
         .photography-option-simple input[type="radio"] {
@@ -225,51 +223,26 @@
         
         .photography-option-simple label {
             display: block;
-            padding: 18px 15px;
+            padding: 12px 15px;
             background-color: white;
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid #e9ecef;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            font-size: 1.1rem;
             font-weight: 600;
         }
         
-        .photography-option-simple input[type="radio"]:checked + label {
-            background-color: rgba(44, 95, 45, 0.1);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        
-        .photography-option-simple input[type="radio"]:checked + label.btn-add {
+        .photography-option-simple input[type="radio"]:checked + label.add-photo {
             background-color: rgba(23, 162, 184, 0.1);
             border-color: var(--info);
             color: var(--info);
         }
         
-        .btn-add {
-            background-color: var(--info);
-            color: white;
-        }
-        
-        .btn-no {
-            background-color: var(--gray-light);
-            color: var(--dark);
-        }
-        
-        /* حقول عناوين العرسان */
-        .address-fields {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .address-field {
-            flex: 1;
-            min-width: 300px;
+        .photography-option-simple input[type="radio"]:checked + label.no-photo {
+            background-color: rgba(108, 117, 125, 0.1);
+            border-color: var(--gray);
+            color: var(--gray);
         }
         
         /* أزرار اختيار القاعة */
@@ -446,25 +419,25 @@
         
         .preview-header {
             text-align: center;
-            padding: 25px;
+            padding: 20px;
             background-color: white;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-bottom: 2px solid var(--secondary);
         }
         
         .preview-header h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 5px;
         }
         
         .preview-header p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
         
         .preview-logo {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
             color: var(--primary);
         }
@@ -472,31 +445,31 @@
         .preview-content {
             display: flex;
             flex-wrap: wrap;
-            padding: 0 25px 25px;
+            padding: 0 20px 20px;
         }
         
         .preview-left {
             flex: 1;
             min-width: 300px;
-            padding: 20px;
+            padding: 15px;
             border-left: 1px solid #eee;
         }
         
         .preview-right {
             flex: 1;
             min-width: 300px;
-            padding: 20px;
+            padding: 15px;
         }
         
         .detail-section {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .detail-title {
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-size: 1rem;
             padding-bottom: 5px;
             border-bottom: 1px solid var(--gray-light);
             display: flex;
@@ -505,68 +478,71 @@
         }
         
         .detail-content {
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         
         .detail-row {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
         }
         
         .detail-label {
             font-weight: 600;
-            min-width: 130px;
+            min-width: 120px;
             color: var(--dark);
+            font-size: 0.9rem;
         }
         
         .detail-value {
             flex: 1;
             color: var(--gray);
+            font-size: 0.9rem;
         }
         
         .hall-tag {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 4px 10px;
             background-color: var(--primary);
             color: white;
             border-radius: 20px;
             font-weight: bold;
             margin-left: 5px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         
         .photography-tag {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 4px 10px;
             background-color: var(--info);
             color: white;
             border-radius: 20px;
             font-weight: bold;
             margin-left: 5px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         
         .signature-area {
-            margin-top: 30px;
+            margin-top: 20px;
             padding-top: 15px;
             border-top: 1px solid #ddd;
         }
         
         .signature-box {
-            height: 80px;
+            height: 60px;
             border: 1px dashed #999;
             border-radius: 4px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--gray);
             background-color: white;
+            font-size: 0.9rem;
         }
         
         .terms {
-            margin-top: 25px;
-            padding: 15px;
+            margin-top: 15px;
+            padding: 10px;
             background-color: #f9f9f9;
             border-radius: 6px;
             border: 1px solid #eee;
@@ -574,27 +550,28 @@
         
         .terms h4 {
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .terms ul {
-            padding-right: 18px;
+            padding-right: 15px;
         }
         
         .terms li {
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             line-height: 1.4;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
         .notes-section {
             background-color: #f9f9f9;
-            padding: 12px;
+            padding: 10px;
             border-radius: 6px;
-            margin-top: 15px;
+            margin-top: 10px;
             border: 1px solid #eee;
+            font-size: 0.9rem;
         }
         
         /* قائمة الحجوزات */
@@ -608,10 +585,10 @@
         }
         
         .reservations-table th, .reservations-table td {
-            padding: 12px;
+            padding: 10px;
             text-align: right;
             border-bottom: 1px solid #eee;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         
         .reservations-table th {
@@ -626,21 +603,21 @@
         
         .hall-badge-list {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 6px;
             background-color: var(--primary);
             color: white;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-left: 5px;
         }
         
         .photography-badge-list {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 3px 6px;
             background-color: var(--info);
             color: white;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             margin-left: 5px;
         }
         
@@ -657,19 +634,19 @@
         /* أزرار الإجراءات في الجدول */
         .action-cell {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             justify-content: flex-start;
         }
         
         .action-btn {
-            padding: 6px 12px;
+            padding: 5px 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             transition: all 0.3s;
         }
         
@@ -693,7 +670,7 @@
         
         /* رسائل التنبيه */
         .alert {
-            padding: 15px;
+            padding: 12px;
             border-radius: 6px;
             margin-bottom: 20px;
             display: none;
@@ -719,29 +696,29 @@
         
         /* تحسينات للطباعة */
         .print-optimized {
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 13px;
+            line-height: 1.3;
         }
         
         .amount-display {
             background-color: #f0f8f0;
-            padding: 12px;
+            padding: 10px;
             border-radius: 6px;
             border-right: 3px solid var(--primary);
         }
         
         .amount-display .detail-row {
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         
         /* تيلجرام ستاتس */
         .telegram-status {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
+            gap: 4px;
+            padding: 4px 8px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
         }
         
@@ -809,10 +786,11 @@
         }
         
         .calendar-header-cell {
-            padding: 15px 10px;
+            padding: 12px 8px;
             text-align: center;
             font-weight: 600;
             border-left: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
         }
         
         .calendar-header-cell:first-child {
@@ -829,8 +807,8 @@
         }
         
         .calendar-day {
-            min-height: 100px;
-            padding: 10px;
+            min-height: 90px;
+            padding: 8px;
             border-right: 1px solid #eee;
             border-bottom: 1px solid #eee;
             position: relative;
@@ -851,24 +829,24 @@
         }
         
         .day-number {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--dark);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .reservations-list {
             margin-top: 5px;
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 3px;
         }
         
         .reservation-badge {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -896,9 +874,9 @@
         
         .calendar-legends {
             display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            padding: 15px;
+            gap: 15px;
+            margin-top: 15px;
+            padding: 12px;
             background-color: #f8f9fa;
             border-radius: 8px;
             flex-wrap: wrap;
@@ -908,13 +886,13 @@
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 6px;
+            font-size: 0.85rem;
         }
         
         .legend-color {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 4px;
         }
         
@@ -928,16 +906,16 @@
         @media (max-width: 992px) {
             .calendar-day {
                 min-height: 80px;
-                padding: 8px;
+                padding: 6px;
             }
             
             .day-number {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
             
             .reservation-badge {
-                font-size: 0.7rem;
-                padding: 3px 6px;
+                font-size: 0.65rem;
+                padding: 2px 5px;
             }
         }
         
@@ -967,10 +945,6 @@
                 flex: 0 0 100%;
             }
             
-            .address-field {
-                flex: 0 0 100%;
-            }
-            
             .amount-item {
                 flex: 0 0 100%;
             }
@@ -991,27 +965,27 @@
             
             .action-cell {
                 flex-direction: column;
-                gap: 5px;
+                gap: 4px;
             }
             
             .calendar-header-cell {
-                padding: 10px 5px;
-                font-size: 0.9rem;
+                padding: 8px 4px;
+                font-size: 0.85rem;
             }
             
             .calendar-day {
                 min-height: 70px;
-                padding: 5px;
+                padding: 4px;
             }
             
             .day-number {
-                font-size: 0.9rem;
-                margin-bottom: 5px;
+                font-size: 0.85rem;
+                margin-bottom: 4px;
             }
             
             .calendar-controls {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
                 text-align: center;
             }
             
@@ -1024,7 +998,7 @@
         @media (max-width: 576px) {
             .calendar-header-cell {
                 font-size: 0.8rem;
-                padding: 8px 3px;
+                padding: 6px 3px;
             }
             
             .calendar-day {
@@ -1032,16 +1006,20 @@
             }
             
             .reservation-badge {
-                font-size: 0.65rem;
-                padding: 2px 4px;
+                font-size: 0.6rem;
+                padding: 2px 3px;
             }
             
             .legend-item {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
             
             .calendar-legends {
-                gap: 10px;
+                gap: 8px;
+            }
+            
+            .photography-options-simple {
+                flex-direction: column;
             }
         }
         
@@ -1060,19 +1038,19 @@
             }
             
             #printableContent {
-                position: fixed !important;
+                position: absolute !important;
                 top: 0 !important;
                 left: 0 !important;
-                right: 0 !important;
-                width: 100% !important;
-                height: auto !important;
-                max-width: 100% !important;
+                width: 21cm !important;
+                height: 29.7cm !important;
                 margin: 0 !important;
-                padding: 0 !important;
+                padding: 1.5cm !important;
                 background: white !important;
                 z-index: 999999 !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
             
             .no-print, 
@@ -1090,16 +1068,16 @@
             }
             
             @page {
-                size: auto;
-                margin: 10mm;
+                size: A4 portrait;
+                margin: 1.5cm;
             }
             
             html, body {
-                width: 100% !important;
-                height: auto !important;
+                width: 21cm !important;
+                height: 29.7cm !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                overflow: visible !important;
+                overflow: hidden !important;
                 background: white !important;
             }
             
@@ -1107,30 +1085,41 @@
                 display: flex !important;
                 flex-direction: row !important;
                 width: 100% !important;
-                padding: 15px !important;
+                height: 23cm !important;
+                padding: 0 !important;
                 margin: 0 !important;
             }
             
             .preview-left, .preview-right {
                 flex: 1 !important;
-                padding: 10px !important;
+                padding: 0 15px !important;
                 page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                height: 100% !important;
             }
             
             .preview-header {
                 background: white !important;
                 color: black !important;
                 border-bottom: 2px solid #333 !important;
-                padding: 20px !important;
-                margin-bottom: 20px !important;
+                padding: 15px 0 !important;
+                margin-bottom: 15px !important;
+                text-align: center !important;
             }
             
             .preview-logo {
                 color: black !important;
+                font-size: 2rem !important;
             }
             
             .preview-header h2 {
                 color: black !important;
+                font-size: 1.5rem !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .preview-header p {
+                font-size: 0.9rem !important;
             }
             
             .detail-section,
@@ -1138,24 +1127,69 @@
             .signature-area {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
+                margin-bottom: 10px !important;
             }
             
             .detail-title {
-                font-size: 16px !important;
-                margin-bottom: 8px !important;
+                font-size: 14px !important;
+                margin-bottom: 6px !important;
+                padding-bottom: 3px !important;
             }
             
             .detail-content {
-                font-size: 14px !important;
+                font-size: 12px !important;
+            }
+            
+            .detail-row {
+                margin-bottom: 4px !important;
+            }
+            
+            .detail-label {
+                font-size: 12px !important;
+                min-width: 100px !important;
+            }
+            
+            .detail-value {
+                font-size: 12px !important;
             }
             
             .signature-box {
                 border: 1px solid #666 !important;
-                height: 70px !important;
+                height: 50px !important;
+                font-size: 12px !important;
+            }
+            
+            .terms {
+                padding: 8px !important;
+                margin-top: 10px !important;
+            }
+            
+            .terms h4 {
+                font-size: 13px !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .terms li {
+                font-size: 11px !important;
+                margin-bottom: 3px !important;
+            }
+            
+            .notes-section {
+                padding: 8px !important;
+                font-size: 12px !important;
+            }
+            
+            .amount-display {
+                padding: 8px !important;
             }
             
             * {
                 color: black !important;
+            }
+            
+            /* إخفاء معلومات العرسان */
+            .preview-right .detail-section:nth-child(2) {
+                display: none !important;
             }
         }
         
@@ -1163,11 +1197,6 @@
         /* إعدادات الطباعة من الهاتف فقط */
         /* =========================================== */
         @media print and (max-width: 768px) {
-            @page {
-                size: A4 portrait !important;
-                margin: 2cm !important;
-            }
-            
             body * {
                 visibility: hidden !important;
                 margin: 0 !important;
@@ -1180,29 +1209,30 @@
             }
             
             #mobilePrintableContent {
-                position: fixed !important;
+                position: absolute !important;
                 top: 0 !important;
                 left: 0 !important;
-                right: 0 !important;
-                width: 100% !important;
-                height: auto !important;
+                width: 21cm !important;
+                height: 29.7cm !important;
                 margin: 0 !important;
-                padding: 0 !important;
+                padding: 1.5cm !important;
                 background: white !important;
                 z-index: 999999 !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
                 font-family: 'Arial', sans-serif !important;
+                overflow: hidden !important;
             }
             
             .print-a4 {
-                width: 21cm !important;
-                max-width: 100% !important;
-                margin: 0 auto !important;
-                padding: 20px !important;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
                 background: white !important;
                 box-sizing: border-box !important;
-                line-height: 1.6 !important;
+                line-height: 1.4 !important;
+                position: relative !important;
             }
             
             .print-a4 * {
@@ -1211,116 +1241,140 @@
             }
             
             .print-a4 {
-                font-size: 14pt !important;
-                line-height: 1.6 !important;
+                font-size: 12pt !important;
+                line-height: 1.4 !important;
             }
             
             .print-a4 .section-title {
-                font-size: 22pt !important;
+                font-size: 18pt !important;
                 font-weight: bold !important;
                 text-align: center !important;
-                margin-bottom: 20px !important;
+                margin-bottom: 15px !important;
                 color: #000 !important;
+                padding-bottom: 10px !important;
+                border-bottom: 2px solid #2c5f2d !important;
             }
             
             .print-a4 .sub-title {
-                font-size: 18pt !important;
+                font-size: 14pt !important;
                 font-weight: bold !important;
-                margin: 15px 0 10px 0 !important;
+                margin: 10px 0 6px 0 !important;
                 color: #000 !important;
                 border-bottom: 1px solid #ddd !important;
-                padding-bottom: 5px !important;
+                padding-bottom: 3px !important;
             }
             
             .print-a4 .info-row {
-                margin-bottom: 10px !important;
-                padding: 8px 0 !important;
+                margin-bottom: 6px !important;
+                padding: 5px 0 !important;
                 border-bottom: 1px solid #f0f0f0 !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
             }
             
             .print-a4 .info-label {
                 font-weight: bold !important;
                 color: #333 !important;
-                margin-bottom: 5px !important;
-                font-size: 15pt !important;
+                margin-bottom: 2px !important;
+                font-size: 11pt !important;
+                width: 120px !important;
             }
             
             .print-a4 .info-value {
                 color: #000 !important;
-                font-size: 14pt !important;
+                font-size: 11pt !important;
+                flex: 1 !important;
             }
             
             .print-a4 .amount-section {
                 background-color: #f8f9fa !important;
-                padding: 15px !important;
+                padding: 10px !important;
                 border-radius: 5px !important;
-                margin: 15px 0 !important;
+                margin: 10px 0 !important;
                 border-right: 3px solid #2c5f2d !important;
             }
             
             .print-a4 .hall-tag {
                 display: inline-block !important;
-                padding: 5px 10px !important;
+                padding: 3px 8px !important;
                 background-color: #2c5f2d !important;
                 color: white !important;
-                border-radius: 15px !important;
+                border-radius: 12px !important;
                 margin-left: 5px !important;
-                font-size: 12pt !important;
+                font-size: 9pt !important;
             }
             
             .print-a4 .photography-tag {
                 display: inline-block !important;
-                padding: 5px 10px !important;
+                padding: 3px 8px !important;
                 background-color: #17a2b8 !important;
                 color: white !important;
-                border-radius: 15px !important;
+                border-radius: 12px !important;
                 margin-left: 5px !important;
-                font-size: 12pt !important;
+                font-size: 9pt !important;
             }
             
             .print-a4 .signature-box {
-                height: 80px !important;
+                height: 50px !important;
                 border: 1px solid #666 !important;
                 border-radius: 4px !important;
-                margin: 10px 0 !important;
+                margin: 8px 0 !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 color: #666 !important;
+                font-size: 11pt !important;
             }
             
             .print-a4 .terms-box {
                 background-color: #f9f9f9 !important;
-                padding: 15px !important;
+                padding: 10px !important;
                 border-radius: 5px !important;
-                margin: 15px 0 !important;
+                margin: 10px 0 !important;
                 border: 1px solid #ddd !important;
+                position: absolute !important;
+                bottom: 1cm !important;
+                left: 1.5cm !important;
+                right: 1.5cm !important;
             }
             
             .print-a4 .terms-title {
-                font-size: 16pt !important;
+                font-size: 13pt !important;
                 font-weight: bold !important;
                 text-align: center !important;
-                margin-bottom: 10px !important;
+                margin-bottom: 8px !important;
                 color: #2c5f2d !important;
             }
             
             .print-a4 .terms-list {
-                padding-right: 20px !important;
+                padding-right: 15px !important;
                 margin: 0 !important;
             }
             
             .print-a4 .terms-list li {
-                margin-bottom: 5px !important;
-                font-size: 13pt !important;
+                margin-bottom: 4px !important;
+                font-size: 10pt !important;
+                line-height: 1.3 !important;
             }
             
             .print-a4 .notes-box {
                 background-color: #f0f8ff !important;
-                padding: 15px !important;
+                padding: 8px !important;
                 border-radius: 5px !important;
-                margin: 15px 0 !important;
+                margin: 8px 0 !important;
                 border: 1px solid #cce7ff !important;
+            }
+            
+            /* إخفاء معلومات العرسان في طباعة الهاتف */
+            .print-a4 .sub-title:nth-child(4) {
+                display: none !important;
+            }
+            
+            .print-a4 .sub-title:nth-child(4) + .info-row,
+            .print-a4 .sub-title:nth-child(4) + .info-row + .info-row,
+            .print-a4 .sub-title:nth-child(4) + .info-row + .info-row + .info-row,
+            .print-a4 .sub-title:nth-child(4) + .info-row + .info-row + .info-row + .info-row {
+                display: none !important;
             }
             
             .no-print, 
@@ -1336,33 +1390,11 @@
                 display: none !important;
                 visibility: hidden !important;
             }
-        }
-        
-        /* =========================================== */
-        /* حقل إضافي عند اختيار إضافة تصوير */
-        /* =========================================== */
-        .additional-photography-details {
-            display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background-color: rgba(23, 162, 184, 0.05);
-            border-radius: 6px;
-            border: 1px solid rgba(23, 162, 184, 0.2);
-        }
-        
-        .additional-photography-details.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .photography-price-input {
-            background-color: white;
-            border: 1px solid #ddd;
-        }
-        
-        .photography-price-input:focus {
-            border-color: var(--info);
-            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
+            
+            @page {
+                size: A4 portrait !important;
+                margin: 1.5cm !important;
+            }
         }
     </style>
     
@@ -1384,7 +1416,7 @@
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+        const app = initializeApp(fbaseConfig);
         const db = getFirestore(app);
         const analytics = getAnalytics(app);
         
@@ -1396,7 +1428,7 @@
             query, where, orderBy, onSnapshot
         };
         
-        console.log("✅ Firebase initialized successfully with new project");
+        console.log("✅ Firebase initialized successfully");
     </script>
 </head>
 <body>
@@ -1481,7 +1513,7 @@
                     </div>
                 </div>
                 
-                <!-- خدمة التصوير - المعدل -->
+                <!-- خدمة التصوير - البسيطة -->
                 <div class="photography-section">
                     <div class="detail-title">
                         <i class="fas fa-camera"></i> خدمة التصوير
@@ -1489,46 +1521,15 @@
                     <div class="photography-options-simple">
                         <div class="photography-option-simple">
                             <input type="radio" id="photographyAdd" name="photography" value="اضافة تصوير">
-                            <label for="photographyAdd" class="btn-add">
-                                <i class="fas fa-plus-circle"></i> إضافة تصوير
+                            <label for="photographyAdd" class="add-photo">
+                                <i class="fas fa-camera"></i> إضافة تصوير
                             </label>
                         </div>
                         <div class="photography-option-simple">
-                            <input type="radio" id="photographyNone" name="photography" value="بدون تصوير">
-                            <label for="photographyNone" class="btn-no">
-                                <i class="fas fa-times-circle"></i> بدون تصوير
+                            <input type="radio" id="photographyNone" name="photography" value="بدون تصوير" checked>
+                            <label for="photographyNone" class="no-photo">
+                                <i class="fas fa-times"></i> بدون تصوير
                             </label>
-                        </div>
-                    </div>
-                    
-                    <!-- تفاصيل إضافية عند اختيار إضافة تصوير -->
-                    <div class="additional-photography-details" id="additionalPhotographyDetails">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="photographyType">نوع خدمة التصوير</label>
-                                <select id="photographyType">
-                                    <option value="">اختر نوع التصوير</option>
-                                    <option value="حزمة التصوير الأساسية">حزمة التصوير الأساسية</option>
-                                    <option value="حزمة التصوير المتقدمة">حزمة التصوير المتقدمة</option>
-                                    <option value="فيديو احترافي">فيديو احترافي</option>
-                                    <option value="تصوير شخصي">تصوير شخصي</option>
-                                    <option value="تصوير فيديو وتصوير">تصوير فيديو وتصوير</option>
-                                    <option value="تصوير كامل">تصوير كامل</option>
-                                    <option value="خدمة تصوير مخصصة">خدمة تصوير مخصصة</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="photographyPrice">سعر خدمة التصوير (دينار عراقي)</label>
-                                <input type="number" id="photographyPrice" class="photography-price-input" placeholder="أدخل سعر التصوير">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group full-width">
-                                <label for="photographyNotes">ملاحظات خاصة بالتصوير</label>
-                                <textarea id="photographyNotes" rows="3" placeholder="أي ملاحظات أو متطلبات خاصة بالتصوير..."></textarea>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1610,7 +1611,7 @@
                 <div class="form-row">
                     <div class="form-group full-width">
                         <label for="notes">ملاحظات إضافية</label>
-                        <textarea id="notes" rows="4" placeholder="أي ملاحظات أو متطلبات خاصة"></textarea>
+                        <textarea id="notes" rows="3" placeholder="أي ملاحظات أو متطلبات خاصة"></textarea>
                     </div>
                 </div>
                 
@@ -1671,37 +1672,10 @@
                         
                         <div class="detail-section">
                             <div class="detail-title">
-                                <i class="fas fa-users"></i> معلومات العرسان
-                            </div>
-                            <div class="detail-content">
-                                <div class="detail-row">
-                                    <span class="detail-label">اسم العريس:</span>
-                                    <span class="detail-value" id="previewGroomName">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">عنوان العريس:</span>
-                                    <span class="detail-value" id="previewGroomAddress">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">اسم العروس:</span>
-                                    <span class="detail-value" id="previewBrideName">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">عنوان العروس:</span>
-                                    <span class="detail-value" id="previewBrideAddress">-</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">
                                 <i class="fas fa-camera"></i> خدمة التصوير
                             </div>
                             <div class="detail-content">
-                                <div id="previewPhotographySelection" style="margin-bottom: 8px;">بدون تصوير</div>
-                                <div id="previewPhotographyType" style="margin-bottom: 8px;"></div>
-                                <div id="previewPhotographyPrice" style="margin-bottom: 8px;"></div>
-                                <div id="previewPhotographyNotes" style="margin-bottom: 8px;"></div>
+                                <div id="previewPhotographySelection" style="margin-bottom: 5px;">بدون تصوير</div>
                                 <div id="previewPhotographyBadges"></div>
                             </div>
                         </div>
@@ -1746,19 +1720,15 @@
                             <div class="detail-content">
                                 <div class="detail-row">
                                     <span class="detail-label">المبلغ الكلي:</span>
-                                    <span class="detail-value" id="previewTotalAmount">0</span> دينار عراقي
+                                    <span class="detail-value" id="previewTotalAmount">0</span> د.ع
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">المبلغ الواصل:</span>
-                                    <span class="detail-value" id="previewPaidAmount">0</span> دينار عراقي
+                                    <span class="detail-value" id="previewPaidAmount">0</span> د.ع
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">المبلغ المتبقي:</span>
-                                    <span class="detail-value" id="previewRemainingAmount">0</span> دينار عراقي
-                                </div>
-                                <div class="detail-row" id="previewPhotographyPriceRow" style="display: none;">
-                                    <span class="detail-label">سعر التصوير:</span>
-                                    <span class="detail-value" id="previewPhotographyPriceValue">0</span> دينار عراقي
+                                    <span class="detail-value" id="previewRemainingAmount">0</span> د.ع
                                 </div>
                             </div>
                         </div>
@@ -1767,7 +1737,7 @@
                             <div class="detail-title">
                                 <i class="fas fa-sticky-note"></i> الملاحظات
                             </div>
-                            <div class="detail-content" style="margin-top: 10px; min-height: 80px;">
+                            <div class="detail-content" style="margin-top: 8px; min-height: 50px;">
                                 <span id="previewNotes">لا توجد ملاحظات</span>
                             </div>
                         </div>
@@ -1777,8 +1747,8 @@
                                 <i class="fas fa-signature"></i> توقيع الطرفين
                             </div>
                             
-                            <div style="margin-top: 15px;">
-                                <div class="detail-row" style="margin-bottom: 15px;">
+                            <div style="margin-top: 10px;">
+                                <div class="detail-row" style="margin-bottom: 10px;">
                                     <span class="detail-label">توقيع السيد:</span>
                                     <span class="detail-value">
                                         <div class="signature-box" id="customerSignatureBox">
@@ -1797,7 +1767,7 @@
                                 </div>
                             </div>
                             
-                            <div style="margin-top: 15px; font-size: 0.9rem;">
+                            <div style="margin-top: 10px; font-size: 0.85rem;">
                                 <input type="checkbox" id="agreeTerms">
                                 <label for="agreeTerms">أوافق على جميع الشروط والأحكام المذكورة</label>
                             </div>
@@ -1805,21 +1775,18 @@
                     </div>
                 </div>
                 
-                <div style="padding: 0 25px 25px;">
+                <div style="padding: 0 20px 15px;">
                     <div class="terms">
                         <h4>الشروط والأحكام:</h4>
                         <ul>
                             <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
                             <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
                             <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
-                            <li>يجب الالتزام بموعد انتهاء الحفل حسب العقد المتفق عليه.</li>
-                            <li>خدمة التصوير تدفع بشكل منفصل عن قيمة الحجز الأساسية.</li>
-                            <li>يجب إبلاغ المصور قبل الحفل بوقت كافٍ إذا كانت الخدمة مطلوبة.</li>
                         </ul>
                     </div>
                     
-                    <div style="margin-top: 25px; padding: 15px; background-color: #f0f0f0; border-radius: 6px; border: 1px solid #ddd;">
-                        <div class="detail-title" style="border-bottom: none; margin-bottom: 8px;">
+                    <div style="margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
+                        <div class="detail-title" style="border-bottom: none; margin-bottom: 5px; font-size: 0.9rem;">
                             <i class="fas fa-info-circle"></i> معلومات هامة
                         </div>
                         <div class="detail-content">
@@ -1832,20 +1799,15 @@
                                 <span class="detail-value">بغداد، المنصور</span>
                             </div>
                             <div class="detail-row">
-                                <span class="detail-label">البريد الإلكتروني:</span>
-                                <span class="detail-value">info@alnakhil.com</span>
-                            </div>
-                            <div class="detail-row">
                                 <span class="detail-label">حالة الحجز:</span>
                                 <span class="detail-value" style="color: var(--success); font-weight: bold;">مؤكد</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div style="margin-top: 30px; text-align: center; font-size: 0.9rem; color: var(--gray); padding: 10px; border-top: 1px solid #eee;">
+                    <div style="margin-top: 15px; text-align: center; font-size: 0.8rem; color: var(--gray); padding: 8px; border-top: 1px solid #eee;">
                         <p>شكراً لاختياركم قاعة النخيل للمناسبات</p>
-                        <p>نتمنى لكم مناسبة سعيدة ونجاح باهر</p>
-                        <p style="margin-top: 10px; font-size: 0.8rem;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
+                        <p style="margin-top: 5px; font-size: 0.75rem;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
                     </div>
                 </div>
             </div>
@@ -2024,40 +1986,9 @@
             // تهيئة التقويم
             generateCalendar();
             
-            // إدارة أزرار التصوير
-            setupPhotographyButtons();
-            
             // اختبار اتصال تليجرام
             testTelegramConnection();
         });
-        
-        // ==================== إعداد أزرار التصوير الجديدة ====================
-        function setupPhotographyButtons() {
-            const photographyAdd = document.getElementById('photographyAdd');
-            const photographyNone = document.getElementById('photographyNone');
-            const additionalDetails = document.getElementById('additionalPhotographyDetails');
-            
-            // عند اختيار "إضافة تصوير"
-            photographyAdd.addEventListener('change', function() {
-                if (this.checked) {
-                    additionalDetails.classList.add('active');
-                }
-            });
-            
-            // عند اختيار "بدون تصوير"
-            photographyNone.addEventListener('change', function() {
-                if (this.checked) {
-                    additionalDetails.classList.remove('active');
-                    // مسح الحقول الإضافية
-                    document.getElementById('photographyType').value = '';
-                    document.getElementById('photographyPrice').value = '';
-                    document.getElementById('photographyNotes').value = '';
-                }
-            });
-            
-            // تعيين "بدون تصوير" كخيار افتراضي
-            photographyNone.checked = true;
-        }
         
         // ==================== تحميل الحجوزات من Firestore ====================
         async function loadReservationsFromFirestore() {
@@ -2364,7 +2295,6 @@
                 updateRemainingAmount();
                 // إعادة تعيين التصوير
                 document.getElementById('photographyNone').checked = true;
-                document.getElementById('additionalPhotographyDetails').classList.remove('active');
             }
         });
         
@@ -2403,23 +2333,9 @@
         function getFormData() {
             const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
             
-            // الحصول على بيانات التصوير الجديدة
-            let photographyData = {
-                serviceType: 'بدون تصوير',
-                photographyType: '',
-                photographyPrice: 0,
-                photographyNotes: ''
-            };
-            
+            // الحصول على بيانات التصوير
             const photographyAdd = document.getElementById('photographyAdd');
-            const photographyNone = document.getElementById('photographyNone');
-            
-            if (photographyAdd.checked) {
-                photographyData.serviceType = 'إضافة تصوير';
-                photographyData.photographyType = document.getElementById('photographyType').value || '';
-                photographyData.photographyPrice = parseFloat(document.getElementById('photographyPrice').value) || 0;
-                photographyData.photographyNotes = document.getElementById('photographyNotes').value || '';
-            }
+            const photographyService = photographyAdd.checked ? 'إضافة تصوير' : 'بدون تصوير';
             
             return {
                 customerName: document.getElementById('customerName').value,
@@ -2428,10 +2344,7 @@
                 brideName: document.getElementById('brideName').value || '',
                 groomAddress: document.getElementById('groomAddress').value || '',
                 brideAddress: document.getElementById('brideAddress').value || '',
-                photographyServiceType: photographyData.serviceType,
-                photographyType: photographyData.photographyType,
-                photographyPrice: photographyData.photographyPrice,
-                photographyNotes: photographyData.photographyNotes,
+                photographyServices: photographyService,
                 eventDate: document.getElementById('eventDate').value,
                 eventType: document.getElementById('eventType').value,
                 eventTime: document.getElementById('eventTime').value,
@@ -2456,56 +2369,24 @@
             document.getElementById('previewPhone').textContent = data.phone;
             document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
             
-            // معلومات العرسان
-            document.getElementById('previewGroomName').textContent = data.groomName || '-';
-            document.getElementById('previewGroomAddress').textContent = data.groomAddress || '-';
-            document.getElementById('previewBrideName').textContent = data.brideName || '-';
-            document.getElementById('previewBrideAddress').textContent = data.brideAddress || '-';
-            
-            // خدمة التصوير - الجديدة
+            // خدمة التصوير
             const photographySelection = document.getElementById('previewPhotographySelection');
-            const photographyType = document.getElementById('previewPhotographyType');
-            const photographyPrice = document.getElementById('previewPhotographyPrice');
-            const photographyNotes = document.getElementById('previewPhotographyNotes');
             const photographyBadges = document.getElementById('previewPhotographyBadges');
-            const photographyPriceRow = document.getElementById('previewPhotographyPriceRow');
-            const photographyPriceValue = document.getElementById('previewPhotographyPriceValue');
             
             photographyBadges.innerHTML = '';
-            photographyType.innerHTML = '';
-            photographyPrice.innerHTML = '';
-            photographyNotes.innerHTML = '';
             
-            if (data.photographyServiceType === 'إضافة تصوير') {
+            if (data.photographyServices === 'إضافة تصوير') {
                 photographySelection.textContent = 'نعم، مطلوب خدمة تصوير';
                 photographySelection.style.color = 'var(--info)';
                 photographySelection.style.fontWeight = 'bold';
                 
-                if (data.photographyType) {
-                    photographyType.innerHTML = `<span class="detail-label">نوع التصوير:</span> <span class="detail-value">${data.photographyType}</span>`;
-                }
-                
-                if (data.photographyPrice > 0) {
-                    photographyPrice.innerHTML = `<span class="detail-label">سعر التصوير:</span> <span class="detail-value">${formatCurrency(data.photographyPrice)} دينار عراقي</span>`;
-                    
-                    // إظهار سطر سعر التصوير في القسم المالي
-                    photographyPriceRow.style.display = 'block';
-                    photographyPriceValue.textContent = formatCurrency(data.photographyPrice);
-                    
-                    // إضافة شارة
-                    const badge = document.createElement('span');
-                    badge.className = 'photography-tag';
-                    badge.textContent = `${data.photographyType || 'تصوير'} - ${formatCurrency(data.photographyPrice)} د.ع`;
-                    photographyBadges.appendChild(badge);
-                }
-                
-                if (data.photographyNotes) {
-                    photographyNotes.innerHTML = `<span class="detail-label">ملاحظات التصوير:</span> <span class="detail-value">${data.photographyNotes}</span>`;
-                }
+                const badge = document.createElement('span');
+                badge.className = 'photography-tag';
+                badge.textContent = 'خدمة تصوير';
+                photographyBadges.appendChild(badge);
             } else {
                 photographySelection.textContent = 'بدون تصوير';
                 photographySelection.style.color = 'var(--gray)';
-                photographyPriceRow.style.display = 'none';
             }
             
             // تفاصيل المناسبة
@@ -2524,13 +2405,13 @@
                 hallSelection.textContent = 'لم يتم اختيار قاعة';
             } else if (selectedHalls.length === 2) {
                 hallSelection.textContent = 'تم حجز القاعتين معاً';
-                hallBadges.innerHTML = '<span class="hall-tag">القاعة 1 (300 شخص)</span><span class="hall-tag">القاعة 2 (250 شخص)</span>';
+                hallBadges.innerHTML = '<span class="hall-tag">القاعة 1</span><span class="hall-tag">القاعة 2</span>';
             } else {
                 hallSelection.textContent = selectedHalls.join(', ');
                 selectedHalls.forEach(hall => {
                     const badge = document.createElement('span');
                     badge.className = 'hall-tag';
-                    badge.textContent = hall === 'القاعة رقم 1' ? 'القاعة 1 (300 شخص)' : 'القاعة 2 (250 شخص)';
+                    badge.textContent = hall === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2';
                     hallBadges.appendChild(badge);
                 });
             }
@@ -2550,9 +2431,6 @@
             // توقيع الزبون
             const signatureBox = document.getElementById('customerSignatureBox');
             signatureBox.innerHTML = '<span>.......................</span>';
-            signatureBox.addEventListener('click', function() {
-                this.innerHTML = '<span style="font-family: cursive; font-size: 18px;">توقيع الزبون</span>';
-            });
             
             // تحديث محتوى الطباعة للهاتف
             updateMobilePreview(data);
@@ -2564,14 +2442,7 @@
             
             const customerName = data.customerName;
             const phone = data.phone;
-            const groomName = data.groomName;
-            const brideName = data.brideName;
-            const groomAddress = data.groomAddress;
-            const brideAddress = data.brideAddress;
-            const photographyServiceType = data.photographyServiceType;
-            const photographyType = data.photographyType;
-            const photographyPrice = data.photographyPrice;
-            const photographyNotes = data.photographyNotes;
+            const photographyServices = data.photographyServices;
             const eventType = data.eventType;
             const eventDate = formatDate(data.eventDate);
             const eventTime = data.eventTime;
@@ -2584,38 +2455,20 @@
             // إنشاء محتوى الهاتف
             let hallTags = '';
             if (selectedHalls.length === 2) {
-                hallTags = '<span class="hall-tag">القاعة 1 (300 شخص)</span> <span class="hall-tag">القاعة 2 (250 شخص)</span>';
+                hallTags = '<span class="hall-tag">القاعة 1</span> <span class="hall-tag">القاعة 2</span>';
             } else if (selectedHalls.length === 1 && selectedHalls[0] !== '') {
-                hallTags = `<span class="hall-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1 (300 شخص)' : 'القاعة 2 (250 شخص)'}</span>`;
+                hallTags = `<span class="hall-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2'}</span>`;
             }
             
             let photographyInfo = '';
-            if (photographyServiceType === 'إضافة تصوير') {
+            if (photographyServices === 'إضافة تصوير') {
                 photographyInfo = `
                     <div class="sub-title">خدمة التصوير</div>
                     <div class="info-row">
-                        <div class="info-label">نوع الخدمة:</div>
-                        <div class="info-value">${photographyType || 'تصوير'}</div>
+                        <div class="info-label">الخدمة:</div>
+                        <div class="info-value">مطلوب خدمة تصوير</div>
                     </div>
                 `;
-                
-                if (photographyPrice > 0) {
-                    photographyInfo += `
-                    <div class="info-row">
-                        <div class="info-label">سعر التصوير:</div>
-                        <div class="info-value">${formatCurrency(photographyPrice)} دينار عراقي</div>
-                    </div>
-                    `;
-                }
-                
-                if (photographyNotes) {
-                    photographyInfo += `
-                    <div class="info-row">
-                        <div class="info-label">ملاحظات التصوير:</div>
-                        <div class="info-value">${photographyNotes}</div>
-                    </div>
-                    `;
-                }
             }
             
             const mobileHTML = `
@@ -2624,7 +2477,7 @@
                         <i class="fas fa-palette"></i><br>
                         قاعة النخيل للمناسبات
                     </div>
-                    <div style="text-align: center; margin-bottom: 20px; font-size: 16pt;">
+                    <div style="text-align: center; margin-bottom: 15px; font-size: 14pt;">
                         عقد حجز قاعة للمناسبات - نسخة الزبون
                     </div>
                     
@@ -2645,26 +2498,6 @@
                         <div class="info-label">رقم الهاتف:</div>
                         <div class="info-value">${phone || '-'}</div>
                     </div>
-                    
-                    ${(groomName || brideName) ? `
-                    <div class="sub-title">معلومات العرسان</div>
-                    <div class="info-row">
-                        <div class="info-label">اسم العريس:</div>
-                        <div class="info-value">${groomName || '-'}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">عنوان العريس:</div>
-                        <div class="info-value">${groomAddress || '-'}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">اسم العروس:</div>
-                        <div class="info-value">${brideName || '-'}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">عنوان العروس:</div>
-                        <div class="info-value">${brideAddress || '-'}</div>
-                    </div>
-                    ` : ''}
                     
                     ${photographyInfo}
                     
@@ -2700,12 +2533,6 @@
                             <div class="info-label">المبلغ الكلي:</div>
                             <div class="info-value">${formatCurrency(totalAmount)} دينار عراقي</div>
                         </div>
-                        ${photographyPrice > 0 ? `
-                        <div class="info-row">
-                            <div class="info-label">سعر التصوير:</div>
-                            <div class="info-value">${formatCurrency(photographyPrice)} دينار عراقي</div>
-                        </div>
-                        ` : ''}
                         <div class="info-row">
                             <div class="info-label">المبلغ الواصل:</div>
                             <div class="info-value">${formatCurrency(paidAmount)} دينار عراقي</div>
@@ -2723,18 +2550,6 @@
                     </div>
                     ` : ''}
                     
-                    <div class="terms-box">
-                        <div class="terms-title">الشروط والأحكام</div>
-                        <ul class="terms-list">
-                            <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
-                            <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
-                            <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
-                            <li>يجب الالتزام بموعد انتهاء الحفل حسب العقد المتفق عليه.</li>
-                            <li>خدمة التصوير تدفع بشكل منفصل عن قيمة الحجز الأساسية.</li>
-                            <li>يجب إبلاغ المصور قبل الحفل بوقت كافٍ إذا كانت الخدمة مطلوبة.</li>
-                        </ul>
-                    </div>
-                    
                     <div class="sub-title">توقيع الطرفين</div>
                     <div class="info-row">
                         <div class="info-label">توقيع السيد:</div>
@@ -2749,7 +2564,7 @@
                         </div>
                     </div>
                     
-                    <div class="info-row" style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
+                    <div class="info-row" style="margin-top: 10px;">
                         <div class="info-label">رقم الهاتف:</div>
                         <div class="info-value">07701234567</div>
                     </div>
@@ -2758,18 +2573,22 @@
                         <div class="info-value">بغداد، المنصور</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">البريد الإلكتروني:</div>
-                        <div class="info-value">info@alnakhil.com</div>
-                    </div>
-                    <div class="info-row">
                         <div class="info-label">حالة الحجز:</div>
                         <div class="info-value" style="color: #2c5f2d; font-weight: bold;">مؤكد</div>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd;">
-                        <p style="font-size: 14pt;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
-                        <p style="font-size: 14pt;">نتمنى لكم مناسبة سعيدة ونجاح باهر</p>
-                        <p style="margin-top: 15px; font-size: 12pt; color: #666;">
+                    <div class="terms-box">
+                        <div class="terms-title">الشروط والأحكام</div>
+                        <ul class="terms-list">
+                            <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
+                            <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                            <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                        <p style="font-size: 12pt;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
+                        <p style="font-size: 11pt; color: #666;">
                             هذه النسخة للزبون - الرجاء الاحتفاظ بها
                         </p>
                     </div>
@@ -2788,8 +2607,17 @@
             
             updatePreview();
             
+            // للحاسوب: استخدام الطباعة العادية مع إعدادات A4
             setTimeout(() => {
+                const originalStyles = document.querySelectorAll('style, link[rel="stylesheet"]');
+                originalStyles.forEach(style => style.setAttribute('media', 'not print'));
+                
                 window.print();
+                
+                // إعادة تعيين الأنماط بعد الطباعة
+                setTimeout(() => {
+                    originalStyles.forEach(style => style.setAttribute('media', 'all'));
+                }, 500);
             }, 100);
         });
         
@@ -2807,23 +2635,24 @@
             
             if (isMobile) {
                 // للهاتف: استخدام محتوى الطباعة الخاص بالهاتف
-                document.getElementById('printableContent').style.display = 'none';
-                document.getElementById('mobilePrintableContent').style.display = 'block';
+                const printContent = document.getElementById('mobilePrintableContent').innerHTML;
+                const originalContent = document.body.innerHTML;
+                
+                document.body.innerHTML = printContent;
                 
                 setTimeout(() => {
                     window.print();
                     
-                    // إعادة العرض بعد الطباعة
+                    // إعادة المحتوى الأصلي بعد الطباعة
                     setTimeout(() => {
-                        document.getElementById('printableContent').style.display = 'block';
-                        document.getElementById('mobilePrintableContent').style.display = 'none';
+                        document.body.innerHTML = originalContent;
+                        // إعادة ربط الأحداث
+                        document.getElementById('printMobileBtn').addEventListener('click', arguments.callee);
                     }, 500);
                 }, 300);
             } else {
-                // للحاسوب: استخدام الطباعة العادية
-                setTimeout(() => {
-                    window.print();
-                }, 100);
+                // إذا كان حاسوب ولكن مستخدم ضغط زر الهاتف
+                showAlert('أنت تستخدم حاسوباً، الرجاء استخدام زر "الطباعة من الحاسوب"', 'info');
             }
         });
         
@@ -2967,7 +2796,6 @@
             
             // إعادة تعيين التصوير
             document.getElementById('photographyNone').checked = true;
-            document.getElementById('additionalPhotographyDetails').classList.remove('active');
             
             // تحديث قائمة الحجوزات والتقويم
             updateReservationsTable();
@@ -3009,25 +2837,6 @@
                 return false;
             }
             
-            // التحقق من حقل التصوير إذا كان "إضافة تصوير"
-            const photographyAdd = document.getElementById('photographyAdd');
-            if (photographyAdd.checked) {
-                const photographyType = document.getElementById('photographyType').value;
-                const photographyPrice = document.getElementById('photographyPrice').value;
-                
-                if (!photographyType.trim()) {
-                    showAlert('يرجى اختيار نوع خدمة التصوير', 'error');
-                    document.getElementById('photographyType').focus();
-                    return false;
-                }
-                
-                if (!photographyPrice.trim() || parseFloat(photographyPrice) <= 0) {
-                    showAlert('يرجى إدخال سعر صحيح لخدمة التصوير', 'error');
-                    document.getElementById('photographyPrice').focus();
-                    return false;
-                }
-            }
-            
             return true;
         }
         
@@ -3058,12 +2867,10 @@
                 }
                 
                 let photographyBadge = '';
-                let photographyText = reservation.photographyServiceType || 'بدون تصوير';
-                if (reservation.photographyServiceType === 'إضافة تصوير') {
+                let photographyText = reservation.photographyServices || 'بدون تصوير';
+                if (reservation.photographyServices === 'إضافة تصوير') {
                     photographyBadge = '<span class="photography-badge-list"><i class="fas fa-camera"></i></span>';
-                    if (reservation.photographyType) {
-                        photographyText = reservation.photographyType;
-                    }
+                    photographyText = 'إضافة تصوير';
                 }
                 
                 let telegramStatus = '';
@@ -3127,21 +2934,14 @@
             document.getElementById('remainingAmount').value = reservation.remainingAmount;
             document.getElementById('notes').value = reservation.notes;
             
-            // تعيين خدمة التصوير الجديدة
+            // تعيين خدمة التصوير
             const photographyAdd = document.getElementById('photographyAdd');
             const photographyNone = document.getElementById('photographyNone');
-            const additionalDetails = document.getElementById('additionalPhotographyDetails');
             
-            if (reservation.photographyServiceType === 'إضافة تصوير') {
+            if (reservation.photographyServices === 'إضافة تصوير') {
                 photographyAdd.checked = true;
-                additionalDetails.classList.add('active');
-                
-                document.getElementById('photographyType').value = reservation.photographyType || '';
-                document.getElementById('photographyPrice').value = reservation.photographyPrice || '';
-                document.getElementById('photographyNotes').value = reservation.photographyNotes || '';
             } else {
                 photographyNone.checked = true;
-                additionalDetails.classList.remove('active');
             }
             
             // تعيين القاعات
@@ -3269,7 +3069,7 @@
                 reservation.groomAddress?.toLowerCase().includes(searchTerm) ||
                 reservation.brideAddress?.toLowerCase().includes(searchTerm) ||
                 reservation.reservationNumber?.toString().includes(searchTerm) ||
-                reservation.photographyType?.toLowerCase().includes(searchTerm)
+                reservation.photographyServices?.toLowerCase().includes(searchTerm)
             );
             
             if (filteredReservations.length === 0) {
@@ -3290,12 +3090,10 @@
                 }
                 
                 let photographyBadge = '';
-                let photographyText = reservation.photographyServiceType || 'بدون تصوير';
-                if (reservation.photographyServiceType === 'إضافة تصوير') {
+                let photographyText = reservation.photographyServices || 'بدون تصوير';
+                if (reservation.photographyServices === 'إضافة تصوير') {
                     photographyBadge = '<span class="photography-badge-list"><i class="fas fa-camera"></i></span>';
-                    if (reservation.photographyType) {
-                        photographyText = reservation.photographyType;
-                    }
+                    photographyText = 'إضافة تصوير';
                 }
                 
                 let telegramStatus = '';
@@ -3419,14 +3217,7 @@
             
             const customerName = data.customerName;
             const phone = data.phone;
-            const groomName = data.groomName || 'غير محدد';
-            const brideName = data.brideName || 'غير محدد';
-            const groomAddress = data.groomAddress || 'غير محدد';
-            const brideAddress = data.brideAddress || 'غير محدد';
-            const photographyServiceType = data.photographyServiceType;
-            const photographyType = data.photographyType || 'غير محدد';
-            const photographyPrice = data.photographyPrice || 0;
-            const photographyNotes = data.photographyNotes || 'لا توجد ملاحظات';
+            const photographyServices = data.photographyServices;
             const eventType = data.eventType;
             const eventDate = formatDate(data.eventDate);
             const eventTime = data.eventTime;
@@ -3439,21 +3230,6 @@
             const remainingAmount = data.remainingAmount || '0';
             
             const notes = data.notes || 'لا توجد ملاحظات';
-            
-            let photographyInfo = '';
-            if (photographyServiceType === 'إضافة تصوير') {
-                photographyInfo = `
-📸 *خدمة التصوير:*
-• نوع التصوير: ${photographyType}
-• سعر التصوير: ${formatCurrency(photographyPrice)} د.ع
-• ملاحظات التصوير: ${photographyNotes}
-                `;
-            } else {
-                photographyInfo = `
-📸 *خدمة التصوير:*
-• بدون تصوير
-                `;
-            }
             
             return `
 🎉 *حجز جديد - قاعة النخيل للمناسبات* 🎉
@@ -3470,13 +3246,8 @@
 • التاريخ: ${eventDate}
 • الوقت: ${eventTime}
 
-👰‍♀️🤵‍♂️ *أسماء العرسان:*
-• العريس: ${groomName}
-• عنوان العريس: ${groomAddress}
-• العروس: ${brideName}
-• عنوان العروس: ${brideAddress}
-
-${photographyInfo}
+📸 *خدمة التصوير:*
+• ${photographyServices}
 
 🏛️ *القاعة المختارة:*
 • ${hallText}
@@ -3486,7 +3257,7 @@ ${photographyInfo}
 • المبلغ الواصل: ${formatCurrency(paidAmount)} د.ع
 • المبلغ المتبقي: ${formatCurrency(remainingAmount)} د.ع
 
-📝 *ملاحظات عامة:*
+📝 *ملاحظات:*
 ${notes}
 
 🕒 *تم الحفظ في:* ${new Date().toLocaleTimeString('ar-IQ')}
@@ -3547,7 +3318,7 @@ ${notes}
         
         // ==================== دوال مساعدة ====================
         function convertToCSV(data) {
-            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'نوع التصوير', 'سعر التصوير', 'ملاحظات التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
+            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
             const rows = data.map(item => [
                 item.reservationNumber || item.id,
                 item.customerName,
@@ -3556,10 +3327,7 @@ ${notes}
                 item.brideName || '',
                 item.groomAddress || '',
                 item.brideAddress || '',
-                item.photographyServiceType || 'بدون تصوير',
-                item.photographyType || '',
-                item.photographyPrice || 0,
-                item.photographyNotes || '',
+                item.photographyServices || 'بدون تصوير',
                 item.eventDate,
                 item.eventType,
                 item.eventTime,
