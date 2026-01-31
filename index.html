@@ -1024,21 +1024,26 @@
         }
         
         /* =========================================== */
-        /* إعدادات الطباعة من الحاسوب */
+        /* إعدادات الطباعة من الحاسوب - A4 وجه واحد */
         /* =========================================== */
         @media print {
             body * {
                 visibility: hidden;
-                margin: 0;
-                padding: 0;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             
-            #printableContent, #printableContent * {
+            #printableArea, #printableArea * {
                 visibility: visible !important;
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                height: auto !important;
             }
             
-            #printableContent {
-                position: absolute !important;
+            #printableArea {
+                position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
                 width: 21cm !important;
@@ -1049,27 +1054,32 @@
                 z-index: 999999 !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
+                font-family: 'Arial', 'Segoe UI', sans-serif !important;
+                color: #000 !important;
                 page-break-inside: avoid !important;
-                break-inside: avoid !important;
+                page-break-after: avoid !important;
             }
             
             .no-print, 
-            .action-buttons, 
-            .nav-tabs, 
             header, 
+            .nav-tabs, 
             .page-title, 
+            .action-buttons,
             .alert,
             .telegram-badge,
             .search-box,
             .watermark,
             .calendar-controls,
-            .calendar-legends {
+            .calendar-legends,
+            .logo,
+            .date-display {
                 display: none !important;
+                visibility: hidden !important;
             }
             
             @page {
-                size: A4 portrait;
-                margin: 1.5cm;
+                size: A4 portrait !important;
+                margin: 1.5cm !important;
             }
             
             html, body {
@@ -1081,320 +1091,177 @@
                 background: white !important;
             }
             
-            .preview-content {
-                display: flex !important;
-                flex-direction: row !important;
+            /* تصميم محتوى الطباعة */
+            .print-content {
                 width: 100% !important;
-                height: 23cm !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            
-            .preview-left, .preview-right {
-                flex: 1 !important;
-                padding: 0 15px !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
                 height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
             }
             
-            .preview-header {
-                background: white !important;
-                color: black !important;
-                border-bottom: 2px solid #333 !important;
-                padding: 15px 0 !important;
-                margin-bottom: 15px !important;
+            .print-header {
                 text-align: center !important;
+                margin-bottom: 20px !important;
+                padding-bottom: 15px !important;
+                border-bottom: 3px solid #2c5f2d !important;
             }
             
-            .preview-logo {
-                color: black !important;
-                font-size: 2rem !important;
-            }
-            
-            .preview-header h2 {
-                color: black !important;
-                font-size: 1.5rem !important;
+            .print-header h2 {
+                font-size: 24pt !important;
+                color: #2c5f2d !important;
                 margin-bottom: 5px !important;
             }
             
-            .preview-header p {
-                font-size: 0.9rem !important;
+            .print-header p {
+                font-size: 14pt !important;
+                color: #666 !important;
             }
             
-            .detail-section,
-            .terms,
-            .signature-area {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
+            .print-logo {
+                font-size: 36pt !important;
+                color: #2c5f2d !important;
                 margin-bottom: 10px !important;
             }
             
-            .detail-title {
-                font-size: 14px !important;
-                margin-bottom: 6px !important;
-                padding-bottom: 3px !important;
+            .print-details {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 15px !important;
+                margin-bottom: 15px !important;
             }
             
-            .detail-content {
-                font-size: 12px !important;
+            .print-section {
+                flex: 1 !important;
+                min-width: 300px !important;
+                margin-bottom: 15px !important;
             }
             
-            .detail-row {
-                margin-bottom: 4px !important;
+            .print-title {
+                font-size: 16pt !important;
+                font-weight: bold !important;
+                color: #2c5f2d !important;
+                margin-bottom: 10px !important;
+                padding-bottom: 5px !important;
+                border-bottom: 1px solid #ddd !important;
             }
             
-            .detail-label {
-                font-size: 12px !important;
-                min-width: 100px !important;
+            .print-row {
+                display: flex !important;
+                margin-bottom: 8px !important;
+                font-size: 12pt !important;
             }
             
-            .detail-value {
-                font-size: 12px !important;
+            .print-label {
+                font-weight: bold !important;
+                min-width: 130px !important;
+                color: #333 !important;
             }
             
-            .signature-box {
-                border: 1px solid #666 !important;
+            .print-value {
+                flex: 1 !important;
+                color: #000 !important;
+            }
+            
+            .print-tag {
+                display: inline-block !important;
+                padding: 4px 10px !important;
+                background-color: #2c5f2d !important;
+                color: white !important;
+                border-radius: 15px !important;
+                margin-left: 5px !important;
+                font-size: 10pt !important;
+                font-weight: bold !important;
+            }
+            
+            .print-amount {
+                background-color: #f0f8f0 !important;
+                padding: 12px !important;
+                border-radius: 8px !important;
+                border-right: 3px solid #2c5f2d !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .print-notes {
+                background-color: #f9f9f9 !important;
+                padding: 10px !important;
+                border-radius: 6px !important;
+                border: 1px solid #eee !important;
+                margin-bottom: 15px !important;
+                font-size: 12pt !important;
+            }
+            
+            .print-signature {
+                margin-top: 20px !important;
+                padding-top: 15px !important;
+                border-top: 1px solid #ddd !important;
+            }
+            
+            .signature-line {
                 height: 50px !important;
-                font-size: 12px !important;
+                border-bottom: 1px solid #999 !important;
+                margin-bottom: 10px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 12pt !important;
+                color: #666 !important;
             }
             
-            .terms {
-                padding: 8px !important;
-                margin-top: 10px !important;
+            .print-terms {
+                background-color: #f9f9f9 !important;
+                padding: 10px !important;
+                border-radius: 6px !important;
+                border: 1px solid #eee !important;
+                margin-top: 15px !important;
             }
             
-            .terms h4 {
-                font-size: 13px !important;
+            .print-terms h4 {
+                text-align: center !important;
+                font-size: 14pt !important;
+                color: #2c5f2d !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .print-terms ul {
+                padding-right: 20px !important;
+                margin: 0 !important;
+            }
+            
+            .print-terms li {
                 margin-bottom: 5px !important;
+                font-size: 10pt !important;
+                line-height: 1.3 !important;
             }
             
-            .terms li {
-                font-size: 11px !important;
-                margin-bottom: 3px !important;
+            .print-footer {
+                text-align: center !important;
+                margin-top: 15px !important;
+                padding-top: 10px !important;
+                border-top: 1px solid #ddd !important;
+                font-size: 10pt !important;
+                color: #666 !important;
             }
             
-            .notes-section {
-                padding: 8px !important;
-                font-size: 12px !important;
-            }
-            
-            .amount-display {
-                padding: 8px !important;
-            }
-            
-            * {
-                color: black !important;
-            }
-            
-            /* إخفاء معلومات العرسان */
-            .preview-right .detail-section:nth-child(2) {
+            /* إخفاء محتوى العرسان من الطباعة */
+            .print-section:nth-child(2) {
                 display: none !important;
             }
         }
         
         /* =========================================== */
-        /* إعدادات الطباعة من الهاتف فقط */
+        /* محتوى الطباعة للهاتف - A4 وجه واحد */
         /* =========================================== */
-        @media print and (max-width: 768px) {
-            body * {
-                visibility: hidden !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            
-            #mobilePrintableContent, #mobilePrintableContent * {
-                visibility: visible !important;
-                display: block !important;
-            }
-            
-            #mobilePrintableContent {
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 21cm !important;
-                height: 29.7cm !important;
-                margin: 0 !important;
-                padding: 1.5cm !important;
-                background: white !important;
-                z-index: 999999 !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                font-family: 'Arial', sans-serif !important;
-                overflow: hidden !important;
-            }
-            
-            .print-a4 {
-                width: 100% !important;
-                height: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                box-sizing: border-box !important;
-                line-height: 1.4 !important;
-                position: relative !important;
-            }
-            
-            .print-a4 * {
-                box-sizing: border-box !important;
-                max-width: 100% !important;
-            }
-            
-            .print-a4 {
-                font-size: 12pt !important;
-                line-height: 1.4 !important;
-            }
-            
-            .print-a4 .section-title {
-                font-size: 18pt !important;
-                font-weight: bold !important;
-                text-align: center !important;
-                margin-bottom: 15px !important;
-                color: #000 !important;
-                padding-bottom: 10px !important;
-                border-bottom: 2px solid #2c5f2d !important;
-            }
-            
-            .print-a4 .sub-title {
-                font-size: 14pt !important;
-                font-weight: bold !important;
-                margin: 10px 0 6px 0 !important;
-                color: #000 !important;
-                border-bottom: 1px solid #ddd !important;
-                padding-bottom: 3px !important;
-            }
-            
-            .print-a4 .info-row {
-                margin-bottom: 6px !important;
-                padding: 5px 0 !important;
-                border-bottom: 1px solid #f0f0f0 !important;
-                display: flex !important;
-                flex-wrap: wrap !important;
-            }
-            
-            .print-a4 .info-label {
-                font-weight: bold !important;
-                color: #333 !important;
-                margin-bottom: 2px !important;
-                font-size: 11pt !important;
-                width: 120px !important;
-            }
-            
-            .print-a4 .info-value {
-                color: #000 !important;
-                font-size: 11pt !important;
-                flex: 1 !important;
-            }
-            
-            .print-a4 .amount-section {
-                background-color: #f8f9fa !important;
-                padding: 10px !important;
-                border-radius: 5px !important;
-                margin: 10px 0 !important;
-                border-right: 3px solid #2c5f2d !important;
-            }
-            
-            .print-a4 .hall-tag {
-                display: inline-block !important;
-                padding: 3px 8px !important;
-                background-color: #2c5f2d !important;
-                color: white !important;
-                border-radius: 12px !important;
-                margin-left: 5px !important;
-                font-size: 9pt !important;
-            }
-            
-            .print-a4 .photography-tag {
-                display: inline-block !important;
-                padding: 3px 8px !important;
-                background-color: #17a2b8 !important;
-                color: white !important;
-                border-radius: 12px !important;
-                margin-left: 5px !important;
-                font-size: 9pt !important;
-            }
-            
-            .print-a4 .signature-box {
-                height: 50px !important;
-                border: 1px solid #666 !important;
-                border-radius: 4px !important;
-                margin: 8px 0 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                color: #666 !important;
-                font-size: 11pt !important;
-            }
-            
-            .print-a4 .terms-box {
-                background-color: #f9f9f9 !important;
-                padding: 10px !important;
-                border-radius: 5px !important;
-                margin: 10px 0 !important;
-                border: 1px solid #ddd !important;
-                position: absolute !important;
-                bottom: 1cm !important;
-                left: 1.5cm !important;
-                right: 1.5cm !important;
-            }
-            
-            .print-a4 .terms-title {
-                font-size: 13pt !important;
-                font-weight: bold !important;
-                text-align: center !important;
-                margin-bottom: 8px !important;
-                color: #2c5f2d !important;
-            }
-            
-            .print-a4 .terms-list {
-                padding-right: 15px !important;
-                margin: 0 !important;
-            }
-            
-            .print-a4 .terms-list li {
-                margin-bottom: 4px !important;
-                font-size: 10pt !important;
-                line-height: 1.3 !important;
-            }
-            
-            .print-a4 .notes-box {
-                background-color: #f0f8ff !important;
-                padding: 8px !important;
-                border-radius: 5px !important;
-                margin: 8px 0 !important;
-                border: 1px solid #cce7ff !important;
-            }
-            
-            /* إخفاء معلومات العرسان في طباعة الهاتف */
-            .print-a4 .sub-title:nth-child(4) {
-                display: none !important;
-            }
-            
-            .print-a4 .sub-title:nth-child(4) + .info-row,
-            .print-a4 .sub-title:nth-child(4) + .info-row + .info-row,
-            .print-a4 .sub-title:nth-child(4) + .info-row + .info-row + .info-row,
-            .print-a4 .sub-title:nth-child(4) + .info-row + .info-row + .info-row + .info-row {
-                display: none !important;
-            }
-            
-            .no-print, 
-            .action-buttons, 
-            .nav-tabs, 
-            header, 
-            .page-title, 
-            .alert,
-            .telegram-badge,
-            .search-box,
-            .watermark,
-            #printableContent {
-                display: none !important;
-                visibility: hidden !important;
-            }
-            
-            @page {
-                size: A4 portrait !important;
-                margin: 1.5cm !important;
-            }
+        .print-mobile-content {
+            display: none;
+            width: 21cm;
+            height: 29.7cm;
+            padding: 1.5cm;
+            background: white;
+            font-family: 'Arial', sans-serif;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -9999;
         }
     </style>
     
@@ -1416,7 +1283,7 @@
         };
 
         // Initialize Firebase
-        const app = initializeApp(fbaseConfig);
+        const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const analytics = getAnalytics(app);
         
@@ -1633,8 +1500,8 @@
         <div id="preview-page" class="page">
             <h2 class="page-title"><i class="fas fa-print"></i> معاينة الحجز وطباعته</h2>
             
-            <!-- محتوى الطباعة العادي للحاسوب -->
-            <div class="preview-container" id="printableContent">
+            <!-- محتوى المعاينة العادي -->
+            <div class="preview-container">
                 <div class="preview-header">
                     <div class="preview-logo">
                         <i class="fas fa-palette"></i>
@@ -1812,10 +1679,9 @@
                 </div>
             </div>
             
-            <!-- محتوى الطباعة للهاتف (مخفي في العرض العادي) -->
-            <div id="mobilePrintableContent" style="display: none;">
-                <!-- سيتم تعبئته بواسطة JavaScript -->
-            </div>
+            <!-- محتوى الطباعة المنفصل (مخفي) -->
+            <div id="printableArea" style="display: none;"></div>
+            <div id="printMobileContent" class="print-mobile-content"></div>
             
             <div class="action-buttons no-print">
                 <button class="btn btn-secondary" id="backToForm">
@@ -2316,6 +2182,7 @@
             document.getElementById('preview-page').classList.add('active');
             
             updatePreview();
+            updatePrintContent();
         });
         
         // ==================== العودة للنموذج ====================
@@ -2431,14 +2298,13 @@
             // توقيع الزبون
             const signatureBox = document.getElementById('customerSignatureBox');
             signatureBox.innerHTML = '<span>.......................</span>';
-            
-            // تحديث محتوى الطباعة للهاتف
-            updateMobilePreview(data);
         }
         
-        // ==================== تحديث محتوى الطباعة للهاتف ====================
-        function updateMobilePreview(data) {
-            const mobileContent = document.getElementById('mobilePrintableContent');
+        // ==================== تحديث محتوى الطباعة ====================
+        function updatePrintContent() {
+            const data = currentReservationData || getFormData();
+            const printableArea = document.getElementById('printableArea');
+            const printMobileContent = document.getElementById('printMobileContent');
             
             const customerName = data.customerName;
             const phone = data.phone;
@@ -2452,150 +2318,140 @@
             const remainingAmount = data.remainingAmount || '0';
             const notes = data.notes;
             
-            // إنشاء محتوى الهاتف
             let hallTags = '';
             if (selectedHalls.length === 2) {
-                hallTags = '<span class="hall-tag">القاعة 1</span> <span class="hall-tag">القاعة 2</span>';
+                hallTags = '<span class="print-tag">القاعة 1</span> <span class="print-tag">القاعة 2</span>';
             } else if (selectedHalls.length === 1 && selectedHalls[0] !== '') {
-                hallTags = `<span class="hall-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2'}</span>`;
+                hallTags = `<span class="print-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2'}</span>`;
             }
             
-            let photographyInfo = '';
+            let photographyTag = '';
             if (photographyServices === 'إضافة تصوير') {
-                photographyInfo = `
-                    <div class="sub-title">خدمة التصوير</div>
-                    <div class="info-row">
-                        <div class="info-label">الخدمة:</div>
-                        <div class="info-value">مطلوب خدمة تصوير</div>
-                    </div>
-                `;
+                photographyTag = '<span class="print-tag" style="background-color: #17a2b8;">خدمة تصوير</span>';
             }
             
-            const mobileHTML = `
-                <div class="print-a4">
-                    <div class="section-title">
-                        <i class="fas fa-palette"></i><br>
-                        قاعة النخيل للمناسبات
-                    </div>
-                    <div style="text-align: center; margin-bottom: 15px; font-size: 14pt;">
-                        عقد حجز قاعة للمناسبات - نسخة الزبون
-                    </div>
-                    
-                    <div class="sub-title">معلومات الحجز</div>
-                    <div class="info-row">
-                        <div class="info-label">اسم السيد المحجِز:</div>
-                        <div class="info-value">${customerName || '-'}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">رقم الحجز:</div>
-                        <div class="info-value">${reservationCounter + 1}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">تاريخ الحجز:</div>
-                        <div class="info-value">${new Date().toLocaleDateString('ar-IQ')}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">رقم الهاتف:</div>
-                        <div class="info-value">${phone || '-'}</div>
-                    </div>
-                    
-                    ${photographyInfo}
-                    
-                    <div class="sub-title">تفاصيل المناسبة</div>
-                    <div class="info-row">
-                        <div class="info-label">نوع المناسبة:</div>
-                        <div class="info-value">${eventType || '-'}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">التاريخ:</div>
-                        <div class="info-value">${eventDate || '-'}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">الوقت:</div>
-                        <div class="info-value">${eventTime || '-'}</div>
-                    </div>
-                    
-                    <div class="sub-title">القاعة المختارة</div>
-                    <div class="info-row">
-                        <div class="info-label">القاعات:</div>
-                        <div class="info-value">${selectedHalls.length > 0 && selectedHalls[0] !== '' ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'}</div>
-                    </div>
-                    ${hallTags ? `
-                    <div class="info-row">
-                        <div class="info-label">العلامات:</div>
-                        <div class="info-value">${hallTags}</div>
-                    </div>
-                    ` : ''}
-                    
-                    <div class="sub-title">التفاصيل المالية</div>
-                    <div class="amount-section">
-                        <div class="info-row">
-                            <div class="info-label">المبلغ الكلي:</div>
-                            <div class="info-value">${formatCurrency(totalAmount)} دينار عراقي</div>
+            const printHTML = `
+                <div class="print-content">
+                    <div class="print-header">
+                        <div class="print-logo">
+                            <i class="fas fa-palette"></i>
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">المبلغ الواصل:</div>
-                            <div class="info-value">${formatCurrency(paidAmount)} دينار عراقي</div>
-                        </div>
-                        <div class="info-row">
-                            <div class="info-label">المبلغ المتبقي:</div>
-                            <div class="info-value">${formatCurrency(remainingAmount)} دينار عراقي</div>
+                        <h2>قاعة النخيل للمناسبات</h2>
+                        <p>عقد حجز قاعة للمناسبات - نسخة الزبون</p>
                     </div>
+                    
+                    <div class="print-details">
+                        <div class="print-section">
+                            <div class="print-title">معلومات الحجز</div>
+                            <div class="print-row">
+                                <div class="print-label">اسم السيد المحجِز:</div>
+                                <div class="print-value">${customerName || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label">رقم الحجز:</div>
+                                <div class="print-value">${reservationCounter + 1}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label">تاريخ الحجز:</div>
+                                <div class="print-value">${new Date().toLocaleDateString('ar-IQ')}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label">رقم الهاتف:</div>
+                                <div class="print-value">${phone || '-'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="print-section">
+                            <div class="print-title">خدمة التصوير</div>
+                            <div class="print-row">
+                                <div class="print-label">الخدمة:</div>
+                                <div class="print-value">${photographyServices === 'إضافة تصوير' ? 'مطلوب خدمة تصوير' : 'بدون تصوير'} ${photographyTag}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="print-section">
+                            <div class="print-title">تفاصيل المناسبة</div>
+                            <div class="print-row">
+                                <div class="print-label">نوع المناسبة:</div>
+                                <div class="print-value">${eventType || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label">التاريخ:</div>
+                                <div class="print-value">${eventDate || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label">الوقت:</div>
+                                <div class="print-value">${eventTime || '-'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="print-section">
+                            <div class="print-title">القاعة المختارة</div>
+                            <div class="print-row">
+                                <div class="print-label">القاعات:</div>
+                                <div class="print-value">${selectedHalls.length > 0 && selectedHalls[0] !== '' ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'} ${hallTags}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="print-amount">
+                        <div class="print-title">التفاصيل المالية</div>
+                        <div class="print-row">
+                            <div class="print-label">المبلغ الكلي:</div>
+                            <div class="print-value">${formatCurrency(totalAmount)} دينار عراقي</div>
+                        </div>
+                        <div class="print-row">
+                            <div class="print-label">المبلغ الواصل:</div>
+                            <div class="print-value">${formatCurrency(paidAmount)} دينار عراقي</div>
+                        </div>
+                        <div class="print-row">
+                            <div class="print-label">المبلغ المتبقي:</div>
+                            <div class="print-value">${formatCurrency(remainingAmount)} دينار عراقي</div>
+                        </div>
                     </div>
                     
                     ${notes ? `
-                    <div class="sub-title">ملاحظات إضافية</div>
-                    <div class="notes-box">
-                        <div class="info-value">${notes}</div>
+                    <div class="print-notes">
+                        <div class="print-title">ملاحظات إضافية</div>
+                        <div class="print-value">${notes}</div>
                     </div>
                     ` : ''}
                     
-                    <div class="sub-title">توقيع الطرفين</div>
-                    <div class="info-row">
-                        <div class="info-label">توقيع السيد:</div>
-                        <div class="info-value">
-                            <div class="signature-box">.......................</div>
+                    <div class="print-signature">
+                        <div class="print-title">توقيع الطرفين</div>
+                        <div class="print-row">
+                            <div class="print-label">توقيع السيد:</div>
+                            <div class="print-value">
+                                <div class="signature-line">.......................</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">توقيع المسؤول:</div>
-                        <div class="info-value">
-                            <div class="signature-box">إدارة قاعة النخيل</div>
+                        <div class="print-row">
+                            <div class="print-label">توقيع المسؤول:</div>
+                            <div class="print-value">
+                                <div class="signature-line">إدارة قاعة النخيل</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="info-row" style="margin-top: 10px;">
-                        <div class="info-label">رقم الهاتف:</div>
-                        <div class="info-value">07701234567</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">العنوان:</div>
-                        <div class="info-value">بغداد، المنصور</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">حالة الحجز:</div>
-                        <div class="info-value" style="color: #2c5f2d; font-weight: bold;">مؤكد</div>
-                    </div>
-                    
-                    <div class="terms-box">
-                        <div class="terms-title">الشروط والأحكام</div>
-                        <ul class="terms-list">
+                    <div class="print-terms">
+                        <h4>الشروط والأحكام:</h4>
+                        <ul>
                             <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
                             <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
                             <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
                         </ul>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
-                        <p style="font-size: 12pt;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
-                        <p style="font-size: 11pt; color: #666;">
-                            هذه النسخة للزبون - الرجاء الاحتفاظ بها
-                        </p>
+                    <div class="print-footer">
+                        <p>شكراً لاختياركم قاعة النخيل للمناسبات</p>
+                        <p>هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
+                        <p>رقم الهاتف: 07701234567 | العنوان: بغداد، المنصور</p>
                     </div>
                 </div>
             `;
             
-            mobileContent.innerHTML = mobileHTML;
+            printableArea.innerHTML = printHTML;
+            printMobileContent.innerHTML = printHTML;
         }
         
         // ==================== الطباعة من الحاسوب ====================
@@ -2605,20 +2461,176 @@
                 return;
             }
             
-            updatePreview();
+            updatePrintContent();
             
-            // للحاسوب: استخدام الطباعة العادية مع إعدادات A4
-            setTimeout(() => {
-                const originalStyles = document.querySelectorAll('style, link[rel="stylesheet"]');
-                originalStyles.forEach(style => style.setAttribute('media', 'not print'));
-                
-                window.print();
-                
-                // إعادة تعيين الأنماط بعد الطباعة
-                setTimeout(() => {
-                    originalStyles.forEach(style => style.setAttribute('media', 'all'));
-                }, 500);
-            }, 100);
+            // إخفاء كل شيء وإظهار محتوى الطباعة فقط
+            const originalBody = document.body.innerHTML;
+            const printContent = document.getElementById('printableArea').innerHTML;
+            
+            document.body.innerHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>طباعة الحجز - قاعة النخيل</title>
+                    <style>
+                        @page {
+                            size: A4 portrait;
+                            margin: 1.5cm;
+                        }
+                        body {
+                            width: 21cm;
+                            height: 29.7cm;
+                            margin: 0;
+                            padding: 0;
+                            font-family: 'Arial', 'Segoe UI', sans-serif;
+                            direction: rtl;
+                        }
+                        .print-content {
+                            width: 100%;
+                            height: 100%;
+                            padding: 0;
+                            margin: 0;
+                        }
+                        .print-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                            padding-bottom: 15px;
+                            border-bottom: 3px solid #2c5f2d;
+                        }
+                        .print-header h2 {
+                            font-size: 24pt;
+                            color: #2c5f2d;
+                            margin-bottom: 5px;
+                        }
+                        .print-header p {
+                            font-size: 14pt;
+                            color: #666;
+                        }
+                        .print-logo {
+                            font-size: 36pt;
+                            color: #2c5f2d;
+                            margin-bottom: 10px;
+                        }
+                        .print-details {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 15px;
+                            margin-bottom: 15px;
+                        }
+                        .print-section {
+                            flex: 1;
+                            min-width: 300px;
+                            margin-bottom: 15px;
+                        }
+                        .print-title {
+                            font-size: 16pt;
+                            font-weight: bold;
+                            color: #2c5f2d;
+                            margin-bottom: 10px;
+                            padding-bottom: 5px;
+                            border-bottom: 1px solid #ddd;
+                        }
+                        .print-row {
+                            display: flex;
+                            margin-bottom: 8px;
+                            font-size: 12pt;
+                        }
+                        .print-label {
+                            font-weight: bold;
+                            min-width: 130px;
+                            color: #333;
+                        }
+                        .print-value {
+                            flex: 1;
+                            color: #000;
+                        }
+                        .print-tag {
+                            display: inline-block;
+                            padding: 4px 10px;
+                            background-color: #2c5f2d;
+                            color: white;
+                            border-radius: 15px;
+                            margin-left: 5px;
+                            font-size: 10pt;
+                            font-weight: bold;
+                        }
+                        .print-amount {
+                            background-color: #f0f8f0;
+                            padding: 12px;
+                            border-radius: 8px;
+                            border-right: 3px solid #2c5f2d;
+                            margin-bottom: 15px;
+                        }
+                        .print-notes {
+                            background-color: #f9f9f9;
+                            padding: 10px;
+                            border-radius: 6px;
+                            border: 1px solid #eee;
+                            margin-bottom: 15px;
+                            font-size: 12pt;
+                        }
+                        .print-signature {
+                            margin-top: 20px;
+                            padding-top: 15px;
+                            border-top: 1px solid #ddd;
+                        }
+                        .signature-line {
+                            height: 50px;
+                            border-bottom: 1px solid #999;
+                            margin-bottom: 10px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 12pt;
+                            color: #666;
+                        }
+                        .print-terms {
+                            background-color: #f9f9f9;
+                            padding: 10px;
+                            border-radius: 6px;
+                            border: 1px solid #eee;
+                            margin-top: 15px;
+                        }
+                        .print-terms h4 {
+                            text-align: center;
+                            font-size: 14pt;
+                            color: #2c5f2d;
+                            margin-bottom: 8px;
+                        }
+                        .print-terms ul {
+                            padding-right: 20px;
+                            margin: 0;
+                        }
+                        .print-terms li {
+                            margin-bottom: 5px;
+                            font-size: 10pt;
+                            line-height: 1.3;
+                        }
+                        .print-footer {
+                            text-align: center;
+                            margin-top: 15px;
+                            padding-top: 10px;
+                            border-top: 1px solid #ddd;
+                            font-size: 10pt;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                    <script>
+                        setTimeout(() => {
+                            window.print();
+                            setTimeout(() => {
+                                document.body.innerHTML = \`${originalBody.replace(/`/g, '\\`')}\`;
+                                location.reload();
+                            }, 500);
+                        }, 500);
+                    <\/script>
+                </body>
+                </html>
+            `;
         });
         
         // ==================== الطباعة من الهاتف ====================
@@ -2628,31 +2640,180 @@
                 return;
             }
             
-            updatePreview();
+            updatePrintContent();
             
             // كشف إذا كان الجهاز هاتف
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
             if (isMobile) {
-                // للهاتف: استخدام محتوى الطباعة الخاص بالهاتف
-                const printContent = document.getElementById('mobilePrintableContent').innerHTML;
-                const originalContent = document.body.innerHTML;
-                
-                document.body.innerHTML = printContent;
-                
-                setTimeout(() => {
-                    window.print();
-                    
-                    // إعادة المحتوى الأصلي بعد الطباعة
-                    setTimeout(() => {
-                        document.body.innerHTML = originalContent;
-                        // إعادة ربط الأحداث
-                        document.getElementById('printMobileBtn').addEventListener('click', arguments.callee);
-                    }, 500);
-                }, 300);
+                // فتح نافذة جديدة للطباعة
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>طباعة الحجز - قاعة النخيل</title>
+                        <style>
+                            @page {
+                                size: A4;
+                                margin: 1.5cm;
+                            }
+                            body {
+                                width: 21cm;
+                                margin: 0 auto;
+                                font-family: 'Arial', sans-serif;
+                                direction: rtl;
+                                padding: 1.5cm;
+                                box-sizing: border-box;
+                            }
+                            .print-content {
+                                width: 100%;
+                            }
+                            .print-header {
+                                text-align: center;
+                                margin-bottom: 20px;
+                                padding-bottom: 15px;
+                                border-bottom: 3px solid #2c5f2d;
+                            }
+                            .print-header h2 {
+                                font-size: 20pt;
+                                color: #2c5f2d;
+                                margin-bottom: 5px;
+                            }
+                            .print-header p {
+                                font-size: 12pt;
+                                color: #666;
+                            }
+                            .print-logo {
+                                font-size: 28pt;
+                                color: #2c5f2d;
+                                margin-bottom: 10px;
+                            }
+                            .print-section {
+                                margin-bottom: 15px;
+                            }
+                            .print-title {
+                                font-size: 14pt;
+                                font-weight: bold;
+                                color: #2c5f2d;
+                                margin-bottom: 8px;
+                                padding-bottom: 3px;
+                                border-bottom: 1px solid #ddd;
+                            }
+                            .print-row {
+                                display: flex;
+                                flex-wrap: wrap;
+                                margin-bottom: 6px;
+                                font-size: 11pt;
+                            }
+                            .print-label {
+                                font-weight: bold;
+                                min-width: 120px;
+                                color: #333;
+                            }
+                            .print-value {
+                                flex: 1;
+                                color: #000;
+                            }
+                            .print-tag {
+                                display: inline-block;
+                                padding: 3px 8px;
+                                background-color: #2c5f2d;
+                                color: white;
+                                border-radius: 12px;
+                                margin-left: 5px;
+                                font-size: 9pt;
+                                font-weight: bold;
+                            }
+                            .print-amount {
+                                background-color: #f0f8f0;
+                                padding: 10px;
+                                border-radius: 6px;
+                                border-right: 3px solid #2c5f2d;
+                                margin-bottom: 15px;
+                            }
+                            .print-notes {
+                                background-color: #f9f9f9;
+                                padding: 8px;
+                                border-radius: 5px;
+                                border: 1px solid #eee;
+                                margin-bottom: 15px;
+                                font-size: 11pt;
+                            }
+                            .print-signature {
+                                margin-top: 15px;
+                                padding-top: 10px;
+                                border-top: 1px solid #ddd;
+                            }
+                            .signature-line {
+                                height: 40px;
+                                border-bottom: 1px solid #999;
+                                margin-bottom: 8px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 11pt;
+                                color: #666;
+                            }
+                            .print-terms {
+                                background-color: #f9f9f9;
+                                padding: 8px;
+                                border-radius: 5px;
+                                border: 1px solid #eee;
+                                margin-top: 10px;
+                            }
+                            .print-terms h4 {
+                                text-align: center;
+                                font-size: 12pt;
+                                color: #2c5f2d;
+                                margin-bottom: 6px;
+                            }
+                            .print-terms ul {
+                                padding-right: 18px;
+                                margin: 0;
+                            }
+                            .print-terms li {
+                                margin-bottom: 4px;
+                                font-size: 9pt;
+                                line-height: 1.3;
+                            }
+                            .print-footer {
+                                text-align: center;
+                                margin-top: 10px;
+                                padding-top: 8px;
+                                border-top: 1px solid #ddd;
+                                font-size: 9pt;
+                                color: #666;
+                            }
+                            @media print {
+                                body {
+                                    width: 21cm;
+                                    height: 29.7cm;
+                                    margin: 0;
+                                    padding: 1.5cm;
+                                }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${document.getElementById('printableArea').innerHTML}
+                        <script>
+                            setTimeout(() => {
+                                window.print();
+                                setTimeout(() => {
+                                    window.close();
+                                }, 1000);
+                            }, 500);
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
             } else {
                 // إذا كان حاسوب ولكن مستخدم ضغط زر الهاتف
-                showAlert('أنت تستخدم حاسوباً، الرجاء استخدام زر "الطباعة من الحاسوب"', 'info');
+                showAlert('أنت تستخدم حاسوباً، الرجاء استخدام زر "الطباعة من الحاسوب" للحصول على أفضل نتيجة', 'info');
             }
         });
         
@@ -2962,6 +3123,7 @@
             document.getElementById('preview-page').classList.add('active');
             
             updatePreview();
+            updatePrintContent();
             
             showAlert(`تم تحميل بيانات الحجز رقم ${reservation.reservationNumber || docId}`, 'info');
         };
