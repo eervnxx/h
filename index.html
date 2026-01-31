@@ -984,6 +984,39 @@
             }
         }
     </style>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+
+        // إعدادات Firebase الخاصة بك
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7gPDDufyshQ50-lPN09KkIwZQUuc8yiU",
+            authDomain: "alnas-5cf4b.firebaseapp.com",
+            projectId: "alnas-5cf4b",
+            storageBucket: "alnas-5cf4b.firebasestorage.app",
+            messagingSenderId: "173426991551",
+            appId: "1:173426991551:web:02e522e583a233e801c10a",
+            measurementId: "G-4EMW3FKMHZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+        
+        // جعل Firebase متاحاً عالمياً
+        window.firebaseApp = app;
+        window.firestore = db;
+        window.firebaseModules = {
+            collection, addDoc, getDocs, updateDoc, deleteDoc, doc, 
+            query, where, orderBy, onSnapshot
+        };
+        
+        console.log("✅ Firebase initialized successfully with new project");
+    </script>
 </head>
 <body>
     <!-- ترويسة الموقع -->
@@ -1397,16 +1430,17 @@
     </div>
 
     <script>
-        // بيانات الحجوزات المخزنة
-        let reservations = JSON.parse(localStorage.getItem('nakhilReservations')) || [];
-        let reservationCounter = reservations.length > 0 ? Math.max(...reservations.map(r => r.id)) : 0;
+        // بيانات الحجوزات
+        let reservations = [];
+        let reservationCounter = 0;
+        let currentReservationData = null;
         
-        // إعدادات تليجرام المعدلة
+        // إعدادات تليجرام
         const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
         const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
         
-        // ==================== تهيئة التطبيق ====================
-        document.addEventListener('DOMContentLoaded', function() {
+        // ==================== تهيئة التطبيق مع Firebase ====================
+        document.addEventListener('DOMContentLoaded', async function() {
             // عرض التاريخ الحالي
             const today = new Date();
             document.getElementById('currentDate').textContent = today.toLocaleDateString('ar-IQ', {
@@ -1419,13 +1453,159 @@
             // تعيين الحد الأدنى لتاريخ الحفل إلى اليوم
             document.getElementById('eventDate').min = today.toISOString().split('T')[0];
             
-            // تحديث الجدول والبيانات
-            updateReservationsTable();
+            // تحديث الجدول والبيانات من Firestore
+            await loadReservationsFromFirestore();
             updateRemainingAmount();
             
             // اختبار اتصال تليجرام
             testTelegramConnection();
         });
+        
+        // ==================== تحميل الحجوزات من Firestore ====================
+        async function loadReservationsFromFirestore() {
+            try {
+                showAlert('جاري تحميل الحجوزات من السحابة...', 'info');
+                
+                const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
+                const querySnapshot = await window.firebaseModules.getDocs(q);
+                
+                reservations = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    reservations.push({
+                        id: doc.id,
+                        ...data
+                    });
+                });
+                
+                // حساب أعلى رقم حجز
+                if (reservations.length > 0) {
+                    const maxId = Math.max(...reservations.map(r => {
+                        const numId = parseInt(r.reservationNumber) || 0;
+                        return numId;
+                    }));
+                    reservationCounter = maxId;
+                } else {
+                    reservationCounter = 0;
+                }
+                
+                updateReservationsTable();
+                showAlert(`تم تحميل ${reservations.length} حجز من السحابة`, 'success');
+                
+                // الاستماع للتحديثات الحية
+                setupRealtimeListener();
+                
+            } catch (error) {
+                console.error('❌ خطأ في تحميل الحجوزات:', error);
+                showAlert('خطأ في تحميل الحجوزات من السحابة. تحقق من اتصالك بالإنترنت', 'error');
+                
+                // محاولة التحميل من localStorage كنسخة احتياطية
+                const localData = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                reservations = localData;
+                if (reservations.length > 0) {
+                    reservationCounter = Math.max(...reservations.map(r => r.reservationNumber || 0));
+                    updateReservationsTable();
+                    showAlert('تم تحميل النسخة الاحتياطية من الحجوزات', 'info');
+                }
+            }
+        }
+        
+        // ==================== إعداد الاستماع للتحديثات الحية ====================
+        function setupRealtimeListener() {
+            try {
+                const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
+                
+                window.firebaseModules.onSnapshot(q, (snapshot) => {
+                    const updatedReservations = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        updatedReservations.push({
+                            id: doc.id,
+                            ...data
+                        });
+                    });
+                    
+                    reservations = updatedReservations;
+                    updateReservationsTable();
+                }, (error) => {
+                    console.error('❌ خطأ في تحديثات الوقت الحقيقي:', error);
+                });
+                
+            } catch (error) {
+                console.error('❌ خطأ في إعداد التحديثات الحية:', error);
+            }
+        }
+        
+        // ==================== حفظ الحجز في Firestore ====================
+        async function saveReservationToFirestore(reservationData) {
+            try {
+                reservationCounter++;
+                
+                // تحضير بيانات الحجز
+                const firestoreData = {
+                    ...reservationData,
+                    reservationNumber: reservationCounter,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                // إضافة إلى Firestore
+                const docRef = await window.firebaseModules.addDoc(
+                    window.firebaseModules.collection(window.firestore, 'reservations'),
+                    firestoreData
+                );
+                
+                console.log('✅ تم حفظ الحجز في Firestore:', docRef.id);
+                
+                // حفظ نسخة احتياطية في localStorage
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                backupReservations.push({
+                    id: docRef.id,
+                    ...firestoreData
+                });
+                localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
+                
+                return {
+                    success: true,
+                    docId: docRef.id,
+                    reservationNumber: reservationCounter,
+                    data: firestoreData
+                };
+                
+            } catch (error) {
+                console.error('❌ خطأ في حفظ الحجز في Firestore:', error);
+                
+                // محاولة الحفظ في localStorage كنسخة احتياطية
+                try {
+                    reservationCounter++;
+                    reservationData.reservationNumber = reservationCounter;
+                    reservationData.createdAt = new Date().toISOString();
+                    
+                    const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                    backupReservations.push({
+                        id: 'local_' + reservationCounter,
+                        ...reservationData
+                    });
+                    localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
+                    
+                    return {
+                        success: true,
+                        docId: 'local_' + reservationCounter,
+                        reservationNumber: reservationCounter,
+                        data: reservationData
+                    };
+                    
+                } catch (localError) {
+                    console.error('❌ خطأ في حفظ النسخة الاحتياطية:', localError);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+        }
         
         // ==================== التنقل بين الصفحات ====================
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1483,6 +1663,9 @@
                 return;
             }
             
+            // حفظ بيانات النموذج مؤقتاً
+            currentReservationData = getFormData();
+            
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.querySelector('[data-page="preview-page"]').classList.add('active');
             
@@ -1505,26 +1688,52 @@
             document.getElementById('booking-form').classList.add('active');
         });
         
+        // ==================== الحصول على بيانات النموذج ====================
+        function getFormData() {
+            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            
+            return {
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                groomName: document.getElementById('groomName').value || '',
+                brideName: document.getElementById('brideName').value || '',
+                eventDate: document.getElementById('eventDate').value,
+                eventType: document.getElementById('eventType').value,
+                eventTime: document.getElementById('eventTime').value,
+                halls: selectedHalls,
+                totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
+                paidAmount: parseFloat(document.getElementById('paidAmount').value) || 0,
+                remainingAmount: parseFloat(document.getElementById('remainingAmount').value) || 0,
+                notes: document.getElementById('notes').value,
+                bookingDate: new Date().toISOString().split('T')[0],
+                telegramSent: false,
+                telegramSentAt: null,
+                status: 'مؤكد'
+            };
+        }
+        
         // ==================== تحديث صفحة المعاينة ====================
         function updatePreview() {
+            const data = currentReservationData || getFormData();
+            
             // معلومات الحجز الأساسية
-            document.getElementById('previewCustomerName').textContent = document.getElementById('customerName').value;
-            document.getElementById('previewPhone').textContent = document.getElementById('phone').value;
+            document.getElementById('previewCustomerName').textContent = data.customerName;
+            document.getElementById('previewPhone').textContent = data.phone;
             document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
             
             // تفاصيل المناسبة
-            document.getElementById('previewEventType').textContent = document.getElementById('eventType').value;
-            document.getElementById('previewEventDate').textContent = formatDate(document.getElementById('eventDate').value);
-            document.getElementById('previewEventTime').textContent = document.getElementById('eventTime').value;
+            document.getElementById('previewEventType').textContent = data.eventType;
+            document.getElementById('previewEventDate').textContent = formatDate(data.eventDate);
+            document.getElementById('previewEventTime').textContent = data.eventTime;
             
             // القاعة المختارة
-            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
             const hallSelection = document.getElementById('previewHallSelection');
             const hallBadges = document.getElementById('previewHallBadges');
             
             hallBadges.innerHTML = '';
             
-            if (selectedHalls.length === 0) {
+            if (selectedHalls.length === 0 || selectedHalls[0] === '') {
                 hallSelection.textContent = 'لم يتم اختيار قاعة';
             } else if (selectedHalls.length === 2) {
                 hallSelection.textContent = 'تم حجز القاعتين معاً';
@@ -1540,12 +1749,12 @@
             }
             
             // التفاصيل المالية
-            document.getElementById('previewTotalAmount').textContent = formatCurrency(document.getElementById('totalAmount').value || '0');
-            document.getElementById('previewPaidAmount').textContent = formatCurrency(document.getElementById('paidAmount').value || '0');
-            document.getElementById('previewRemainingAmount').textContent = formatCurrency(document.getElementById('remainingAmount').value || '0');
+            document.getElementById('previewTotalAmount').textContent = formatCurrency(data.totalAmount || '0');
+            document.getElementById('previewPaidAmount').textContent = formatCurrency(data.paidAmount || '0');
+            document.getElementById('previewRemainingAmount').textContent = formatCurrency(data.remainingAmount || '0');
             
             // الملاحظات
-            const notes = document.getElementById('notes').value;
+            const notes = data.notes;
             document.getElementById('previewNotes').textContent = notes || 'لا توجد ملاحظات';
             
             // رقم الحجز
@@ -1559,32 +1768,31 @@
             });
             
             // تحديث محتوى الطباعة للهاتف
-            updateMobilePreview();
+            updateMobilePreview(data);
         }
         
         // ==================== تحديث محتوى الطباعة للهاتف ====================
-        function updateMobilePreview() {
+        function updateMobilePreview(data) {
             const mobileContent = document.getElementById('mobilePrintableContent');
             
-            // جمع البيانات
-            const customerName = document.getElementById('customerName').value;
-            const phone = document.getElementById('phone').value;
-            const groomName = document.getElementById('groomName').value;
-            const brideName = document.getElementById('brideName').value;
-            const eventType = document.getElementById('eventType').value;
-            const eventDate = formatDate(document.getElementById('eventDate').value);
-            const eventTime = document.getElementById('eventTime').value;
-            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
-            const totalAmount = document.getElementById('totalAmount').value || '0';
-            const paidAmount = document.getElementById('paidAmount').value || '0';
-            const remainingAmount = document.getElementById('remainingAmount').value || '0';
-            const notes = document.getElementById('notes').value;
+            const customerName = data.customerName;
+            const phone = data.phone;
+            const groomName = data.groomName;
+            const brideName = data.brideName;
+            const eventType = data.eventType;
+            const eventDate = formatDate(data.eventDate);
+            const eventTime = data.eventTime;
+            const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
+            const totalAmount = data.totalAmount || '0';
+            const paidAmount = data.paidAmount || '0';
+            const remainingAmount = data.remainingAmount || '0';
+            const notes = data.notes;
             
             // إنشاء محتوى الهاتف
             let hallTags = '';
             if (selectedHalls.length === 2) {
                 hallTags = '<span class="hall-tag">القاعة 1 (300 شخص)</span> <span class="hall-tag">القاعة 2 (250 شخص)</span>';
-            } else if (selectedHalls.length === 1) {
+            } else if (selectedHalls.length === 1 && selectedHalls[0] !== '') {
                 hallTags = `<span class="hall-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1 (300 شخص)' : 'القاعة 2 (250 شخص)'}</span>`;
             }
             
@@ -1644,7 +1852,7 @@
                     <div class="sub-title">القاعة المختارة</div>
                     <div class="info-row">
                         <div class="info-label">القاعات:</div>
-                        <div class="info-value">${selectedHalls.length > 0 ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'}</div>
+                        <div class="info-value">${selectedHalls.length > 0 && selectedHalls[0] !== '' ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'}</div>
                     </div>
                     ${hallTags ? `
                     <div class="info-row">
@@ -1810,55 +2018,53 @@
                 return;
             }
             
-            reservationCounter++;
-            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            const reservationData = getFormData();
             
-            const reservation = {
-                id: reservationCounter,
-                customerName: document.getElementById('customerName').value,
-                phone: document.getElementById('phone').value,
-                groomName: document.getElementById('groomName').value || '',
-                brideName: document.getElementById('brideName').value || '',
-                eventDate: document.getElementById('eventDate').value,
-                eventType: document.getElementById('eventType').value,
-                eventTime: document.getElementById('eventTime').value,
-                halls: selectedHalls,
-                totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
-                paidAmount: parseFloat(document.getElementById('paidAmount').value) || 0,
-                remainingAmount: parseFloat(document.getElementById('remainingAmount').value) || 0,
-                notes: document.getElementById('notes').value,
-                bookingDate: new Date().toISOString().split('T')[0],
-                telegramSent: false,
-                telegramSentAt: null,
-                status: 'مؤكد'
-            };
+            // حفظ في Firebase
+            showAlert('جاري حفظ الحجز في السحابة...', 'info');
+            const saveResult = await saveReservationToFirestore(reservationData);
+            
+            if (!saveResult.success) {
+                showAlert('خطأ في حفظ الحجز في السحابة', 'error');
+                return;
+            }
+            
+            const reservationNumber = saveResult.reservationNumber;
             
             // إرسال إشعار تليجرام
+            let telegramSuccess = false;
             try {
                 const telegramMessage = formatTelegramMessage();
                 await sendToAllAdmins(telegramMessage);
-                reservation.telegramSent = true;
-                reservation.telegramSentAt = new Date().toISOString();
+                telegramSuccess = true;
+                
+                // تحديث حالة التليجرام في Firestore
+                try {
+                    await window.firebaseModules.updateDoc(
+                        window.firebaseModules.doc(window.firestore, 'reservations', saveResult.docId),
+                        {
+                            telegramSent: true,
+                            telegramSentAt: new Date().toISOString()
+                        }
+                    );
+                } catch (updateError) {
+                    console.error('❌ خطأ في تحديث حالة التليجرام:', updateError);
+                }
+                
             } catch (error) {
                 console.error('خطأ في إرسال تليجرام:', error);
-                reservation.telegramSent = false;
             }
             
-            // إضافة الحجز إلى القائمة
-            reservations.push(reservation);
-            
-            // حفظ في localStorage
-            localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
-            
             // إظهار رسالة نجاح
-            showAlert(`تم حفظ الحجز بنجاح! رقم الحجز: ${reservationCounter} ${reservation.telegramSent ? '✅ (تم الإرسال للتليجرام)' : '⚠️ (لم يتم الإرسال للتليجرام)'}`, 'success');
-            
-            // تحديث قائمة الحجوزات
-            updateReservationsTable();
+            showAlert(`تم حفظ الحجز بنجاح! رقم الحجز: ${reservationNumber} ${telegramSuccess ? '✅ (تم الإرسال للتليجرام)' : '⚠️ (لم يتم الإرسال للتليجرام)'}`, 'success');
             
             // مسح النموذج
             document.getElementById('reservationForm').reset();
             updateRemainingAmount();
+            currentReservationData = null;
+            
+            // تحديث قائمة الحجوزات
+            updateReservationsTable();
             
             // العودة إلى صفحة الحجز
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1885,12 +2091,14 @@
             for (const fieldId of requiredFields) {
                 const field = document.getElementById(fieldId);
                 if (!field.value.trim()) {
+                    field.focus();
                     return false;
                 }
             }
             
             const selectedHalls = document.querySelectorAll('input[name="hall"]:checked');
             if (selectedHalls.length === 0) {
+                showAlert('يرجى اختيار قاعة واحدة على الأقل', 'error');
                 return false;
             }
             
@@ -1907,15 +2115,17 @@
                 return;
             }
             
-            const sortedReservations = [...reservations].sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate));
+            const sortedReservations = [...reservations].sort((a, b) => 
+                new Date(b.createdAt || b.bookingDate) - new Date(a.createdAt || a.bookingDate)
+            );
             
             sortedReservations.forEach(reservation => {
                 const row = document.createElement('tr');
                 
                 let hallBadge = '';
-                if (reservation.halls.length === 2) {
+                if (Array.isArray(reservation.halls) && reservation.halls.length === 2) {
                     hallBadge = '<span class="hall-badge-list">1/2</span>';
-                } else if (reservation.halls.includes('القاعة رقم 1')) {
+                } else if (Array.isArray(reservation.halls) && reservation.halls.includes('القاعة رقم 1')) {
                     hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
                 } else {
                     hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
@@ -1923,7 +2133,8 @@
                 
                 let telegramStatus = '';
                 if (reservation.telegramSent) {
-                    const sentTime = reservation.telegramSentAt ? new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
+                    const sentTime = reservation.telegramSentAt ? 
+                        new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
                     telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
                 } else {
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
@@ -1931,24 +2142,24 @@
                 
                 const actions = `
                     <div class="action-cell">
-                        <button class="action-btn view" onclick="viewReservation(${reservation.id})">
+                        <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
                             <i class="fas fa-eye"></i> معاينة
                         </button>
-                        <button class="action-btn delete" onclick="deleteReservation(${reservation.id})">
+                        <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
                             <i class="fas fa-trash-alt"></i> حذف
                         </button>
                     </div>
                 `;
                 
                 row.innerHTML = `
-                    <td>${reservation.id}</td>
+                    <td>${reservation.reservationNumber || reservation.id}</td>
                     <td>${reservation.customerName}</td>
                     <td>${reservation.groomName || '-'}</td>
                     <td>${reservation.brideName || '-'}</td>
                     <td>${reservation.phone}</td>
                     <td>${formatDate(reservation.eventDate)}</td>
                     <td>${reservation.eventType}</td>
-                    <td>${reservation.halls.join(', ')} ${hallBadge}</td>
+                    <td>${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls} ${hallBadge}</td>
                     <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
                     <td>${telegramStatus}</td>
                     <td>${actions}</td>
@@ -1959,8 +2170,8 @@
         }
         
         // ==================== عرض تفاصيل الحجز ====================
-        window.viewReservation = function(id) {
-            const reservation = reservations.find(r => r.id === id);
+        window.viewReservation = function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
             if (!reservation) return;
             
             document.getElementById('customerName').value = reservation.customerName;
@@ -1976,10 +2187,12 @@
             document.getElementById('notes').value = reservation.notes;
             
             document.querySelectorAll('input[name="hall"]').forEach(cb => {
-                cb.checked = reservation.halls.includes(cb.value);
+                const halls = Array.isArray(reservation.halls) ? reservation.halls : [reservation.halls];
+                cb.checked = halls.includes(cb.value);
             });
             
             updateRemainingAmount();
+            currentReservationData = reservation;
             
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.querySelector('[data-page="preview-page"]').classList.add('active');
@@ -1991,38 +2204,47 @@
             
             updatePreview();
             
-            showAlert(`تم تحميل بيانات الحجز رقم ${id}`, 'info');
+            showAlert(`تم تحميل بيانات الحجز رقم ${reservation.reservationNumber || docId}`, 'info');
         };
         
         // ==================== حذف الحجز ====================
-        window.deleteReservation = function(id) {
-            if (!confirm(`هل أنت متأكد من حذف الحجز رقم ${id}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+        window.deleteReservation = async function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
+            if (!reservation) return;
+            
+            if (!confirm(`هل أنت متأكد من حذف الحجز رقم ${reservation.reservationNumber}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
                 return;
             }
             
-            const index = reservations.findIndex(r => r.id === id);
-            if (index !== -1) {
-                const deletedReservation = reservations[index];
-                reservations.splice(index, 1);
+            // حذف من Firebase
+            showAlert('جاري حذف الحجز من السحابة...', 'info');
+            
+            try {
+                await window.firebaseModules.deleteDoc(
+                    window.firebaseModules.doc(window.firestore, 'reservations', docId)
+                );
                 
-                localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
+                // تحديث النسخة الاحتياطية
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                const updatedBackup = backupReservations.filter(r => r.id !== docId);
+                localStorage.setItem('nakhilReservations_backup', JSON.stringify(updatedBackup));
                 
-                if (reservations.length === 0) {
-                    reservationCounter = 0;
-                } else if (id === reservationCounter) {
-                    reservationCounter = Math.max(...reservations.map(r => r.id));
-                }
+                // إرسال إشعار حذف للتليجرام
+                sendDeleteNotificationToTelegram(reservation);
                 
+                // تحديث واجهة المستخدم
                 updateReservationsTable();
                 
-                sendDeleteNotificationToTelegram(deletedReservation);
+                showAlert(`تم حذف الحجز رقم ${reservation.reservationNumber} بنجاح`, 'success');
                 
-                showAlert(`تم حذف الحجز رقم ${id} بنجاح`, 'success');
+            } catch (error) {
+                console.error('❌ خطأ في حذف الحجز:', error);
+                showAlert('خطأ في حذف الحجز من السحابة', 'error');
             }
         };
         
         // ==================== حذف جميع الحجوزات ====================
-        document.getElementById('deleteAllBtn').addEventListener('click', function() {
+        document.getElementById('deleteAllBtn').addEventListener('click', async function() {
             if (reservations.length === 0) {
                 showAlert('لا توجد حجوزات لحذفها', 'info');
                 return;
@@ -2032,15 +2254,40 @@
                 return;
             }
             
+            showAlert('جاري حذف جميع الحجوزات من السحابة...', 'info');
+            
+            let deletedCount = 0;
+            let errorCount = 0;
+            
+            // حذف كل وثيقة على حدة
+            for (const reservation of reservations) {
+                try {
+                    await window.firebaseModules.deleteDoc(
+                        window.firebaseModules.doc(window.firestore, 'reservations', reservation.id)
+                    );
+                    deletedCount++;
+                } catch (error) {
+                    console.error(`❌ خطأ في حذف الحجز ${reservation.id}:`, error);
+                    errorCount++;
+                }
+            }
+            
+            // إرسال إشعار حذف الكل للتليجرام
             sendDeleteAllNotificationToTelegram(reservations.length);
             
+            // تحديث البيانات المحلية
             reservations = [];
             reservationCounter = 0;
+            localStorage.removeItem('nakhilReservations_backup');
             
-            localStorage.setItem('nakhilReservations', JSON.stringify(reservations));
+            // تحديث واجهة المستخدم
             updateReservationsTable();
             
-            showAlert('تم حذف جميع الحجوزات بنجاح', 'success');
+            if (errorCount > 0) {
+                showAlert(`تم حذف ${deletedCount} حجز بنجاح، وفشل حذف ${errorCount} حجز`, 'warning');
+            } else {
+                showAlert(`تم حذف جميع الحجوزات بنجاح (${deletedCount} حجز)`, 'success');
+            }
         });
         
         // ==================== البحث في الحجوزات ====================
@@ -2053,12 +2300,12 @@
             tableBody.innerHTML = '';
             
             const filteredReservations = reservations.filter(reservation => 
-                reservation.customerName.toLowerCase().includes(searchTerm) ||
-                reservation.phone.includes(searchTerm) ||
-                reservation.eventType.toLowerCase().includes(searchTerm) ||
-                reservation.groomName.toLowerCase().includes(searchTerm) ||
-                reservation.brideName.toLowerCase().includes(searchTerm) ||
-                reservation.id.toString().includes(searchTerm)
+                reservation.customerName?.toLowerCase().includes(searchTerm) ||
+                reservation.phone?.includes(searchTerm) ||
+                reservation.eventType?.toLowerCase().includes(searchTerm) ||
+                reservation.groomName?.toLowerCase().includes(searchTerm) ||
+                reservation.brideName?.toLowerCase().includes(searchTerm) ||
+                reservation.reservationNumber?.toString().includes(searchTerm)
             );
             
             if (filteredReservations.length === 0) {
@@ -2070,9 +2317,9 @@
                 const row = document.createElement('tr');
                 
                 let hallBadge = '';
-                if (reservation.halls.length === 2) {
+                if (Array.isArray(reservation.halls) && reservation.halls.length === 2) {
                     hallBadge = '<span class="hall-badge-list">1/2</span>';
-                } else if (reservation.halls.includes('القاعة رقم 1')) {
+                } else if (Array.isArray(reservation.halls) && reservation.halls.includes('القاعة رقم 1')) {
                     hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
                 } else {
                     hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
@@ -2080,7 +2327,8 @@
                 
                 let telegramStatus = '';
                 if (reservation.telegramSent) {
-                    const sentTime = reservation.telegramSentAt ? new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
+                    const sentTime = reservation.telegramSentAt ? 
+                        new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
                     telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
                 } else {
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
@@ -2088,24 +2336,24 @@
                 
                 const actions = `
                     <div class="action-cell">
-                        <button class="action-btn view" onclick="viewReservation(${reservation.id})">
+                        <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
                             <i class="fas fa-eye"></i> معاينة
                         </button>
-                        <button class="action-btn delete" onclick="deleteReservation(${reservation.id})">
+                        <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
                             <i class="fas fa-trash-alt"></i> حذف
                         </button>
                     </div>
                 `;
                 
                 row.innerHTML = `
-                    <td>${reservation.id}</td>
+                    <td>${reservation.reservationNumber || reservation.id}</td>
                     <td>${reservation.customerName}</td>
                     <td>${reservation.groomName || '-'}</td>
                     <td>${reservation.brideName || '-'}</td>
                     <td>${reservation.phone}</td>
                     <td>${formatDate(reservation.eventDate)}</td>
                     <td>${reservation.eventType}</td>
-                    <td>${reservation.halls.join(', ')} ${hallBadge}</td>
+                    <td>${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls} ${hallBadge}</td>
                     <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
                     <td>${telegramStatus}</td>
                     <td>${actions}</td>
@@ -2191,22 +2439,24 @@
         }
         
         function formatTelegramMessage() {
-            const customerName = document.getElementById('customerName').value;
-            const phone = document.getElementById('phone').value;
-            const groomName = document.getElementById('groomName').value || 'غير محدد';
-            const brideName = document.getElementById('brideName').value || 'غير محدد';
-            const eventType = document.getElementById('eventType').value;
-            const eventDate = formatDate(document.getElementById('eventDate').value);
-            const eventTime = document.getElementById('eventTime').value;
+            const data = currentReservationData || getFormData();
             
-            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
+            const customerName = data.customerName;
+            const phone = data.phone;
+            const groomName = data.groomName || 'غير محدد';
+            const brideName = data.brideName || 'غير محدد';
+            const eventType = data.eventType;
+            const eventDate = formatDate(data.eventDate);
+            const eventTime = data.eventTime;
+            
+            const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
             const hallText = selectedHalls.length === 2 ? 'القاعتين معاً' : selectedHalls.join(', ');
             
-            const totalAmount = document.getElementById('totalAmount').value || '0';
-            const paidAmount = document.getElementById('paidAmount').value || '0';
-            const remainingAmount = document.getElementById('remainingAmount').value || '0';
+            const totalAmount = data.totalAmount || '0';
+            const paidAmount = data.paidAmount || '0';
+            const remainingAmount = data.remainingAmount || '0';
             
-            const notes = document.getElementById('notes').value || 'لا توجد ملاحظات';
+            const notes = data.notes || 'لا توجد ملاحظات';
             
             return `
 🎉 *حجز جديد - قاعة النخيل للمناسبات* 🎉
@@ -2246,7 +2496,7 @@ ${notes}
             const message = `
 ⚠️ *حذف حجز - قاعة النخيل للمناسبات* ⚠️
 
-🔢 *رقم الحجز المحذوف:* ${reservation.id}
+🔢 *رقم الحجز المحذوف:* ${reservation.reservationNumber}
 👤 *اسم السيد:* ${reservation.customerName}
 📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
 💒 *نوع المناسبة:* ${reservation.eventType}
@@ -2296,7 +2546,7 @@ ${notes}
         function convertToCSV(data) {
             const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
             const rows = data.map(item => [
-                item.id,
+                item.reservationNumber || item.id,
                 item.customerName,
                 item.phone,
                 item.groomName || '',
@@ -2304,7 +2554,7 @@ ${notes}
                 item.eventDate,
                 item.eventType,
                 item.eventTime,
-                item.halls.join(' + '),
+                Array.isArray(item.halls) ? item.halls.join(' + ') : item.halls,
                 item.totalAmount,
                 item.paidAmount,
                 item.remainingAmount,
