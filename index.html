@@ -2336,115 +2336,109 @@
                         <div class="print-logo">
                             <i class="fas fa-palette"></i>
                         </div>
-                        <h2>قاعة النخيل للمناسبات</h2>
-                        <p>عقد حجز قاعة للمناسبات - نسخة الزبون</p>
+                        <h2 style="font-size: 22pt; margin-bottom: 5px;">قاعة النخيل للمناسبات</h2>
+                        <p style="font-size: 12pt; color: #666;">عقد حجز قاعة للمناسبات - نسخة الزبون</p>
+                        <div style="margin-top: 10px; padding: 5px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 10pt;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>رقم الحجز: ${reservationCounter + 1}</span>
+                                <span>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-IQ')}</span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="print-details">
-                        <div class="print-section">
-                            <div class="print-title">معلومات الحجز</div>
+                        <div class="print-section" style="flex: 2; min-width: 250px;">
+                            <div class="print-title" style="font-size: 14pt;">معلومات الحجز</div>
                             <div class="print-row">
-                                <div class="print-label">اسم السيد المحجِز:</div>
+                                <div class="print-label" style="min-width: 100px;">اسم السيد المحجِز:</div>
                                 <div class="print-value">${customerName || '-'}</div>
                             </div>
                             <div class="print-row">
-                                <div class="print-label">رقم الحجز:</div>
-                                <div class="print-value">${reservationCounter + 1}</div>
-                            </div>
-                            <div class="print-row">
-                                <div class="print-label">تاريخ الحجز:</div>
-                                <div class="print-value">${new Date().toLocaleDateString('ar-IQ')}</div>
-                            </div>
-                            <div class="print-row">
-                                <div class="print-label">رقم الهاتف:</div>
+                                <div class="print-label" style="min-width: 100px;">رقم الهاتف:</div>
                                 <div class="print-value">${phone || '-'}</div>
                             </div>
-                        </div>
-                        
-                        <div class="print-section">
-                            <div class="print-title">خدمة التصوير</div>
                             <div class="print-row">
-                                <div class="print-label">الخدمة:</div>
+                                <div class="print-label" style="min-width: 100px;">خدمة التصوير:</div>
                                 <div class="print-value">${photographyServices === 'إضافة تصوير' ? 'مطلوب خدمة تصوير' : 'بدون تصوير'} ${photographyTag}</div>
                             </div>
                         </div>
                         
-                        <div class="print-section">
-                            <div class="print-title">تفاصيل المناسبة</div>
+                        <div class="print-section" style="flex: 2; min-width: 250px;">
+                            <div class="print-title" style="font-size: 14pt;">تفاصيل المناسبة</div>
                             <div class="print-row">
-                                <div class="print-label">نوع المناسبة:</div>
+                                <div class="print-label" style="min-width: 100px;">نوع المناسبة:</div>
                                 <div class="print-value">${eventType || '-'}</div>
                             </div>
                             <div class="print-row">
-                                <div class="print-label">التاريخ:</div>
+                                <div class="print-label" style="min-width: 100px;">التاريخ:</div>
                                 <div class="print-value">${eventDate || '-'}</div>
                             </div>
                             <div class="print-row">
-                                <div class="print-label">الوقت:</div>
+                                <div class="print-label" style="min-width: 100px;">الوقت:</div>
                                 <div class="print-value">${eventTime || '-'}</div>
                             </div>
                         </div>
                         
-                        <div class="print-section">
-                            <div class="print-title">القاعة المختارة</div>
+                        <div class="print-section" style="flex: 1.5; min-width: 200px;">
+                            <div class="print-title" style="font-size: 14pt;">القاعة المختارة</div>
                             <div class="print-row">
-                                <div class="print-label">القاعات:</div>
+                                <div class="print-label" style="min-width: 90px;">القاعات:</div>
                                 <div class="print-value">${selectedHalls.length > 0 && selectedHalls[0] !== '' ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'} ${hallTags}</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="print-amount">
-                        <div class="print-title">التفاصيل المالية</div>
-                        <div class="print-row">
-                            <div class="print-label">المبلغ الكلي:</div>
-                            <div class="print-value">${formatCurrency(totalAmount)} دينار عراقي</div>
-                        </div>
-                        <div class="print-row">
-                            <div class="print-label">المبلغ الواصل:</div>
-                            <div class="print-value">${formatCurrency(paidAmount)} دينار عراقي</div>
-                        </div>
-                        <div class="print-row">
-                            <div class="print-label">المبلغ المتبقي:</div>
-                            <div class="print-value">${formatCurrency(remainingAmount)} دينار عراقي</div>
+                    <div class="print-amount" style="padding: 10px; margin-bottom: 15px;">
+                        <div class="print-title" style="font-size: 14pt;">التفاصيل المالية</div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">المبلغ الكلي:</div>
+                                <div style="font-size: 12pt;">${formatCurrency(totalAmount)} د.ع</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">المبلغ الواصل:</div>
+                                <div style="font-size: 12pt;">${formatCurrency(paidAmount)} د.ع</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">المبلغ المتبقي:</div>
+                                <div style="font-size: 12pt;">${formatCurrency(remainingAmount)} د.ع</div>
+                            </div>
                         </div>
                     </div>
                     
                     ${notes ? `
-                    <div class="print-notes">
-                        <div class="print-title">ملاحظات إضافية</div>
-                        <div class="print-value">${notes}</div>
+                    <div class="print-notes" style="padding: 8px; margin-bottom: 12px;">
+                        <div class="print-title" style="font-size: 13pt;">ملاحظات إضافية</div>
+                        <div class="print-value" style="font-size: 11pt; line-height: 1.4;">${notes}</div>
                     </div>
                     ` : ''}
                     
-                    <div class="print-signature">
-                        <div class="print-title">توقيع الطرفين</div>
-                        <div class="print-row">
-                            <div class="print-label">توقيع السيد:</div>
-                            <div class="print-value">
-                                <div class="signature-line">.......................</div>
+                    <div class="print-signature" style="margin-top: 15px;">
+                        <div class="print-title" style="font-size: 14pt;">توقيع الطرفين</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع السيد:</div>
+                                <div class="signature-line" style="height: 40px; font-size: 11pt;">.......................</div>
                             </div>
-                        </div>
-                        <div class="print-row">
-                            <div class="print-label">توقيع المسؤول:</div>
-                            <div class="print-value">
-                                <div class="signature-line">إدارة قاعة النخيل</div>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع المسؤول:</div>
+                                <div class="signature-line" style="height: 40px; font-size: 11pt;">إدارة قاعة النخيل</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="print-terms">
-                        <h4>الشروط والأحكام:</h4>
-                        <ul>
-                            <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
-                            <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
-                            <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
+                    <div class="print-terms" style="margin-top: 15px; padding: 8px;">
+                        <h4 style="font-size: 12pt; margin-bottom: 6px;">الشروط والأحكام:</h4>
+                        <ul style="padding-right: 15px; margin: 0;">
+                            <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
+                            <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                            <li style="font-size: 9pt; line-height: 1.3;">قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
                         </ul>
                     </div>
                     
-                    <div class="print-footer">
-                        <p>شكراً لاختياركم قاعة النخيل للمناسبات</p>
-                        <p>هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
+                    <div class="print-footer" style="margin-top: 10px; padding-top: 8px; font-size: 9pt;">
+                        <p style="margin-bottom: 5px;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
+                        <p style="margin-bottom: 3px;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
                         <p>رقم الهاتف: 07701234567 | العنوان: بغداد، المنصور</p>
                     </div>
                 </div>
@@ -2454,7 +2448,7 @@
             printMobileContent.innerHTML = printHTML;
         }
         
-        // ==================== الطباعة من الحاسوب (مصححة) ====================
+        // ==================== الطباعة من الحاسوب (مصححة ومضغوطة) ====================
         document.getElementById('printDesktopBtn').addEventListener('click', function() {
             if (!document.getElementById('agreeTerms').checked) {
                 showAlert('يرجى الموافقة على الشروط والأحكام قبل الطباعة', 'error');
@@ -2462,10 +2456,6 @@
             }
             
             updatePrintContent();
-            
-            // حفظ مراجع الصفحة الأصلية
-            const originalTitle = document.title;
-            const originalBody = document.body.cloneNode(true);
             
             // إنشاء محتوى الطباعة فقط
             const printContent = document.getElementById('printableArea').innerHTML;
@@ -2487,7 +2477,7 @@
                     <style>
                         @page {
                             size: A4 portrait;
-                            margin: 1.5cm;
+                            margin: 0.8cm;
                         }
                         
                         * {
@@ -2497,187 +2487,191 @@
                         }
                         
                         body {
-                            width: 21cm;
-                            min-height: 29.7cm;
+                            width: 19.4cm; /* 21cm - (0.8cm * 2) */
+                            height: 28.1cm; /* 29.7cm - (0.8cm * 2) */
                             margin: 0 auto;
-                            padding: 1.5cm;
+                            padding: 0.8cm;
                             font-family: 'Arial', 'Segoe UI', sans-serif;
                             direction: rtl;
                             background: white;
-                            line-height: 1.6;
+                            line-height: 1.4;
+                            font-size: 10pt;
                         }
                         
                         .print-content {
                             width: 100%;
                             height: 100%;
+                            display: flex;
+                            flex-direction: column;
                         }
                         
                         .print-header {
                             text-align: center;
-                            margin-bottom: 25px;
-                            padding-bottom: 15px;
-                            border-bottom: 3px solid #2c5f2d;
+                            margin-bottom: 15px;
+                            padding-bottom: 10px;
+                            border-bottom: 2px solid #2c5f2d;
                         }
                         
                         .print-header h2 {
-                            font-size: 26pt;
+                            font-size: 20pt;
                             color: #2c5f2d;
-                            margin-bottom: 8px;
+                            margin-bottom: 5px;
                         }
                         
                         .print-header p {
-                            font-size: 14pt;
+                            font-size: 11pt;
                             color: #666;
+                            margin-bottom: 8px;
                         }
                         
                         .print-logo {
-                            font-size: 40pt;
+                            font-size: 30pt;
                             color: #2c5f2d;
-                            margin-bottom: 15px;
+                            margin-bottom: 8px;
                         }
                         
                         .print-details {
                             display: flex;
                             flex-wrap: wrap;
-                            gap: 20px;
-                            margin-bottom: 20px;
+                            gap: 12px;
+                            margin-bottom: 15px;
                         }
                         
                         .print-section {
                             flex: 1;
-                            min-width: 300px;
-                            margin-bottom: 20px;
+                            min-width: 200px;
+                            margin-bottom: 12px;
                         }
                         
                         .print-title {
-                            font-size: 16pt;
+                            font-size: 12pt;
                             font-weight: bold;
                             color: #2c5f2d;
-                            margin-bottom: 12px;
-                            padding-bottom: 6px;
-                            border-bottom: 2px solid #ddd;
+                            margin-bottom: 8px;
+                            padding-bottom: 4px;
+                            border-bottom: 1px solid #ddd;
                         }
                         
                         .print-row {
                             display: flex;
-                            margin-bottom: 10px;
-                            font-size: 12pt;
+                            margin-bottom: 6px;
+                            font-size: 10pt;
                         }
                         
                         .print-label {
                             font-weight: bold;
-                            min-width: 140px;
+                            min-width: 90px;
                             color: #333;
+                            font-size: 10pt;
                         }
                         
                         .print-value {
                             flex: 1;
                             color: #000;
+                            font-size: 10pt;
                         }
                         
                         .print-tag {
                             display: inline-block;
-                            padding: 5px 12px;
+                            padding: 3px 8px;
                             background-color: #2c5f2d;
                             color: white;
-                            border-radius: 15px;
-                            margin-right: 5px;
-                            font-size: 10pt;
+                            border-radius: 12px;
+                            margin-right: 4px;
+                            font-size: 8pt;
                             font-weight: bold;
                         }
                         
                         .print-amount {
                             background-color: #f0f8f0;
-                            padding: 15px;
-                            border-radius: 8px;
-                            border-right: 4px solid #2c5f2d;
-                            margin-bottom: 20px;
+                            padding: 10px;
+                            border-radius: 6px;
+                            border-right: 3px solid #2c5f2d;
+                            margin-bottom: 12px;
                         }
                         
                         .print-notes {
                             background-color: #f9f9f9;
-                            padding: 12px;
-                            border-radius: 6px;
+                            padding: 8px;
+                            border-radius: 5px;
                             border: 1px solid #eee;
-                            margin-bottom: 20px;
-                            font-size: 12pt;
+                            margin-bottom: 12px;
+                            font-size: 10pt;
                         }
                         
                         .print-signature {
-                            margin-top: 25px;
-                            padding-top: 18px;
-                            border-top: 2px solid #ddd;
+                            margin-top: 15px;
+                            padding-top: 12px;
+                            border-top: 1px solid #ddd;
                         }
                         
                         .signature-line {
-                            height: 55px;
-                            border-bottom: 2px solid #999;
-                            margin-bottom: 12px;
+                            height: 35px;
+                            border-bottom: 1px solid #999;
+                            margin-bottom: 8px;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 13pt;
+                            font-size: 10pt;
                             color: #666;
                         }
                         
                         .print-terms {
                             background-color: #f9f9f9;
-                            padding: 12px;
-                            border-radius: 6px;
+                            padding: 8px;
+                            border-radius: 5px;
                             border: 1px solid #eee;
-                            margin-top: 20px;
+                            margin-top: 12px;
                         }
                         
                         .print-terms h4 {
                             text-align: center;
-                            font-size: 14pt;
+                            font-size: 11pt;
                             color: #2c5f2d;
-                            margin-bottom: 10px;
+                            margin-bottom: 6px;
                         }
                         
                         .print-terms ul {
-                            padding-right: 25px;
+                            padding-right: 15px;
                             margin: 0;
                         }
                         
                         .print-terms li {
-                            margin-bottom: 6px;
-                            font-size: 10pt;
-                            line-height: 1.4;
+                            margin-bottom: 4px;
+                            font-size: 8pt;
+                            line-height: 1.3;
                         }
                         
                         .print-footer {
                             text-align: center;
-                            margin-top: 20px;
-                            padding-top: 12px;
-                            border-top: 2px solid #ddd;
-                            font-size: 10pt;
+                            margin-top: 10px;
+                            padding-top: 8px;
+                            border-top: 1px solid #ddd;
+                            font-size: 8pt;
                             color: #666;
                         }
                         
                         @media print {
                             body {
-                                padding: 0 !important;
+                                padding: 0.8cm !important;
                                 margin: 0 !important;
+                                width: 19.4cm !important;
+                                height: 28.1cm !important;
                             }
-                            .print-content {
-                                padding: 1.5cm;
-                            }
-                            .no-print {
+                            button {
                                 display: none !important;
                             }
                         }
                         
                         @media screen {
                             body {
-                                padding: 20px;
                                 background: #f5f5f5;
                             }
                             .print-content {
                                 background: white;
-                                box-shadow: 0 0 20px rgba(0,0,0,0.1);
-                                border-radius: 10px;
-                                padding: 30px;
+                                box-shadow: 0 0 15px rgba(0,0,0,0.1);
+                                border-radius: 8px;
+                                padding: 15px;
                             }
                         }
                     </style>
@@ -2686,23 +2680,22 @@
                     <div class="print-content">
                         ${printContent}
                     </div>
+                    <button onclick="window.print()" style="position: fixed; top: 20px; left: 20px; padding: 8px 15px; background: #2c5f2d; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: Arial; z-index: 10000;">🖨️ طباعة</button>
+                    <button onclick="window.close()" style="position: fixed; top: 20px; left: 120px; padding: 8px 15px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: Arial; z-index: 10000;">✖ إغلاق</button>
                     <script>
                         window.addEventListener('load', function() {
-                            // إعطاء وقت لتحميل الخطوط والتنسيقات
                             setTimeout(function() {
                                 window.print();
-                                // بعد الطباعة، يمكن إغلاق النافذة تلقائياً
-                                setTimeout(function() {
-                                    // window.close(); // يمكن تفعيل هذا إذا أردت إغلاق النافذة تلقائياً
-                                }, 1000);
-                            }, 1000);
+                            }, 500);
                         });
                         
-                        // دعم الزر الأساسي للطباعة
                         document.addEventListener('keydown', function(e) {
                             if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                                 e.preventDefault();
                                 window.print();
+                            }
+                            if (e.key === 'Escape') {
+                                window.close();
                             }
                         });
                     <\/script>
@@ -2711,37 +2704,6 @@
             `);
             
             printWindow.document.close();
-            
-            // إضافة زر للرجوع في نافذة الطباعة
-            setTimeout(() => {
-                const printBody = printWindow.document.body;
-                const backButton = printWindow.document.createElement('button');
-                backButton.innerHTML = '← رجوع';
-                backButton.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    left: 20px;
-                    padding: 10px 20px;
-                    background: #2c5f2d;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-family: Arial;
-                    z-index: 10000;
-                `;
-                backButton.onclick = () => printWindow.close();
-                
-                // إضافة فقط في وضع المعاينة (ليس أثناء الطباعة)
-                const style = printWindow.document.createElement('style');
-                style.textContent = `
-                    @media print {
-                        button { display: none !important; }
-                    }
-                `;
-                printWindow.document.head.appendChild(style);
-                printBody.appendChild(backButton);
-            }, 500);
         });
         
         // ==================== الطباعة من الهاتف ====================
@@ -2769,147 +2731,153 @@
                         <style>
                             @page {
                                 size: A4;
-                                margin: 1.5cm;
+                                margin: 0.8cm;
                             }
                             body {
-                                width: 21cm;
+                                width: 19.4cm;
                                 margin: 0 auto;
                                 font-family: 'Arial', sans-serif;
                                 direction: rtl;
-                                padding: 1.5cm;
+                                padding: 0.8cm;
                                 box-sizing: border-box;
+                                font-size: 10pt;
                             }
                             .print-content {
                                 width: 100%;
                             }
                             .print-header {
                                 text-align: center;
-                                margin-bottom: 20px;
-                                padding-bottom: 15px;
-                                border-bottom: 3px solid #2c5f2d;
+                                margin-bottom: 15px;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid #2c5f2d;
                             }
                             .print-header h2 {
-                                font-size: 20pt;
+                                font-size: 18pt;
                                 color: #2c5f2d;
                                 margin-bottom: 5px;
                             }
                             .print-header p {
-                                font-size: 12pt;
+                                font-size: 10pt;
                                 color: #666;
                             }
                             .print-logo {
-                                font-size: 28pt;
-                                color: #2c5f2d;
-                                margin-bottom: 10px;
-                            }
-                            .print-section {
-                                margin-bottom: 15px;
-                            }
-                            .print-title {
-                                font-size: 14pt;
-                                font-weight: bold;
+                                font-size: 25pt;
                                 color: #2c5f2d;
                                 margin-bottom: 8px;
+                            }
+                            .print-section {
+                                margin-bottom: 12px;
+                            }
+                            .print-title {
+                                font-size: 11pt;
+                                font-weight: bold;
+                                color: #2c5f2d;
+                                margin-bottom: 6px;
                                 padding-bottom: 3px;
                                 border-bottom: 1px solid #ddd;
                             }
                             .print-row {
                                 display: flex;
                                 flex-wrap: wrap;
-                                margin-bottom: 6px;
-                                font-size: 11pt;
+                                margin-bottom: 5px;
+                                font-size: 9pt;
                             }
                             .print-label {
                                 font-weight: bold;
-                                min-width: 120px;
+                                min-width: 80px;
                                 color: #333;
+                                font-size: 9pt;
                             }
                             .print-value {
                                 flex: 1;
                                 color: #000;
+                                font-size: 9pt;
                             }
                             .print-tag {
                                 display: inline-block;
-                                padding: 3px 8px;
+                                padding: 2px 6px;
                                 background-color: #2c5f2d;
                                 color: white;
-                                border-radius: 12px;
-                                margin-left: 5px;
-                                font-size: 9pt;
+                                border-radius: 10px;
+                                margin-right: 3px;
+                                font-size: 7pt;
                                 font-weight: bold;
                             }
                             .print-amount {
                                 background-color: #f0f8f0;
-                                padding: 10px;
-                                border-radius: 6px;
-                                border-right: 3px solid #2c5f2d;
-                                margin-bottom: 15px;
+                                padding: 8px;
+                                border-radius: 5px;
+                                border-right: 2px solid #2c5f2d;
+                                margin-bottom: 12px;
                             }
                             .print-notes {
                                 background-color: #f9f9f9;
-                                padding: 8px;
-                                border-radius: 5px;
+                                padding: 6px;
+                                border-radius: 4px;
                                 border: 1px solid #eee;
-                                margin-bottom: 15px;
-                                font-size: 11pt;
+                                margin-bottom: 12px;
+                                font-size: 9pt;
                             }
                             .print-signature {
-                                margin-top: 15px;
-                                padding-top: 10px;
+                                margin-top: 12px;
+                                padding-top: 8px;
                                 border-top: 1px solid #ddd;
                             }
                             .signature-line {
-                                height: 40px;
+                                height: 30px;
                                 border-bottom: 1px solid #999;
-                                margin-bottom: 8px;
+                                margin-bottom: 6px;
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
-                                font-size: 11pt;
+                                font-size: 9pt;
                                 color: #666;
                             }
                             .print-terms {
                                 background-color: #f9f9f9;
-                                padding: 8px;
-                                border-radius: 5px;
+                                padding: 6px;
+                                border-radius: 4px;
                                 border: 1px solid #eee;
                                 margin-top: 10px;
                             }
                             .print-terms h4 {
                                 text-align: center;
-                                font-size: 12pt;
+                                font-size: 10pt;
                                 color: #2c5f2d;
-                                margin-bottom: 6px;
+                                margin-bottom: 5px;
                             }
                             .print-terms ul {
-                                padding-right: 18px;
+                                padding-right: 12px;
                                 margin: 0;
                             }
                             .print-terms li {
-                                margin-bottom: 4px;
-                                font-size: 9pt;
+                                margin-bottom: 3px;
+                                font-size: 7pt;
                                 line-height: 1.3;
                             }
                             .print-footer {
                                 text-align: center;
-                                margin-top: 10px;
-                                padding-top: 8px;
+                                margin-top: 8px;
+                                padding-top: 6px;
                                 border-top: 1px solid #ddd;
-                                font-size: 9pt;
+                                font-size: 7pt;
                                 color: #666;
                             }
                             @media print {
                                 body {
-                                    width: 21cm;
-                                    height: 29.7cm;
+                                    width: 19.4cm;
+                                    height: 28.1cm;
                                     margin: 0;
-                                    padding: 1.5cm;
+                                    padding: 0.8cm;
                                 }
+                                button { display: none !important; }
                             }
                         </style>
                     </head>
                     <body>
                         ${document.getElementById('printableArea').innerHTML}
+                        <button onclick="window.print()" style="position: fixed; top: 10px; left: 10px; padding: 6px 12px; background: #2c5f2d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 10px; z-index: 10000;">🖨️ طباعة</button>
+                        <button onclick="window.close()" style="position: fixed; top: 10px; left: 90px; padding: 6px 12px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 10px; z-index: 10000;">✖ إغلاق</button>
                         <script>
                             setTimeout(() => {
                                 window.print();
