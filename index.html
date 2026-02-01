@@ -145,6 +145,8 @@
             --warning: #ffc107;
             --danger: #dc3545;
             --info: #17a2b8;
+            --purple: #9c27b0;
+            --light-green: #4caf50;
         }
         
         * {
@@ -999,6 +1001,17 @@
             color: #333;
         }
         
+        /* الإضافات الجديدة للأرقام 1x و 2x */
+        .hall1-second-badge {
+            background-color: rgba(156, 39, 176, 0.9);
+            color: white;
+        }
+        
+        .hall2-second-badge {
+            background-color: rgba(76, 175, 80, 0.9);
+            color: white;
+        }
+        
         .calendar-legends {
             display: flex;
             gap: 15px;
@@ -1494,7 +1507,7 @@
             
             <div class="login-instructions">
                 <h4><i class="fas fa-info-circle"></i> معلومات تسجيل الدخول</h4>
-                <p> : <strong></strong></p>
+                <p>كلمة المرور: <strong>7788xx</strong></p>
                 <p>سيتم حفظ حالة تسجيل الدخول على هذا الجهاز لمدة 30 يوماً عند تفعيل خيار "تذكر تسجيل الدخول"</p>
             </div>
         </div>
@@ -1961,6 +1974,14 @@
                         <span>القاعتين محجوزتان</span>
                     </div>
                     <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(156, 39, 176, 0.9);"></div>
+                        <span>قاعة 1 مرة ثانية (1x)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(76, 175, 80, 0.9);"></div>
+                        <span>قاعة 2 مرة ثانية (2x)</span>
+                    </div>
+                    <div class="legend-item">
                         <div class="legend-color" style="background-color: rgba(44, 95, 45, 0.1); border: 2px solid #2c5f2d;"></div>
                         <span>اليوم الحالي</span>
                     </div>
@@ -2361,19 +2382,35 @@
                         Array.isArray(r.halls) && r.halls.length === 2
                     );
                     
-                    // عرض الحجوزات
+                    // عرض الحجوزات - التحديث الجديد
                     if (bothHallsReservations.length > 0) {
                         const badge = createReservationBadge('1/2', 'both-halls-badge', bothHallsReservations[0]);
                         reservationsList.appendChild(badge);
                     } else {
+                        // عرض الحجوزات للقاعة 1
                         if (hall1Reservations.length > 0) {
-                            const badge = createReservationBadge('1', 'hall1-badge', hall1Reservations[0]);
-                            reservationsList.appendChild(badge);
+                            // الحجز الأول للقاعة 1
+                            const badge1 = createReservationBadge('1', 'hall1-badge', hall1Reservations[0]);
+                            reservationsList.appendChild(badge1);
+                            
+                            // الحجز الثاني للقاعة 1 - 1x بلون بنفسجي
+                            if (hall1Reservations.length > 1) {
+                                const badge2 = createReservationBadge('1x', 'hall1-second-badge', hall1Reservations[1]);
+                                reservationsList.appendChild(badge2);
+                            }
                         }
                         
+                        // عرض الحجوزات للقاعة 2
                         if (hall2Reservations.length > 0) {
-                            const badge = createReservationBadge('2', 'hall2-badge', hall2Reservations[0]);
-                            reservationsList.appendChild(badge);
+                            // الحجز الأول للقاعة 2
+                            const badge1 = createReservationBadge('2', 'hall2-badge', hall2Reservations[0]);
+                            reservationsList.appendChild(badge1);
+                            
+                            // الحجز الثاني للقاعة 2 - 2x بلون أخضر
+                            if (hall2Reservations.length > 1) {
+                                const badge2 = createReservationBadge('2x', 'hall2-second-badge', hall2Reservations[1]);
+                                reservationsList.appendChild(badge2);
+                            }
                         }
                     }
                     
