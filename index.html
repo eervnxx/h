@@ -5,7 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قاعة النخيل للمناسبات - نظام إدارة الحجوزات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- أنماط نظام الحماية -->
     <style>
+        /* أنماط نظام الحماية */
+        .protection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c5f2d 0%, #4a8c4a 100%);
+            z-index: 999999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .protection-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+        
+        .protection-logo {
+            font-size: 60px;
+            color: #2c5f2d;
+            margin-bottom: 20px;
+        }
+        
+        .protection-title {
+            color: #2c5f2d;
+            margin-bottom: 10px;
+        }
+        
+        .protection-subtitle {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .protection-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 20px;
+        }
+        
+        .protection-input:focus {
+            border-color: #2c5f2d;
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.2);
+        }
+        
+        .protection-btn {
+            background: #2c5f2d;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .protection-btn:hover {
+            background: #4a8c4a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .protection-error {
+            color: #dc3545;
+            margin-top: 15px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .protection-info {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 13px;
+        }
+        
+        .welcome-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 100000;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        /* إخفاء التطبيق قبل التحقق */
+        body:not(.authenticated) #mainApp {
+            display: none !important;
+        }
+    </style>
+    
+    <!-- أنماط تطبيق الحجوزات (نفس الأنماط الأصلية) -->
+    <style>
+        /* ======= أنماط تطبيق الحجوزات (كاملة) ======= */
         :root {
             --primary: #2c5f2d;
             --primary-light: #4a8c4a;
@@ -1263,805 +1395,677 @@
             left: 0;
             z-index: -9999;
         }
-        
-        /* أنيميشن الحماية */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
     </style>
-    
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-
-        // إعدادات Firebase الخاصة بك
-        const firebaseConfig = {
-            apiKey: "AIzaSyC7gPDDufyshQ50-lPN09KkIwZQUuc8yiU",
-            authDomain: "alnas-5cf4b.firebaseapp.com",
-            projectId: "alnas-5cf4b",
-            storageBucket: "alnas-5cf4b.firebasestorage.app",
-            messagingSenderId: "173426991551",
-            appId: "1:173426991551:web:02e522e583a233e801c10a",
-            measurementId: "G-4EMW3FKMHZ"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const analytics = getAnalytics(app);
-        
-        // جعل Firebase متاحاً عالمياً
-        window.firebaseApp = app;
-        window.firestore = db;
-        window.firebaseModules = {
-            collection, addDoc, getDocs, updateDoc, deleteDoc, doc, 
-            query, where, orderBy, onSnapshot
-        };
-        
-        console.log("✅ Firebase initialized successfully");
-    </script>
 </head>
 <body>
-    <!-- ترويسة الموقع -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <i class="fas fa-palette"></i>
-                <div>
-                    <h1>قاعة النخيل للمناسبات</h1>
-                    <p>نظام إدارة الحجوزات الإلكتروني</p>
-                    <div class="telegram-badge">
-                        <i class="fab fa-telegram"></i>
-                        متصل ببوت تليجرام
-                    </div>
-                </div>
+    <!-- شاشة الحماية -->
+    <div id="protectionOverlay" class="protection-overlay">
+        <div class="protection-container">
+            <div class="protection-logo"><i class="fas fa-palette"></i></div>
+            <h2 class="protection-title">قاعة النخيل للمناسبات</h2>
+            <p class="protection-subtitle">نظام إدارة الحجوزات الإلكتروني</p>
+            <div>
+                <input type="password" id="passwordInput" class="protection-input" placeholder="🔐 أدخل كلمة المرور">
             </div>
-            <div class="date-display" id="currentDate">
-                <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
+            <button id="unlockBtn" class="protection-btn">
+                <i class="fas fa-unlock-alt"></i> فتح النظام
+            </button>
+            <p id="errorMessage" class="protection-error">
+               <i class="fas fa-times-circle"></i> كلمة المرور غير صحيحة
+            </p>
+            <div class="protection-info">
+                <i class="fas fa-info-circle"></i> سيتم تذكرك على هذا الجهاز
             </div>
         </div>
-    </header>
+    </div>
     
-    <div class="container">
-        <!-- أشرطة التنقل -->
-        <div class="nav-tabs">
-            <div class="nav-tab active" data-page="booking-form">
-                <i class="fas fa-calendar-plus"></i> حجز جديد
-            </div>
-            <div class="nav-tab" data-page="preview-page">
-                <i class="fas fa-eye"></i> معاينة الحجز
-            </div>
-            <div class="nav-tab" data-page="reservations-calendar">
-                <i class="fas fa-calendar-alt"></i> تقويم الحجوزات
-            </div>
-            <div class="nav-tab" data-page="reservations-list">
-                <i class="fas fa-list"></i> قائمة الحجوزات
-            </div>
-        </div>
-        
-        <!-- رسائل التنبيه -->
-        <div id="alertMessage" class="alert"></div>
-        
-        <!-- نموذج الحجز -->
-        <div id="booking-form" class="page active">
-            <h2 class="page-title"><i class="fas fa-edit"></i> نموذج حجز جديد</h2>
+    <!-- التطبيق الرئيسي (مخفي حتى التحقق) -->
+    <div id="mainApp" style="display: none;">
+        <!-- Firebase SDKs -->
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+            import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
+
+            // إعدادات Firebase الخاصة بك
+            const firebaseConfig = {
+                apiKey: "AIzaSyC7gPDDufyshQ50-lPN09KkIwZQUuc8yiU",
+                authDomain: "alnas-5cf4b.firebaseapp.com",
+                projectId: "alnas-5cf4b",
+                storageBucket: "alnas-5cf4b.firebasestorage.app",
+                messagingSenderId: "173426991551",
+                appId: "1:173426991551:web:02e522e583a233e801c10a",
+                measurementId: "G-4EMW3FKMHZ"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            const analytics = getAnalytics(app);
             
-            <form id="reservationForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="customerName" class="required">اسم السيد المحجِز</label>
-                        <input type="text" id="customerName" required placeholder="أدخل الاسم الكامل">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone" class="required">رقم الهاتف</label>
-                        <input type="tel" id="phone" required placeholder="مثال: 07701234567">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="groomName">اسم العريس (لحفلات الزفاف)</label>
-                        <input type="text" id="groomName" placeholder="أدخل اسم العريس">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="brideName">اسم العروس (لحفلات الزفاف)</label>
-                        <input type="text" id="brideName" placeholder="أدخل اسم العروس">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="groomAddress">عنوان العريس</label>
-                        <input type="text" id="groomAddress" placeholder="أدخل عنوان العريس الكامل">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="brideAddress">عنوان العروس</label>
-                        <input type="text" id="brideAddress" placeholder="أدخل عنوان العروس الكامل">
-                    </div>
-                </div>
-                
-                <!-- خدمة التصوير - البسيطة -->
-                <div class="photography-section">
-                    <div class="detail-title">
-                        <i class="fas fa-camera"></i> خدمة التصوير
-                    </div>
-                    <div class="photography-options-simple">
-                        <div class="photography-option-simple">
-                            <input type="radio" id="photographyAdd" name="photography" value="اضافة تصوير">
-                            <label for="photographyAdd" class="add-photo">
-                                <i class="fas fa-camera"></i> إضافة تصوير
-                            </label>
-                        </div>
-                        <div class="photography-option-simple">
-                            <input type="radio" id="photographyNone" name="photography" value="بدون تصوير" checked>
-                            <label for="photographyNone" class="no-photo">
-                                <i class="fas fa-times"></i> بدون تصوير
-                            </label>
+            // جعل Firebase متاحاً عالمياً
+            window.firebaseApp = app;
+            window.firestore = db;
+            window.firebaseModules = {
+                collection, addDoc, getDocs, updateDoc, deleteDoc, doc, 
+                query, where, orderBy, onSnapshot
+            };
+            
+            console.log("✅ Firebase initialized successfully");
+            
+            // بعد تحميل Firebase، تحقق من الحماية
+            checkAccess();
+        </script>
+        
+        <!-- محتوى التطبيق الأصلي -->
+        <header>
+            <div class="container header-content">
+                <div class="logo">
+                    <i class="fas fa-palette"></i>
+                    <div>
+                        <h1>قاعة النخيل للمناسبات</h1>
+                        <p>نظام إدارة الحجوزات الإلكتروني</p>
+                        <div class="telegram-badge">
+                            <i class="fab fa-telegram"></i>
+                            متصل ببوت تليجرام
                         </div>
                     </div>
                 </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="eventDate" class="required">تاريخ الحفل</label>
-                        <input type="date" id="eventDate" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="eventType" class="required">نوع المناسبة</label>
-                        <select id="eventType" required>
-                            <option value="">اختر نوع المناسبة</option>
-                            <option value="عرس">عرس</option>
-                            <option value="خطوبة">خطوبة</option>
-                            <option value="حفلة خاصة">حفلة خاصة</option>
-                            <option value="عيد ميلاد">عيد ميلاد</option>
-                            <option value="مناسبة رسمية">مناسبة رسمية</option>
-                            <option value="مؤتمر">مؤتمر</option>
-                        </select>
-                    </div>
+                <div class="date-display" id="currentDate">
+                    <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
                 </div>
+            </div>
+        </header>
+        
+        <div class="container">
+            <!-- أشرطة التنقل -->
+            <div class="nav-tabs">
+                <div class="nav-tab active" data-page="booking-form">
+                    <i class="fas fa-calendar-plus"></i> حجز جديد
+                </div>
+                <div class="nav-tab" data-page="preview-page">
+                    <i class="fas fa-eye"></i> معاينة الحجز
+                </div>
+                <div class="nav-tab" data-page="reservations-calendar">
+                    <i class="fas fa-calendar-alt"></i> تقويم الحجوزات
+                </div>
+                <div class="nav-tab" data-page="reservations-list">
+                    <i class="fas fa-list"></i> قائمة الحجوزات
+                </div>
+            </div>
+            
+            <!-- رسائل التنبيه -->
+            <div id="alertMessage" class="alert"></div>
+            
+            <!-- نموذج الحجز -->
+            <div id="booking-form" class="page active">
+                <h2 class="page-title"><i class="fas fa-edit"></i> نموذج حجز جديد</h2>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="eventTime" class="required">وقت المناسبة</label>
-                        <select id="eventTime" required>
-                            <option value="">اختر وقت المناسبة</option>
-                            <option value="صباحي">صباحي</option>
-                            <option value="عصري">عصري</option>
-                            <option value="مسائي">مسائي</option>
-                            <option value="كامل اليوم">كامل اليوم</option>
-                        </select>
+                <form id="reservationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerName" class="required">اسم السيد المحجِز</label>
+                            <input type="text" id="customerName" required placeholder="أدخل الاسم الكامل">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="required">رقم الهاتف</label>
+                            <input type="tel" id="phone" required placeholder="مثال: 07701234567">
+                        </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label class="required">القاعة المطلوبة</label>
-                        <div class="select-all">
-                            <input type="checkbox" id="selectAllHalls">
-                            <label for="selectAllHalls">تحديد الكل (حجز القاعتين معاً)</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="groomName">اسم العريس (لحفلات الزفاف)</label>
+                            <input type="text" id="groomName" placeholder="أدخل اسم العريس">
                         </div>
-                        <div class="hall-options">
-                            <div class="hall-option">
-                                <input type="checkbox" id="hall1" name="hall" value="القاعة رقم 1">
-                                <label for="hall1">
-                                    القاعة رقم 1
-                                    <div class="hall-badge">سعة 300 شخص</div>
+                        
+                        <div class="form-group">
+                            <label for="brideName">اسم العروس (لحفلات الزفاف)</label>
+                            <input type="text" id="brideName" placeholder="أدخل اسم العروس">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="groomAddress">عنوان العريس</label>
+                            <input type="text" id="groomAddress" placeholder="أدخل عنوان العريس الكامل">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="brideAddress">عنوان العروس</label>
+                            <input type="text" id="brideAddress" placeholder="أدخل عنوان العروس الكامل">
+                        </div>
+                    </div>
+                    
+                    <!-- خدمة التصوير - البسيطة -->
+                    <div class="photography-section">
+                        <div class="detail-title">
+                            <i class="fas fa-camera"></i> خدمة التصوير
+                        </div>
+                        <div class="photography-options-simple">
+                            <div class="photography-option-simple">
+                                <input type="radio" id="photographyAdd" name="photography" value="اضافة تصوير">
+                                <label for="photographyAdd" class="add-photo">
+                                    <i class="fas fa-camera"></i> إضافة تصوير
                                 </label>
                             </div>
-                            <div class="hall-option">
-                                <input type="checkbox" id="hall2" name="hall" value="القاعة رقم 2">
-                                <label for="hall2">
-                                    القاعة رقم 2
-                                    <div class="hall-badge">سعة 250 شخص</div>
+                            <div class="photography-option-simple">
+                                <input type="radio" id="photographyNone" name="photography" value="بدون تصوير" checked>
+                                <label for="photographyNone" class="no-photo">
+                                    <i class="fas fa-times"></i> بدون تصوير
                                 </label>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="totalAmount" class="required">المبلغ الكلي (دينار عراقي)</label>
-                        <input type="number" id="totalAmount" required placeholder="أدخل المبلغ الكلي">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventDate" class="required">تاريخ الحفل</label>
+                            <input type="date" id="eventDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventType" class="required">نوع المناسبة</label>
+                            <select id="eventType" required>
+                                <option value="">اختر نوع المناسبة</option>
+                                <option value="عرس">عرس</option>
+                                <option value="خطوبة">خطوبة</option>
+                                <option value="حفلة خاصة">حفلة خاصة</option>
+                                <option value="عيد ميلاد">عيد ميلاد</option>
+                                <option value="مناسبة رسمية">مناسبة رسمية</option>
+                                <option value="مؤتمر">مؤتمر</option>
+                            </select>
+                        </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="paidAmount" class="required">المبلغ الواصل (دينار عراقي)</label>
-                        <input type="number" id="paidAmount" required placeholder="أدخل المبلغ المدفوع">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTime" class="required">وقت المناسبة</label>
+                            <select id="eventTime" required>
+                                <option value="">اختر وقت المناسبة</option>
+                                <option value="صباحي">صباحي</option>
+                                <option value="عصري">عصري</option>
+                                <option value="مسائي">مسائي</option>
+                                <option value="كامل اليوم">كامل اليوم</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="required">القاعة المطلوبة</label>
+                            <div class="select-all">
+                                <input type="checkbox" id="selectAllHalls">
+                                <label for="selectAllHalls">تحديد الكل (حجز القاعتين معاً)</label>
+                            </div>
+                            <div class="hall-options">
+                                <div class="hall-option">
+                                    <input type="checkbox" id="hall1" name="hall" value="القاعة رقم 1">
+                                    <label for="hall1">
+                                        القاعة رقم 1
+                                        <div class="hall-badge">سعة 300 شخص</div>
+                                    </label>
+                                </div>
+                                <div class="hall-option">
+                                    <input type="checkbox" id="hall2" name="hall" value="القاعة رقم 2">
+                                    <label for="hall2">
+                                        القاعة رقم 2
+                                        <div class="hall-badge">سعة 250 شخص</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="remainingAmount">المبلغ المتبقي (دينار عراقي)</label>
-                        <input type="number" id="remainingAmount" readonly placeholder="سيتم حسابه تلقائياً">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="totalAmount" class="required">المبلغ الكلي (دينار عراقي)</label>
+                            <input type="number" id="totalAmount" required placeholder="أدخل المبلغ الكلي">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="paidAmount" class="required">المبلغ الواصل (دينار عراقي)</label>
+                            <input type="number" id="paidAmount" required placeholder="أدخل المبلغ المدفوع">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="remainingAmount">المبلغ المتبقي (دينار عراقي)</label>
+                            <input type="number" id="remainingAmount" readonly placeholder="سيتم حسابه تلقائياً">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="notes">ملاحظات إضافية</label>
+                            <textarea id="notes" rows="3" placeholder="أي ملاحظات أو متطلبات خاصة"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-secondary" id="clearForm">
+                            <i class="fas fa-eraser"></i> مسح النموذج
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitForm">
+                            <i class="fas fa-save"></i> حفظ الحجز
+                        </button>
+                        <button type="button" class="btn btn-success" id="previewBtn">
+                            <i class="fas fa-eye"></i> معاينة الحجز
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- صفحة المعاينة -->
+            <div id="preview-page" class="page">
+                <h2 class="page-title"><i class="fas fa-print"></i> معاينة الحجز وطباعته</h2>
+                
+                <!-- محتوى المعاينة العادي -->
+                <div class="preview-container">
+                    <div class="preview-header">
+                        <div class="preview-logo">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h2>قاعة النخيل للمناسبات</h2>
+                        <p>عقد حجز قاعة للمناسبات - نسخة الزبون</p>
+                    </div>
+                    
+                    <div class="preview-content print-optimized">
+                        <!-- الجانب الأيمن - تفاصيل الحجز -->
+                        <div class="preview-right">
+                            <div class="detail-section">
+                                <div class="detail-title">
+                                    <i class="fas fa-user"></i> معلومات الحجز
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-row">
+                                        <span class="detail-label">اسم السيد المحجِز:</span>
+                                        <span class="detail-value" id="previewCustomerName">-</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">رقم الحجز:</span>
+                                        <span class="detail-value" id="previewReservationId">-</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">تاريخ الحجز:</span>
+                                        <span class="detail-value" id="previewBookingDate">-</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">رقم الهاتف:</span>
+                                        <span class="detail-value" id="previewPhone">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">
+                                    <i class="fas fa-camera"></i> خدمة التصوير
+                                </div>
+                                <div class="detail-content">
+                                    <div id="previewPhotographySelection" style="margin-bottom: 5px;">بدون تصوير</div>
+                                    <div id="previewPhotographyBadges"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">
+                                    <i class="fas fa-calendar-check"></i> تفاصيل المناسبة
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-row">
+                                        <span class="detail-label">نوع المناسبة:</span>
+                                        <span class="detail-value" id="previewEventType">-</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">التاريخ:</span>
+                                        <span class="detail-value" id="previewEventDate">-</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">الوقت:</span>
+                                        <span class="detail-value" id="previewEventTime">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- الجانب الأيسر - القاعة والمال والتفاصيل -->
+                        <div class="preview-left">
+                            <div class="detail-section">
+                                <div class="detail-title">
+                                    <i class="fas fa-building"></i> القاعة المختارة
+                                </div>
+                                <div class="detail-content">
+                                    <div id="previewHallSelection" style="margin-bottom: 8px;">لم يتم اختيار قاعة</div>
+                                    <div id="previewHallBadges"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section amount-display">
+                                <div class="detail-title">
+                                    <i class="fas fa-money-bill-wave"></i> التفاصيل المالية
+                                </div>
+                                <div class="detail-content">
+                                    <div class="detail-row">
+                                        <span class="detail-label">المبلغ الكلي:</span>
+                                        <span class="detail-value" id="previewTotalAmount">0</span> د.ع
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">المبلغ الواصل:</span>
+                                        <span class="detail-value" id="previewPaidAmount">0</span> د.ع
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">المبلغ المتبقي:</span>
+                                        <span class="detail-value" id="previewRemainingAmount">0</span> د.ع
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="notes-section">
+                                <div class="detail-title">
+                                    <i class="fas fa-sticky-note"></i> الملاحظات
+                                </div>
+                                <div class="detail-content" style="margin-top: 8px; min-height: 50px;">
+                                    <span id="previewNotes">لا توجد ملاحظات</span>
+                                </div>
+                            </div>
+                            
+                            <div class="signature-area">
+                                <div class="detail-title">
+                                    <i class="fas fa-signature"></i> توقيع الطرفين
+                                </div>
+                                
+                                <div style="margin-top: 10px;">
+                                    <div class="detail-row" style="margin-bottom: 10px;">
+                                        <span class="detail-label">توقيع السيد:</span>
+                                        <span class="detail-value">
+                                            <div class="signature-box" id="customerSignatureBox">
+                                                <span>.......................</span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="detail-row">
+                                        <span class="detail-label">توقيع المسؤول:</span>
+                                        <span class="detail-value">
+                                            <div class="signature-box">
+                                                <span>إدارة قاعة النخيل</span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-top: 10px; font-size: 0.85rem;">
+                                    <input type="checkbox" id="agreeTerms">
+                                    <label for="agreeTerms">أوافق على جميع الشروط والأحكام المذكورة</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 0 20px 15px;">
+                        <div class="terms">
+                            <h4>الشروط والأحكام:</h4>
+                            <ul>
+                                <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
+                                <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                                <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
+                            <div class="detail-title" style="border-bottom: none; margin-bottom: 5px; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle"></i> معلومات هامة
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-row">
+                                    <span class="detail-label">رقم الهاتف:</span>
+                                    <span class="detail-value">07701234567</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">العنوان:</span>
+                                    <span class="detail-value">بغداد، المنصور</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">حالة الحجز:</span>
+                                    <span class="detail-value" style="color: var(--success); font-weight: bold;">مؤكد</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px; text-align: center; font-size: 0.8rem; color: var(--gray); padding: 8px; border-top: 1px solid #eee;">
+                            <p>شكراً لاختياركم قاعة النخيل للمناسبات</p>
+                            <p style="margin-top: 5px; font-size: 0.75rem;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label for="notes">ملاحظات إضافية</label>
-                        <textarea id="notes" rows="3" placeholder="أي ملاحظات أو متطلبات خاصة"></textarea>
+                <!-- محتوى الطباعة المنفصل (مخفي) -->
+                <div id="printableArea" style="display: none;"></div>
+                <div id="printMobileContent" class="print-mobile-content"></div>
+                
+                <div class="action-buttons no-print">
+                    <button class="btn btn-secondary" id="backToForm">
+                        <i class="fas fa-arrow-right"></i> العودة للنموذج
+                    </button>
+                    <button class="btn btn-success" id="printDesktopBtn">
+                        <i class="fas fa-desktop"></i> الطباعة من الحاسوب
+                    </button>
+                    <button class="btn btn-phone" id="printMobileBtn">
+                        <i class="fas fa-mobile-alt"></i> الطباعة من الهاتف
+                    </button>
+                    <button class="btn btn-telegram" id="sendToTelegram">
+                        <i class="fab fa-telegram"></i> إرسال للتليجرام
+                    </button>
+                    <button class="btn btn-primary" id="saveReservation">
+                        <i class="fas fa-save"></i> حفظ الحجز
+                    </button>
+                </div>
+            </div>
+            
+            <!-- صفحة تقويم الحجوزات -->
+            <div id="reservations-calendar" class="page">
+                <h2 class="page-title"><i class="fas fa-calendar-alt"></i> تقويم الحجوزات</h2>
+                
+                <div class="calendar-controls">
+                    <div class="calendar-navigation">
+                        <button class="btn btn-secondary" id="prevMonth">
+                            <i class="fas fa-chevron-right"></i> الشهر السابق
+                        </button>
+                        <div class="month-year" id="currentMonthYear">حزيران 2024</div>
+                        <button class="btn btn-secondary" id="nextMonth">
+                            الشهر التالي <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" id="todayBtn">
+                        <i class="fas fa-calendar-day"></i> الشهر الحالي
+                    </button>
+                </div>
+                
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="calendar-header-cell">الأحد</div>
+                        <div class="calendar-header-cell">الاثنين</div>
+                        <div class="calendar-header-cell">الثلاثاء</div>
+                        <div class="calendar-header-cell">الأربعاء</div>
+                        <div class="calendar-header-cell">الخميس</div>
+                        <div class="calendar-header-cell">الجمعة</div>
+                        <div class="calendar-header-cell">السبت</div>
+                    </div>
+                    <div class="calendar-body" id="calendarBody">
+                        <!-- سيتم تعبئته بواسطة JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="calendar-legends">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.9);"></div>
+                        <span>القاعة رقم 1 محجوزة</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.9);"></div>
+                        <span>القاعة رقم 2 محجوزة</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.9);"></div>
+                        <span>القاعتين محجوزتان</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(44, 95, 45, 0.1); border: 2px solid #2c5f2d;"></div>
+                        <span>اليوم الحالي</span>
                     </div>
                 </div>
                 
                 <div class="action-buttons">
-                    <button type="button" class="btn btn-secondary" id="clearForm">
-                        <i class="fas fa-eraser"></i> مسح النموذج
+                    <button class="btn btn-primary" id="refreshCalendar">
+                        <i class="fas fa-sync-alt"></i> تحديث التقويم
                     </button>
-                    <button type="submit" class="btn btn-primary" id="submitForm">
-                        <i class="fas fa-save"></i> حفظ الحجز
-                    </button>
-                    <button type="button" class="btn btn-success" id="previewBtn">
-                        <i class="fas fa-eye"></i> معاينة الحجز
+                    <button class="btn btn-success" id="printCalendar">
+                        <i class="fas fa-print"></i> طباعة التقويم
                     </button>
                 </div>
-            </form>
-        </div>
-        
-        <!-- صفحة المعاينة -->
-        <div id="preview-page" class="page">
-            <h2 class="page-title"><i class="fas fa-print"></i> معاينة الحجز وطباعته</h2>
+            </div>
             
-            <!-- محتوى المعاينة العادي -->
-            <div class="preview-container">
-                <div class="preview-header">
-                    <div class="preview-logo">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h2>قاعة النخيل للمناسبات</h2>
-                    <p>عقد حجز قاعة للمناسبات - نسخة الزبون</p>
+            <!-- قائمة الحجوزات -->
+            <div id="reservations-list" class="page">
+                <h2 class="page-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات</h2>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="ابحث باسم السيد أو رقم الهاتف أو نوع المناسبة...">
+                    <button class="btn btn-secondary" id="searchBtn">
+                        <i class="fas fa-search"></i> بحث
+                    </button>
+                    <button class="btn" id="clearSearch">
+                        <i class="fas fa-times"></i> مسح
+                    </button>
                 </div>
                 
-                <div class="preview-content print-optimized">
-                    <!-- الجانب الأيمن - تفاصيل الحجز -->
-                    <div class="preview-right">
-                        <div class="detail-section">
-                            <div class="detail-title">
-                                <i class="fas fa-user"></i> معلومات الحجز
-                            </div>
-                            <div class="detail-content">
-                                <div class="detail-row">
-                                    <span class="detail-label">اسم السيد المحجِز:</span>
-                                    <span class="detail-value" id="previewCustomerName">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">رقم الحجز:</span>
-                                    <span class="detail-value" id="previewReservationId">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">تاريخ الحجز:</span>
-                                    <span class="detail-value" id="previewBookingDate">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">رقم الهاتف:</span>
-                                    <span class="detail-value" id="previewPhone">-</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">
-                                <i class="fas fa-camera"></i> خدمة التصوير
-                            </div>
-                            <div class="detail-content">
-                                <div id="previewPhotographySelection" style="margin-bottom: 5px;">بدون تصوير</div>
-                                <div id="previewPhotographyBadges"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-section">
-                            <div class="detail-title">
-                                <i class="fas fa-calendar-check"></i> تفاصيل المناسبة
-                            </div>
-                            <div class="detail-content">
-                                <div class="detail-row">
-                                    <span class="detail-label">نوع المناسبة:</span>
-                                    <span class="detail-value" id="previewEventType">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">التاريخ:</span>
-                                    <span class="detail-value" id="previewEventDate">-</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">الوقت:</span>
-                                    <span class="detail-value" id="previewEventTime">-</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- الجانب الأيسر - القاعة والمال والتفاصيل -->
-                    <div class="preview-left">
-                        <div class="detail-section">
-                            <div class="detail-title">
-                                <i class="fas fa-building"></i> القاعة المختارة
-                            </div>
-                            <div class="detail-content">
-                                <div id="previewHallSelection" style="margin-bottom: 8px;">لم يتم اختيار قاعة</div>
-                                <div id="previewHallBadges"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-section amount-display">
-                            <div class="detail-title">
-                                <i class="fas fa-money-bill-wave"></i> التفاصيل المالية
-                            </div>
-                            <div class="detail-content">
-                                <div class="detail-row">
-                                    <span class="detail-label">المبلغ الكلي:</span>
-                                    <span class="detail-value" id="previewTotalAmount">0</span> د.ع
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">المبلغ الواصل:</span>
-                                    <span class="detail-value" id="previewPaidAmount">0</span> د.ع
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">المبلغ المتبقي:</span>
-                                    <span class="detail-value" id="previewRemainingAmount">0</span> د.ع
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="notes-section">
-                            <div class="detail-title">
-                                <i class="fas fa-sticky-note"></i> الملاحظات
-                            </div>
-                            <div class="detail-content" style="margin-top: 8px; min-height: 50px;">
-                                <span id="previewNotes">لا توجد ملاحظات</span>
-                            </div>
-                        </div>
-                        
-                        <div class="signature-area">
-                            <div class="detail-title">
-                                <i class="fas fa-signature"></i> توقيع الطرفين
-                            </div>
-                            
-                            <div style="margin-top: 10px;">
-                                <div class="detail-row" style="margin-bottom: 10px;">
-                                    <span class="detail-label">توقيع السيد:</span>
-                                    <span class="detail-value">
-                                        <div class="signature-box" id="customerSignatureBox">
-                                            <span>.......................</span>
-                                        </div>
-                                    </span>
-                                </div>
-                                
-                                <div class="detail-row">
-                                    <span class="detail-label">توقيع المسؤول:</span>
-                                    <span class="detail-value">
-                                        <div class="signature-box">
-                                            <span>إدارة قاعة النخيل</span>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div style="margin-top: 10px; font-size: 0.85rem;">
-                                <input type="checkbox" id="agreeTerms">
-                                <label for="agreeTerms">أوافق على جميع الشروط والأحكام المذكورة</label>
-                            </div>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="reservations-table compact-table">
+                        <thead>
+                            <tr>
+                                <th>رقم الحجز</th>
+                                <th>اسم السيد</th>
+                                <th>العريس</th>
+                                <th>العروس</th>
+                                <th>عنوان العريس</th>
+                                <th>عنوان العروس</th>
+                                <th>التصوير</th>
+                                <th>رقم الهاتف</th>
+                                <th>تاريخ الحفل</th>
+                                <th>نوع المناسبة</th>
+                                <th>القاعة</th>
+                                <th>المبلغ الكلي</th>
+                                <th>التليجرام</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservationsTableBody">
+                            <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
+                        </tbody>
+                    </table>
                 </div>
                 
-                <div style="padding: 0 20px 15px;">
-                    <div class="terms">
-                        <h4>الشروط والأحكام:</h4>
-                        <ul>
-                            <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
-                            <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
-                            <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
-                        <div class="detail-title" style="border-bottom: none; margin-bottom: 5px; font-size: 0.9rem;">
-                            <i class="fas fa-info-circle"></i> معلومات هامة
-                        </div>
-                        <div class="detail-content">
-                            <div class="detail-row">
-                                <span class="detail-label">رقم الهاتف:</span>
-                                <span class="detail-value">07701234567</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">العنوان:</span>
-                                <span class="detail-value">بغداد، المنصور</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">حالة الحجز:</span>
-                                <span class="detail-value" style="color: var(--success); font-weight: bold;">مؤكد</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 15px; text-align: center; font-size: 0.8rem; color: var(--gray); padding: 8px; border-top: 1px solid #eee;">
-                        <p>شكراً لاختياركم قاعة النخيل للمناسبات</p>
-                        <p style="margin-top: 5px; font-size: 0.75rem;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- محتوى الطباعة المنفصل (مخفي) -->
-            <div id="printableArea" style="display: none;"></div>
-            <div id="printMobileContent" class="print-mobile-content"></div>
-            
-            <div class="action-buttons no-print">
-                <button class="btn btn-secondary" id="backToForm">
-                    <i class="fas fa-arrow-right"></i> العودة للنموذج
-                </button>
-                <button class="btn btn-success" id="printDesktopBtn">
-                    <i class="fas fa-desktop"></i> الطباعة من الحاسوب
-                </button>
-                <button class="btn btn-phone" id="printMobileBtn">
-                    <i class="fas fa-mobile-alt"></i> الطباعة من الهاتف
-                </button>
-                <button class="btn btn-telegram" id="sendToTelegram">
-                    <i class="fab fa-telegram"></i> إرسال للتليجرام
-                </button>
-                <button class="btn btn-primary" id="saveReservation">
-                    <i class="fas fa-save"></i> حفظ الحجز
-                </button>
-            </div>
-        </div>
-        
-        <!-- صفحة تقويم الحجوزات -->
-        <div id="reservations-calendar" class="page">
-            <h2 class="page-title"><i class="fas fa-calendar-alt"></i> تقويم الحجوزات</h2>
-            
-            <div class="calendar-controls">
-                <div class="calendar-navigation">
-                    <button class="btn btn-secondary" id="prevMonth">
-                        <i class="fas fa-chevron-right"></i> الشهر السابق
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="exportReservations">
+                        <i class="fas fa-file-export"></i> تصدير البيانات
                     </button>
-                    <div class="month-year" id="currentMonthYear">حزيران 2024</div>
-                    <button class="btn btn-secondary" id="nextMonth">
-                        الشهر التالي <i class="fas fa-chevron-left"></i>
+                    <button class="btn btn-danger" id="deleteAllBtn">
+                        <i class="fas fa-trash-alt"></i> حذف الكل
                     </button>
                 </div>
-                <button class="btn btn-primary" id="todayBtn">
-                    <i class="fas fa-calendar-day"></i> الشهر الحالي
-                </button>
-            </div>
-            
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <div class="calendar-header-cell">الأحد</div>
-                    <div class="calendar-header-cell">الاثنين</div>
-                    <div class="calendar-header-cell">الثلاثاء</div>
-                    <div class="calendar-header-cell">الأربعاء</div>
-                    <div class="calendar-header-cell">الخميس</div>
-                    <div class="calendar-header-cell">الجمعة</div>
-                    <div class="calendar-header-cell">السبت</div>
-                </div>
-                <div class="calendar-body" id="calendarBody">
-                    <!-- سيتم تعبئته بواسطة JavaScript -->
-                </div>
-            </div>
-            
-            <div class="calendar-legends">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(220, 53, 69, 0.9);"></div>
-                    <span>القاعة رقم 1 محجوزة</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(0, 123, 255, 0.9);"></div>
-                    <span>القاعة رقم 2 محجوزة</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(255, 193, 7, 0.9);"></div>
-                    <span>القاعتين محجوزتان</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: rgba(44, 95, 45, 0.1); border: 2px solid #2c5f2d;"></div>
-                    <span>اليوم الحالي</span>
-                </div>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="btn btn-primary" id="refreshCalendar">
-                    <i class="fas fa-sync-alt"></i> تحديث التقويم
-                </button>
-                <button class="btn btn-success" id="printCalendar">
-                    <i class="fas fa-print"></i> طباعة التقويم
-                </button>
-            </div>
-        </div>
-        
-        <!-- قائمة الحجوزات -->
-        <div id="reservations-list" class="page">
-            <h2 class="page-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات</h2>
-            
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ابحث باسم السيد أو رقم الهاتف أو نوع المناسبة...">
-                <button class="btn btn-secondary" id="searchBtn">
-                    <i class="fas fa-search"></i> بحث
-                </button>
-                <button class="btn" id="clearSearch">
-                    <i class="fas fa-times"></i> مسح
-                </button>
-            </div>
-            
-            <div class="table-responsive">
-                <table class="reservations-table compact-table">
-                    <thead>
-                        <tr>
-                            <th>رقم الحجز</th>
-                            <th>اسم السيد</th>
-                            <th>العريس</th>
-                            <th>العروس</th>
-                            <th>عنوان العريس</th>
-                            <th>عنوان العروس</th>
-                            <th>التصوير</th>
-                            <th>رقم الهاتف</th>
-                            <th>تاريخ الحفل</th>
-                            <th>نوع المناسبة</th>
-                            <th>القاعة</th>
-                            <th>المبلغ الكلي</th>
-                            <th>التليجرام</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reservationsTableBody">
-                        <!-- سيتم تعبئته بواسطة الجافاسكريبت -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="btn btn-primary" id="exportReservations">
-                    <i class="fas fa-file-export"></i> تصدير البيانات
-                </button>
-                <button class="btn btn-danger" id="deleteAllBtn">
-                    <i class="fas fa-trash-alt"></i> حذف الكل
-                </button>
             </div>
         </div>
     </div>
 
+    <!-- JavaScript للدمج -->
     <script>
-        // ==================== الحماية لمرة واحدة لكل جهاز ====================
-        // ضع هذا الكود في بداية الـ <script> قبل أي كود آخر
-
-        const APP_PASSWORD = "7788x"; // ⬅️ غيّر هذا إلى كلمة السر التي تريدها
-
-        function setupOneTimeAccess() {
-            // التحقق إذا كان المستخدم قد أدخل كلمة السر من قبل على هذا الجهاز
+        // ==================== نظام الحماية ====================
+        const APP_PASSWORD = "7788x"; // كلمة السر المخصصة
+        
+        function checkAccess() {
             const hasAccess = localStorage.getItem('nakhil_permanent_access');
-            
             if (hasAccess === 'true') {
-                console.log("✅ تم التحقق من الوصول مسبقاً");
-                return true; // يتابع إلى التطبيق مباشرة
-            }
-            
-            // إذا لم يكن قد أدخل كلمة السر من قبل
-            return requestPassword();
-        }
-
-        function requestPassword() {
-            // إنشاء واجهة دخول جميلة
-            const overlay = document.createElement('div');
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(135deg, #2c5f2d 0%, #4a8c4a 100%);
-                z-index: 999999;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            `;
-            
-            overlay.innerHTML = `
-                <div style="
-                    background: white;
-                    padding: 40px;
-                    border-radius: 15px;
-                    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-                    text-align: center;
-                    max-width: 450px;
-                    width: 90%;
-                ">
-                    <div style="
-                        font-size: 60px;
-                        color: #2c5f2d;
-                        margin-bottom: 20px;
-                    ">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    
-                    <h2 style="color: #2c5f2d; margin-bottom: 10px;">
-                        قاعة النخيل للمناسبات
-                    </h2>
-                    
-                    <p style="color: #666; margin-bottom: 25px;">
-                        نظام إدارة الحجوزات الإلكتروني
-                    </p>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <input type="password" 
-                               id="passwordInput" 
-                               placeholder="🔐 أدخل كلمة المرور"
-                               style="
-                                   width: 100%;
-                                   padding: 15px;
-                                   border: 2px solid #ddd;
-                                   border-radius: 8px;
-                                   font-size: 16px;
-                                   text-align: center;
-                                   outline: none;
-                                   transition: all 0.3s;
-                               "
-                               onfocus="this.style.borderColor='#2c5f2d'"
-                               onblur="this.style.borderColor='#ddd'">
-                    </div>
-                    
-                    <button onclick="verifyPermanentPassword()"
-                            style="
-                                background: #2c5f2d;
-                                color: white;
-                                border: none;
-                                padding: 15px 40px;
-                                border-radius: 8px;
-                                font-size: 16px;
-                                font-weight: bold;
-                                cursor: pointer;
-                                transition: all 0.3s;
-                                width: 100%;
-                            "
-                            onmouseover="this.style.backgroundColor='#4a8c4a'"
-                            onmouseout="this.style.backgroundColor='#2c5f2d'">
-                        <i class="fas fa-unlock-alt"></i> فتح النظام
-                    </button>
-                    
-                    <p id="errorMessage" 
-                       style="
-                           color: #dc3545;
-                           margin-top: 15px;
-                           display: none;
-                           font-size: 14px;
-                       ">
-                       <i class="fas fa-times-circle"></i> كلمة المرور غير صحيحة
-                    </p>
-                    
-                    <div style="
-                        margin-top: 25px;
-                        padding-top: 15px;
-                        border-top: 1px solid #eee;
-                        color: #888;
-                        font-size: 13px;
-                    ">
-                        <i class="fas fa-info-circle"></i> سيتم تذكرك على هذا الجهاز
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(overlay);
-            
-            // تمكين الإدخال عند الضغط على Enter
-            document.getElementById('passwordInput').addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    verifyPermanentPassword();
-                }
-            });
-            
-            return false;
-        }
-
-        function verifyPermanentPassword() {
-            const input = document.getElementById('passwordInput');
-            const errorMsg = document.getElementById('errorMessage');
-            
-            if (input.value === APP_PASSWORD) {
-                // حفظ في localStorage للدخول المباشر في المستقبل
-                localStorage.setItem('nakhil_permanent_access', 'true');
-                localStorage.setItem('nakhil_access_date', new Date().toISOString());
-                
-                // إزالة واجهة الدخول
-                document.querySelector('div[style*="position: fixed; top: 0"]').remove();
+                // إخفاء شاشة الحماية وإظهار التطبيق
+                document.getElementById('protectionOverlay').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
                 
                 // إظهار رسالة ترحيب
                 showWelcomeMessage();
                 
+                // بدء تشغيل التطبيق
+                initializeApplication();
+            } else {
+                // إعداد أحداث الحماية
+                setupProtectionEvents();
+            }
+        }
+        
+        function setupProtectionEvents() {
+            document.getElementById('unlockBtn').addEventListener('click', verifyPassword);
+            
+            document.getElementById('passwordInput').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') verifyPassword();
+            });
+        }
+        
+        function verifyPassword() {
+            const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (input.value === APP_PASSWORD) {
+                localStorage.setItem('nakhil_permanent_access', 'true');
+                localStorage.setItem('nakhil_access_date', new Date().toISOString());
+                
+                // إخفاء شاشة الحماية
+                document.getElementById('protectionOverlay').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                
+                // إظهار رسالة ترحيب
+                showWelcomeMessage();
+                
+                // بدء تشغيل التطبيق
+                initializeApplication();
+                
                 return true;
             } else {
-                // عرض رسالة الخطأ
                 errorMsg.style.display = 'block';
                 input.style.borderColor = '#dc3545';
                 input.style.animation = 'shake 0.5s';
-                
-                // إعادة التركيز على حقل الإدخال
                 input.focus();
                 input.select();
                 
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
                 return false;
             }
         }
-
+        
         function showWelcomeMessage() {
-            // إضافة رسالة ترحيب مؤقتة
             const welcomeMsg = document.createElement('div');
-            welcomeMsg.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: rgba(40, 167, 69, 0.9);
-                color: white;
-                padding: 15px 25px;
-                border-radius: 8px;
-                z-index: 100000;
-                font-weight: bold;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                animation: slideIn 0.5s ease;
-            `;
-            
-            welcomeMsg.innerHTML = `
-                <i class="fas fa-check-circle"></i> 
-                تم التحقق بنجاح! مرحباً بك في نظام قاعة النخيل
-            `;
-            
+            welcomeMsg.className = 'welcome-message';
+            welcomeMsg.innerHTML = `<i class="fas fa-check-circle"></i> تم التحقق بنجاح! مرحباً بك في نظام قاعة النخيل`;
             document.body.appendChild(welcomeMsg);
-            
-            // إزالة الرسالة بعد 3 ثوان
             setTimeout(() => {
                 welcomeMsg.style.animation = 'slideOut 0.5s ease';
                 setTimeout(() => welcomeMsg.remove(), 500);
             }, 3000);
         }
-
-        // ==================== التنفيذ الرئيسي ====================
-        // هذا الجزء يتحكم في سير العمل
-
-        // انتظر تحميل DOM بالكامل
-        document.addEventListener('DOMContentLoaded', function() {
-            // التحقق من الوصول
-            if (!setupOneTimeAccess()) {
-                // إذا لم يكن هناك وصول، نوقف تنفيذ باقي الكود
-                console.log("⏳ في انتظار إدخال كلمة المرور...");
-                return;
-            }
-            
-            // إذا كان هناك وصول، نبدأ تشغيل التطبيق
-            console.log("🚀 بدء تشغيل نظام قاعة النخيل...");
-            
-            // هنا تبدأ باقي دوال التطبيق الحالية
-            initializeApplication();
-        });
-
-        // دالة تهيئة التطبيق - ضع فيها كل دوال التهيئة الحالية
+        
+        // ==================== تطبيق الحجوزات (الكود الأصلي) ====================
+        // بيانات الحجوزات
+        let reservations = [];
+        let reservationCounter = 0;
+        let currentReservationData = null;
+        
+        // متغيرات التقويم
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        
+        // إعدادات تليجرام
+        const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
+        const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
+        
         function initializeApplication() {
-            // بيانات الحجوزات
-            let reservations = [];
-            let reservationCounter = 0;
-            let currentReservationData = null;
-            
-            // متغيرات التقويم
-            let currentDate = new Date();
-            let currentMonth = currentDate.getMonth();
-            let currentYear = currentDate.getFullYear();
-            
-            // إعدادات تليجرام
-            const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
-            const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
-            
-            // ==================== تهيئة التطبيق مع Firebase ====================
             // عرض التاريخ الحالي
             const today = new Date();
             document.getElementById('currentDate').textContent = today.toLocaleDateString('ar-IQ', {
@@ -2084,228 +2088,234 @@
             // اختبار اتصال تليجرام
             testTelegramConnection();
             
-            // ==================== تحميل الحجوزات من Firestore ====================
-            async function loadReservationsFromFirestore() {
-                try {
-                    showAlert('جاري تحميل الحجوزات من السحابة...', 'info');
-                    
-                    const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
-                    const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
-                    const querySnapshot = await window.firebaseModules.getDocs(q);
-                    
-                    reservations = [];
-                    querySnapshot.forEach((doc) => {
+            // إضافة جميع الأحداث الأخرى
+            setupApplicationEvents();
+        }
+        
+        // ==================== تحميل الحجوزات من Firestore ====================
+        async function loadReservationsFromFirestore() {
+            try {
+                showAlert('جاري تحميل الحجوزات من السحابة...', 'info');
+                
+                const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
+                const querySnapshot = await window.firebaseModules.getDocs(q);
+                
+                reservations = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    reservations.push({
+                        id: doc.id,
+                        ...data
+                    });
+                });
+                
+                // حساب أعلى رقم حجز
+                if (reservations.length > 0) {
+                    const maxId = Math.max(...reservations.map(r => {
+                        const numId = parseInt(r.reservationNumber) || 0;
+                        return numId;
+                    }));
+                    reservationCounter = maxId;
+                } else {
+                    reservationCounter = 0;
+                }
+                
+                updateReservationsTable();
+                generateCalendar();
+                showAlert(`تم تحميل ${reservations.length} حجز من السحابة`, 'success');
+                
+                // الاستماع للتحديثات الحية
+                setupRealtimeListener();
+                
+            } catch (error) {
+                console.error('❌ خطأ في تحميل الحجوزات:', error);
+                showAlert('خطأ في تحميل الحجوزات من السحابة. تحقق من اتصالك بالإنترنت', 'error');
+                
+                // محاولة التحميل من localStorage كنسخة احتياطية
+                const localData = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                reservations = localData;
+                if (reservations.length > 0) {
+                    reservationCounter = Math.max(...reservations.map(r => r.reservationNumber || 0));
+                    updateReservationsTable();
+                    generateCalendar();
+                    showAlert('تم تحميل النسخة الاحتياطية من الحجوزات', 'info');
+                }
+            }
+        }
+        
+        // ==================== إعداد الاستماع للتحديثات الحية ====================
+        function setupRealtimeListener() {
+            try {
+                const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
+                
+                window.firebaseModules.onSnapshot(q, (snapshot) => {
+                    const updatedReservations = [];
+                    snapshot.forEach((doc) => {
                         const data = doc.data();
-                        reservations.push({
+                        updatedReservations.push({
                             id: doc.id,
                             ...data
                         });
                     });
                     
-                    // حساب أعلى رقم حجز
-                    if (reservations.length > 0) {
-                        const maxId = Math.max(...reservations.map(r => {
-                            const numId = parseInt(r.reservationNumber) || 0;
-                            return numId;
-                        }));
-                        reservationCounter = maxId;
-                    } else {
-                        reservationCounter = 0;
-                    }
-                    
+                    reservations = updatedReservations;
                     updateReservationsTable();
                     generateCalendar();
-                    showAlert(`تم تحميل ${reservations.length} حجز من السحابة`, 'success');
-                    
-                    // الاستماع للتحديثات الحية
-                    setupRealtimeListener();
-                    
-                } catch (error) {
-                    console.error('❌ خطأ في تحميل الحجوزات:', error);
-                    showAlert('خطأ في تحميل الحجوزات من السحابة. تحقق من اتصالك بالإنترنت', 'error');
-                    
-                    // محاولة التحميل من localStorage كنسخة احتياطية
-                    const localData = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
-                    reservations = localData;
-                    if (reservations.length > 0) {
-                        reservationCounter = Math.max(...reservations.map(r => r.reservationNumber || 0));
-                        updateReservationsTable();
-                        generateCalendar();
-                        showAlert('تم تحميل النسخة الاحتياطية من الحجوزات', 'info');
-                    }
-                }
+                }, (error) => {
+                    console.error('❌ خطأ في تحديثات الوقت الحقيقي:', error);
+                });
+                
+            } catch (error) {
+                console.error('❌ خطأ في إعداد التحديثات الحية:', error);
+            }
+        }
+        
+        // ==================== توليد التقويم ====================
+        function generateCalendar() {
+            const calendarBody = document.getElementById('calendarBody');
+            calendarBody.innerHTML = '';
+            
+            // تحديث عنوان الشهر
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                               "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            document.getElementById('currentMonthYear').textContent = 
+                `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // الحصول على اليوم الأول من الشهر
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay(); // 0 = الأحد, 1 = الاثنين, ...
+            
+            // الأيام الفارغة في بداية الشهر
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarBody.appendChild(emptyDay);
             }
             
-            // ==================== إعداد الاستماع للتحديثات الحية ====================
-            function setupRealtimeListener() {
-                try {
-                    const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
-                    const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
-                    
-                    window.firebaseModules.onSnapshot(q, (snapshot) => {
-                        const updatedReservations = [];
-                        snapshot.forEach((doc) => {
-                            const data = doc.data();
-                            updatedReservations.push({
-                                id: doc.id,
-                                ...data
-                            });
-                        });
-                        
-                        reservations = updatedReservations;
-                        updateReservationsTable();
-                        generateCalendar();
-                    }, (error) => {
-                        console.error('❌ خطأ في تحديثات الوقت الحقيقي:', error);
-                    });
-                    
-                } catch (error) {
-                    console.error('❌ خطأ في إعداد التحديثات الحية:', error);
-                }
-            }
+            // الأيام الفعلية في الشهر
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
             
-            // ==================== توليد التقويم ====================
-            function generateCalendar() {
-                const calendarBody = document.getElementById('calendarBody');
-                calendarBody.innerHTML = '';
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
                 
-                // تحديث عنوان الشهر
-                const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-                                   "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-                document.getElementById('currentMonthYear').textContent = 
-                    `${monthNames[currentMonth]} ${currentYear}`;
-                
-                // الحصول على اليوم الأول من الشهر
-                const firstDay = new Date(currentYear, currentMonth, 1);
-                const lastDay = new Date(currentYear, currentMonth + 1, 0);
-                const daysInMonth = lastDay.getDate();
-                const startingDay = firstDay.getDay(); // 0 = الأحد, 1 = الاثنين, ...
-                
-                // الأيام الفارغة في بداية الشهر
-                for (let i = 0; i < startingDay; i++) {
-                    const emptyDay = document.createElement('div');
-                    emptyDay.className = 'calendar-day empty';
-                    calendarBody.appendChild(emptyDay);
+                // التحقق إذا كان اليوم الحالي
+                if (isCurrentMonth && day === today.getDate()) {
+                    dayElement.classList.add('today');
                 }
                 
-                // الأيام الفعلية في الشهر
-                const today = new Date();
-                const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+                // رقم اليوم
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
                 
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day';
+                // الحجوزات لهذا اليوم
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayReservations = getReservationsForDate(dateStr);
+                
+                if (dayReservations.length > 0) {
+                    const reservationsList = document.createElement('div');
+                    reservationsList.className = 'reservations-list';
                     
-                    // التحقق إذا كان اليوم الحالي
-                    if (isCurrentMonth && day === today.getDate()) {
-                        dayElement.classList.add('today');
-                    }
+                    // تجميع الحجوزات حسب القاعة
+                    const hall1Reservations = dayReservations.filter(r => 
+                        Array.isArray(r.halls) && r.halls.includes('القاعة رقم 1') && 
+                        (!Array.isArray(r.halls) || r.halls.length < 2)
+                    );
                     
-                    // رقم اليوم
-                    const dayNumber = document.createElement('div');
-                    dayNumber.className = 'day-number';
-                    dayNumber.textContent = day;
-                    dayElement.appendChild(dayNumber);
+                    const hall2Reservations = dayReservations.filter(r => 
+                        Array.isArray(r.halls) && r.halls.includes('القاعة رقم 2') && 
+                        (!Array.isArray(r.halls) || r.halls.length < 2)
+                    );
                     
-                    // الحجوزات لهذا اليوم
-                    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const dayReservations = getReservationsForDate(dateStr);
+                    const bothHallsReservations = dayReservations.filter(r => 
+                        Array.isArray(r.halls) && r.halls.length === 2
+                    );
                     
-                    if (dayReservations.length > 0) {
-                        const reservationsList = document.createElement('div');
-                        reservationsList.className = 'reservations-list';
-                        
-                        // تجميع الحجوزات حسب القاعة
-                        const hall1Reservations = dayReservations.filter(r => 
-                            Array.isArray(r.halls) && r.halls.includes('القاعة رقم 1') && 
-                            (!Array.isArray(r.halls) || r.halls.length < 2)
-                        );
-                        
-                        const hall2Reservations = dayReservations.filter(r => 
-                            Array.isArray(r.halls) && r.halls.includes('القاعة رقم 2') && 
-                            (!Array.isArray(r.halls) || r.halls.length < 2)
-                        );
-                        
-                        const bothHallsReservations = dayReservations.filter(r => 
-                            Array.isArray(r.halls) && r.halls.length === 2
-                        );
-                        
-                        // عرض الحجوزات
-                        if (bothHallsReservations.length > 0) {
-                            const badge = createReservationBadge('1/2', 'both-halls-badge', bothHallsReservations[0]);
+                    // عرض الحجوزات
+                    if (bothHallsReservations.length > 0) {
+                        const badge = createReservationBadge('1/2', 'both-halls-badge', bothHallsReservations[0]);
+                        reservationsList.appendChild(badge);
+                    } else {
+                        if (hall1Reservations.length > 0) {
+                            const badge = createReservationBadge('1', 'hall1-badge', hall1Reservations[0]);
                             reservationsList.appendChild(badge);
-                        } else {
-                            if (hall1Reservations.length > 0) {
-                                const badge = createReservationBadge('1', 'hall1-badge', hall1Reservations[0]);
-                                reservationsList.appendChild(badge);
-                            }
-                            
-                            if (hall2Reservations.length > 0) {
-                                const badge = createReservationBadge('2', 'hall2-badge', hall2Reservations[0]);
-                                reservationsList.appendChild(badge);
-                            }
                         }
                         
-                        dayElement.appendChild(reservationsList);
+                        if (hall2Reservations.length > 0) {
+                            const badge = createReservationBadge('2', 'hall2-badge', hall2Reservations[0]);
+                            reservationsList.appendChild(badge);
+                        }
                     }
                     
-                    calendarBody.appendChild(dayElement);
+                    dayElement.appendChild(reservationsList);
                 }
                 
-                // ملء الأيام المتبقية لتصبح 7 أيام في الأسبوع
-                const totalCells = 42; // 6 أسابيع × 7 أيام
-                const currentCells = calendarBody.children.length;
-                
-                for (let i = currentCells; i < totalCells; i++) {
-                    const emptyDay = document.createElement('div');
-                    emptyDay.className = 'calendar-day empty';
-                    calendarBody.appendChild(emptyDay);
-                }
+                calendarBody.appendChild(dayElement);
             }
             
-            // ==================== الحصول على الحجوزات لتاريخ معين ====================
-            function getReservationsForDate(dateStr) {
-                return reservations.filter(reservation => {
-                    if (!reservation.eventDate) return false;
-                    
-                    // تحويل التاريخ إلى نفس التنسيق
-                    const reservationDate = new Date(reservation.eventDate);
-                    const targetDate = new Date(dateStr);
-                    
-                    return reservationDate.toDateString() === targetDate.toDateString();
-                });
-            }
+            // ملء الأيام المتبقية لتصبح 7 أيام في الأسبوع
+            const totalCells = 42; // 6 أسابيع × 7 أيام
+            const currentCells = calendarBody.children.length;
             
-            // ==================== إنشاء شارة الحجز ====================
-            function createReservationBadge(text, className, reservation) {
-                const badge = document.createElement('div');
-                badge.className = `reservation-badge ${className}`;
-                badge.textContent = text;
-                badge.title = `${reservation.customerName} - ${reservation.eventType}`;
-                
-                badge.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showReservationDetails(reservation);
-                });
-                
-                return badge;
+            for (let i = currentCells; i < totalCells; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarBody.appendChild(emptyDay);
             }
-            
-            // ==================== عرض تفاصيل الحجز ====================
-            function showReservationDetails(reservation) {
-                const message = `
-        اسم السيد: ${reservation.customerName}
-        رقم الهاتف: ${reservation.phone}
-        نوع المناسبة: ${reservation.eventType}
-        القاعة: ${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls}
-        المبلغ الكلي: ${formatCurrency(reservation.totalAmount)} د.ع
-        خدمة التصوير: ${reservation.photographyServices ? reservation.photographyServices : 'لا يوجد'}
-                `;
+        }
+        
+        // ==================== الحصول على الحجوزات لتاريخ معين ====================
+        function getReservationsForDate(dateStr) {
+            return reservations.filter(reservation => {
+                if (!reservation.eventDate) return false;
                 
-                alert(message);
-            }
+                // تحويل التاريخ إلى نفس التنسيق
+                const reservationDate = new Date(reservation.eventDate);
+                const targetDate = new Date(dateStr);
+                
+                return reservationDate.toDateString() === targetDate.toDateString();
+            });
+        }
+        
+        // ==================== إنشاء شارة الحجز ====================
+        function createReservationBadge(text, className, reservation) {
+            const badge = document.createElement('div');
+            badge.className = `reservation-badge ${className}`;
+            badge.textContent = text;
+            badge.title = `${reservation.customerName} - ${reservation.eventType}`;
             
-            // ==================== التنقل في التقويم ====================
+            badge.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showReservationDetails(reservation);
+            });
+            
+            return badge;
+        }
+        
+        // ==================== عرض تفاصيل الحجز ====================
+        function showReservationDetails(reservation) {
+            const message = `
+اسم السيد: ${reservation.customerName}
+رقم الهاتف: ${reservation.phone}
+نوع المناسبة: ${reservation.eventType}
+القاعة: ${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls}
+المبلغ الكلي: ${formatCurrency(reservation.totalAmount)} د.ع
+خدمة التصوير: ${reservation.photographyServices ? reservation.photographyServices : 'لا يوجد'}
+            `;
+            
+            alert(message);
+        }
+        
+        // ==================== إعداد أحداث التطبيق ====================
+        function setupApplicationEvents() {
+            // التنقل في التقويم
             document.getElementById('prevMonth').addEventListener('click', function() {
                 currentMonth--;
                 if (currentMonth < 0) {
@@ -2336,7 +2346,7 @@
                 showAlert('تم تحديث التقويم', 'success');
             });
             
-            // ==================== التنقل بين الصفحات ====================
+            // التنقل بين الصفحات
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     const pageId = this.getAttribute('data-page');
@@ -2363,7 +2373,7 @@
                 });
             });
             
-            // ==================== إدارة القاعات ====================
+            // إدارة القاعات
             document.getElementById('selectAllHalls').addEventListener('change', function() {
                 const hallCheckboxes = document.querySelectorAll('input[name="hall"]');
                 hallCheckboxes.forEach(cb => {
@@ -2371,18 +2381,11 @@
                 });
             });
             
-            // ==================== حساب المبلغ المتبقي ====================
+            // حساب المبلغ المتبقي
             document.getElementById('totalAmount').addEventListener('input', updateRemainingAmount);
             document.getElementById('paidAmount').addEventListener('input', updateRemainingAmount);
             
-            function updateRemainingAmount() {
-                const total = parseFloat(document.getElementById('totalAmount').value) || 0;
-                const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-                const remaining = total - paid;
-                document.getElementById('remainingAmount').value = remaining > 0 ? remaining : 0;
-            }
-            
-            // ==================== أزرار النموذج ====================
+            // أزرار النموذج
             document.getElementById('clearForm').addEventListener('click', function() {
                 if (confirm('هل تريد مسح جميع بيانات النموذج؟')) {
                     document.getElementById('reservationForm').reset();
@@ -2413,7 +2416,7 @@
                 updatePrintContent();
             });
             
-            // ==================== العودة للنموذج ====================
+            // العودة للنموذج
             document.getElementById('backToForm').addEventListener('click', function() {
                 document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                 document.querySelector('[data-page="booking-form"]').classList.add('active');
@@ -2424,259 +2427,7 @@
                 document.getElementById('booking-form').classList.add('active');
             });
             
-            // ==================== الحصول على بيانات النموذج ====================
-            function getFormData() {
-                const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
-                
-                // الحصول على بيانات التصوير
-                const photographyAdd = document.getElementById('photographyAdd');
-                const photographyService = photographyAdd.checked ? 'إضافة تصوير' : 'بدون تصوير';
-                
-                return {
-                    customerName: document.getElementById('customerName').value,
-                    phone: document.getElementById('phone').value,
-                    groomName: document.getElementById('groomName').value || '',
-                    brideName: document.getElementById('brideName').value || '',
-                    groomAddress: document.getElementById('groomAddress').value || '',
-                    brideAddress: document.getElementById('brideAddress').value || '',
-                    photographyServices: photographyService,
-                    eventDate: document.getElementById('eventDate').value,
-                    eventType: document.getElementById('eventType').value,
-                    eventTime: document.getElementById('eventTime').value,
-                    halls: selectedHalls,
-                    totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
-                    paidAmount: parseFloat(document.getElementById('paidAmount').value) || 0,
-                    remainingAmount: parseFloat(document.getElementById('remainingAmount').value) || 0,
-                    notes: document.getElementById('notes').value,
-                    bookingDate: new Date().toISOString().split('T')[0],
-                    telegramSent: false,
-                    telegramSentAt: null,
-                    status: 'مؤكد'
-                };
-            }
-            
-            // ==================== تحديث صفحة المعاينة ====================
-            function updatePreview() {
-                const data = currentReservationData || getFormData();
-                
-                // معلومات الحجز الأساسية
-                document.getElementById('previewCustomerName').textContent = data.customerName;
-                document.getElementById('previewPhone').textContent = data.phone;
-                document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
-                
-                // خدمة التصوير
-                const photographySelection = document.getElementById('previewPhotographySelection');
-                const photographyBadges = document.getElementById('previewPhotographyBadges');
-                
-                photographyBadges.innerHTML = '';
-                
-                if (data.photographyServices === 'إضافة تصوير') {
-                    photographySelection.textContent = 'نعم، مطلوب خدمة تصوير';
-                    photographySelection.style.color = 'var(--info)';
-                    photographySelection.style.fontWeight = 'bold';
-                    
-                    const badge = document.createElement('span');
-                    badge.className = 'photography-tag';
-                    badge.textContent = 'خدمة تصوير';
-                    photographyBadges.appendChild(badge);
-                } else {
-                    photographySelection.textContent = 'بدون تصوير';
-                    photographySelection.style.color = 'var(--gray)';
-                }
-                
-                // تفاصيل المناسبة
-                document.getElementById('previewEventType').textContent = data.eventType;
-                document.getElementById('previewEventDate').textContent = formatDate(data.eventDate);
-                document.getElementById('previewEventTime').textContent = data.eventTime;
-                
-                // القاعة المختارة
-                const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
-                const hallSelection = document.getElementById('previewHallSelection');
-                const hallBadges = document.getElementById('previewHallBadges');
-                
-                hallBadges.innerHTML = '';
-                
-                if (selectedHalls.length === 0 || selectedHalls[0] === '') {
-                    hallSelection.textContent = 'لم يتم اختيار قاعة';
-                } else if (selectedHalls.length === 2) {
-                    hallSelection.textContent = 'تم حجز القاعتين معاً';
-                    hallBadges.innerHTML = '<span class="hall-tag">القاعة 1</span><span class="hall-tag">القاعة 2</span>';
-                } else {
-                    hallSelection.textContent = selectedHalls.join(', ');
-                    selectedHalls.forEach(hall => {
-                        const badge = document.createElement('span');
-                        badge.className = 'hall-tag';
-                        badge.textContent = hall === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2';
-                        hallBadges.appendChild(badge);
-                    });
-                }
-                
-                // التفاصيل المالية
-                document.getElementById('previewTotalAmount').textContent = formatCurrency(data.totalAmount || '0');
-                document.getElementById('previewPaidAmount').textContent = formatCurrency(data.paidAmount || '0');
-                document.getElementById('previewRemainingAmount').textContent = formatCurrency(data.remainingAmount || '0');
-                
-                // الملاحظات
-                const notes = data.notes;
-                document.getElementById('previewNotes').textContent = notes || 'لا توجد ملاحظات';
-                
-                // رقم الحجز
-                document.getElementById('previewReservationId').textContent = reservationCounter + 1;
-                
-                // توقيع الزبون
-                const signatureBox = document.getElementById('customerSignatureBox');
-                signatureBox.innerHTML = '<span>.......................</span>';
-            }
-            
-            // ==================== تحديث محتوى الطباعة ====================
-            function updatePrintContent() {
-                const data = currentReservationData || getFormData();
-                const printableArea = document.getElementById('printableArea');
-                const printMobileContent = document.getElementById('printMobileContent');
-                
-                const customerName = data.customerName;
-                const phone = data.phone;
-                const photographyServices = data.photographyServices;
-                const eventType = data.eventType;
-                const eventDate = formatDate(data.eventDate);
-                const eventTime = data.eventTime;
-                const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
-                const totalAmount = data.totalAmount || '0';
-                const paidAmount = data.paidAmount || '0';
-                const remainingAmount = data.remainingAmount || '0';
-                const notes = data.notes;
-                
-                let hallTags = '';
-                if (selectedHalls.length === 2) {
-                    hallTags = '<span class="print-tag">القاعة 1</span> <span class="print-tag">القاعة 2</span>';
-                } else if (selectedHalls.length === 1 && selectedHalls[0] !== '') {
-                    hallTags = `<span class="print-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2'}</span>`;
-                }
-                
-                let photographyTag = '';
-                if (photographyServices === 'إضافة تصوير') {
-                    photographyTag = '<span class="print-tag" style="background-color: #17a2b8;">خدمة تصوير</span>';
-                }
-                
-                const printHTML = `
-                    <div class="print-content">
-                        <div class="print-header">
-                            <div class="print-logo">
-                                <i class="fas fa-palette"></i>
-                            </div>
-                            <h2 style="font-size: 22pt; margin-bottom: 5px;">قاعة النخيل للمناسبات</h2>
-                            <p style="font-size: 12pt; color: #666;">عقد حجز قاعة للمناسبات - نسخة الزبون</p>
-                            <div style="margin-top: 10px; padding: 5px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 10pt;">
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span>رقم الحجز: ${reservationCounter + 1}</span>
-                                    <span>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-IQ')}</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="print-details">
-                            <div class="print-section" style="flex: 2; min-width: 250px;">
-                                <div class="print-title" style="font-size: 14pt;">معلومات الحجز</div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 100px;">اسم السيد المحجِز:</div>
-                                    <div class="print-value">${customerName || '-'}</div>
-                                </div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 100px;">رقم الهاتف:</div>
-                                    <div class="print-value">${phone || '-'}</div>
-                                </div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 100px;">خدمة التصوير:</div>
-                                    <div class="print-value">${photographyServices === 'إضافة تصوير' ? 'مطلوب خدمة تصوير' : 'بدون تصوير'} ${photographyTag}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="print-section" style="flex: 2; min-width: 250px;">
-                                <div class="print-title" style="font-size: 14pt;">تفاصيل المناسبة</div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 100px;">نوع المناسبة:</div>
-                                    <div class="print-value">${eventType || '-'}</div>
-                                </div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 100px;">التاريخ:</div>
-                                    <div class="print-value">${eventDate || '-'}</div>
-                                </div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 100px;">الوقت:</div>
-                                    <div class="print-value">${eventTime || '-'}</div>
-                                </div>
-                            </div>
-                            
-                            <div class="print-section" style="flex: 1.5; min-width: 200px;">
-                                <div class="print-title" style="font-size: 14pt;">القاعة المختارة</div>
-                                <div class="print-row">
-                                    <div class="print-label" style="min-width: 90px;">القاعات:</div>
-                                    <div class="print-value">${selectedHalls.length > 0 && selectedHalls[0] !== '' ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'} ${hallTags}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="print-amount" style="padding: 10px; margin-bottom: 15px;">
-                            <div class="print-title" style="font-size: 14pt;">التفاصيل المالية</div>
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 3px;">المبلغ الكلي:</div>
-                                    <div style="font-size: 12pt;">${formatCurrency(totalAmount)} د.ع</div>
-                                </div>
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 3px;">المبلغ الواصل:</div>
-                                    <div style="font-size: 12pt;">${formatCurrency(paidAmount)} د.ع</div>
-                                </div>
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 3px;">المبلغ المتبقي:</div>
-                                    <div style="font-size: 12pt;">${formatCurrency(remainingAmount)} د.ع</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        ${notes ? `
-                        <div class="print-notes" style="padding: 8px; margin-bottom: 12px;">
-                            <div class="print-title" style="font-size: 13pt;">ملاحظات إضافية</div>
-                            <div class="print-value" style="font-size: 11pt; line-height: 1.4;">${notes}</div>
-                        </div>
-                        ` : ''}
-                        
-                        <div class="print-signature" style="margin-top: 15px;">
-                            <div class="print-title" style="font-size: 14pt;">توقيع الطرفين</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع السيد:</div>
-                                    <div class="signature-line" style="height: 40px; font-size: 11pt;">.......................</div>
-                                </div>
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع المسؤول:</div>
-                                    <div class="signature-line" style="height: 40px; font-size: 11pt;">إدارة قاعة النخيل</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="print-terms" style="margin-top: 15px; padding: 8px;">
-                            <h4 style="font-size: 12pt; margin-bottom: 6px;">الشروط والأحكام:</h4>
-                            <ul style="padding-right: 15px; margin: 0;">
-                                <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
-                                <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
-                                <li style="font-size: 9pt; line-height: 1.3;">قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="print-footer" style="margin-top: 10px; padding-top: 8px; font-size: 9pt;">
-                            <p style="margin-bottom: 5px;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
-                            <p style="margin-bottom: 3px;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
-                            <p>رقم الهاتف: 07701234567 | العنوان: بغداد، المنصور</p>
-                        </div>
-                    </div>
-                `;
-                
-                printableArea.innerHTML = printHTML;
-                printMobileContent.innerHTML = printHTML;
-            }
-            
-            // ==================== الطباعة من الحاسوب (مصححة ومضغوطة) ====================
+            // الطباعة من الحاسوب
             document.getElementById('printDesktopBtn').addEventListener('click', function() {
                 if (!document.getElementById('agreeTerms').checked) {
                     showAlert('يرجى الموافقة على الشروط والأحكام قبل الطباعة', 'error');
@@ -2934,7 +2685,7 @@
                 printWindow.document.close();
             });
             
-            // ==================== الطباعة من الهاتف ====================
+            // الطباعة من الهاتف
             document.getElementById('printMobileBtn').addEventListener('click', function() {
                 if (!document.getElementById('agreeTerms').checked) {
                     showAlert('يرجى الموافقة على الشروط والأحكام قبل الطباعة', 'error');
@@ -3124,7 +2875,7 @@
                 }
             });
             
-            // ==================== إرسال للتليجرام ====================
+            // إرسال للتليجرام
             document.getElementById('sendToTelegram').addEventListener('click', function() {
                 if (!validateForm()) {
                     showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
@@ -3135,344 +2886,36 @@
                 sendToAllAdmins(telegramMessage);
             });
             
-            // ==================== حفظ الحجز في Firestore ====================
-            async function saveReservationToFirestore(reservationData) {
-                try {
-                    reservationCounter++;
-                    
-                    // تحضير بيانات الحجز
-                    const firestoreData = {
-                        ...reservationData,
-                        reservationNumber: reservationCounter,
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    };
-                    
-                    // إضافة إلى Firestore
-                    const docRef = await window.firebaseModules.addDoc(
-                        window.firebaseModules.collection(window.firestore, 'reservations'),
-                        firestoreData
-                    );
-                    
-                    console.log('✅ تم حفظ الحجز في Firestore:', docRef.id);
-                    
-                    // حفظ نسخة احتياطية في localStorage
-                    const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
-                    backupReservations.push({
-                        id: docRef.id,
-                        ...firestoreData
-                    });
-                    localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
-                    
-                    return {
-                        success: true,
-                        docId: docRef.id,
-                        reservationNumber: reservationCounter,
-                        data: firestoreData
-                    };
-                    
-                } catch (error) {
-                    console.error('❌ خطأ في حفظ الحجز في Firestore:', error);
-                    
-                    // محاولة الحفظ في localStorage كنسخة احتياطية
-                    try {
-                        reservationCounter++;
-                        reservationData.reservationNumber = reservationCounter;
-                        reservationData.createdAt = new Date().toISOString();
-                        
-                        const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
-                        backupReservations.push({
-                            id: 'local_' + reservationCounter,
-                            ...reservationData
-                        });
-                        localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
-                        
-                        return {
-                            success: true,
-                            docId: 'local_' + reservationCounter,
-                            reservationNumber: reservationCounter,
-                            data: reservationData
-                        };
-                        
-                    } catch (localError) {
-                        console.error('❌ خطأ في حفظ النسخة الاحتياطية:', localError);
-                        return {
-                            success: false,
-                            error: error.message
-                        };
-                    }
-                }
-            }
-            
-            // ==================== حفظ الحجز ====================
+            // حفظ الحجز
             document.getElementById('saveReservation').addEventListener('click', saveReservation);
             document.getElementById('submitForm').addEventListener('click', function(e) {
                 e.preventDefault();
                 saveReservation();
             });
             
-            async function saveReservation() {
-                if (!validateForm()) {
-                    showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
-                    return;
-                }
-                
-                const reservationData = getFormData();
-                
-                // حفظ في Firebase
-                showAlert('جاري حفظ الحجز في السحابة...', 'info');
-                const saveResult = await saveReservationToFirestore(reservationData);
-                
-                if (!saveResult.success) {
-                    showAlert('خطأ في حفظ الحجز في السحابة', 'error');
-                    return;
-                }
-                
-                const reservationNumber = saveResult.reservationNumber;
-                
-                // إرسال إشعار تليجرام
-                let telegramSuccess = false;
-                try {
-                    const telegramMessage = formatTelegramMessage();
-                    await sendToAllAdmins(telegramMessage);
-                    telegramSuccess = true;
-                    
-                    // تحديث حالة التليجرام في Firestore
-                    try {
-                        await window.firebaseModules.updateDoc(
-                            window.firebaseModules.doc(window.firestore, 'reservations', saveResult.docId),
-                            {
-                                telegramSent: true,
-                                telegramSentAt: new Date().toISOString()
-                            }
-                        );
-                    } catch (updateError) {
-                        console.error('❌ خطأ في تحديث حالة التليجرام:', updateError);
-                    }
-                    
-                } catch (error) {
-                    console.error('خطأ في إرسال تليجرام:', error);
-                }
-                
-                // إظهار رسالة نجاح
-                showAlert(`تم حفظ الحجز بنجاح! رقم الحجز: ${reservationNumber} ${telegramSuccess ? '✅ (تم الإرسال للتليجرام)' : '⚠️ (لم يتم الإرسال للتليجرام)'}`, 'success');
-                
-                // مسح النموذج
-                document.getElementById('reservationForm').reset();
-                updateRemainingAmount();
-                currentReservationData = null;
-                
-                // إعادة تعيين التصوير
-                document.getElementById('photographyNone').checked = true;
-                
-                // تحديث قائمة الحجوزات والتقويم
-                updateReservationsTable();
-                generateCalendar();
-                
-                // العودة إلى صفحة الحجز
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelector('[data-page="booking-form"]').classList.add('active');
-                
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('booking-form').classList.add('active');
-            }
-            
-            // ==================== التحقق من صحة النموذج ====================
-            function validateForm() {
-                const requiredFields = [
-                    'customerName',
-                    'phone',
-                    'eventDate',
-                    'eventType',
-                    'eventTime',
-                    'totalAmount',
-                    'paidAmount'
-                ];
-                
-                for (const fieldId of requiredFields) {
-                    const field = document.getElementById(fieldId);
-                    if (!field.value.trim()) {
-                        field.focus();
-                        return false;
-                    }
-                }
-                
-                const selectedHalls = document.querySelectorAll('input[name="hall"]:checked');
-                if (selectedHalls.length === 0) {
-                    showAlert('يرجى اختيار قاعة واحدة على الأقل', 'error');
-                    return false;
-                }
-                
-                return true;
-            }
-            
-            // ==================== تحديث قائمة الحجوزات ====================
-            function updateReservationsTable() {
-                const tableBody = document.getElementById('reservationsTableBody');
-                tableBody.innerHTML = '';
-                
+            // تصدير البيانات
+            document.getElementById('exportReservations').addEventListener('click', function() {
                 if (reservations.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="14" style="text-align: center; padding: 30px;">لا توجد حجوزات مسجلة بعد</td></tr>';
+                    showAlert('لا توجد بيانات للتصدير', 'error');
                     return;
                 }
                 
-                const sortedReservations = [...reservations].sort((a, b) => 
-                    new Date(b.createdAt || b.bookingDate) - new Date(a.createdAt || a.bookingDate)
-                );
+                const csvContent = convertToCSV(reservations);
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
                 
-                sortedReservations.forEach(reservation => {
-                    const row = document.createElement('tr');
-                    
-                    let hallBadge = '';
-                    if (Array.isArray(reservation.halls) && reservation.halls.length === 2) {
-                        hallBadge = '<span class="hall-badge-list">1/2</span>';
-                    } else if (Array.isArray(reservation.halls) && reservation.halls.includes('القاعة رقم 1')) {
-                        hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
-                    } else {
-                        hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
-                    }
-                    
-                    let photographyBadge = '';
-                    let photographyText = reservation.photographyServices || 'بدون تصوير';
-                    if (reservation.photographyServices === 'إضافة تصوير') {
-                        photographyBadge = '<span class="photography-badge-list"><i class="fas fa-camera"></i></span>';
-                        photographyText = 'إضافة تصوير';
-                    }
-                    
-                    let telegramStatus = '';
-                    if (reservation.telegramSent) {
-                        const sentTime = reservation.telegramSentAt ? 
-                            new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
-                        telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
-                    } else {
-                        telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
-                    }
-                    
-                    const actions = `
-                        <div class="action-cell">
-                            <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
-                                <i class="fas fa-eye"></i> معاينة
-                            </button>
-                            <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
-                                <i class="fas fa-trash-alt"></i> حذف
-                            </button>
-                        </div>
-                    `;
-                    
-                    row.innerHTML = `
-                        <td>${reservation.reservationNumber || reservation.id}</td>
-                        <td>${reservation.customerName}</td>
-                        <td>${reservation.groomName || '-'}</td>
-                        <td>${reservation.brideName || '-'}</td>
-                        <td>${reservation.groomAddress || '-'}</td>
-                        <td>${reservation.brideAddress || '-'}</td>
-                        <td>${photographyText} ${photographyBadge}</td>
-                        <td>${reservation.phone}</td>
-                        <td>${formatDate(reservation.eventDate)}</td>
-                        <td>${reservation.eventType}</td>
-                        <td>${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls} ${hallBadge}</td>
-                        <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
-                        <td>${telegramStatus}</td>
-                        <td>${actions}</td>
-                    `;
-                    
-                    tableBody.appendChild(row);
-                });
-            }
+                link.setAttribute('href', url);
+                link.setAttribute('download', `حجوزات_قاعة_النخيل_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showAlert('تم تصدير بيانات الحجوزات بنجاح', 'success');
+            });
             
-            // ==================== عرض تفاصيل الحجز ====================
-            window.viewReservation = function(docId) {
-                const reservation = reservations.find(r => r.id === docId);
-                if (!reservation) return;
-                
-                // تعبئة الحقول الرئيسية
-                document.getElementById('customerName').value = reservation.customerName;
-                document.getElementById('phone').value = reservation.phone;
-                document.getElementById('groomName').value = reservation.groomName;
-                document.getElementById('brideName').value = reservation.brideName;
-                document.getElementById('groomAddress').value = reservation.groomAddress;
-                document.getElementById('brideAddress').value = reservation.brideAddress;
-                document.getElementById('eventDate').value = reservation.eventDate;
-                document.getElementById('eventType').value = reservation.eventType;
-                document.getElementById('eventTime').value = reservation.eventTime;
-                document.getElementById('totalAmount').value = reservation.totalAmount;
-                document.getElementById('paidAmount').value = reservation.paidAmount;
-                document.getElementById('remainingAmount').value = reservation.remainingAmount;
-                document.getElementById('notes').value = reservation.notes;
-                
-                // تعيين خدمة التصوير
-                const photographyAdd = document.getElementById('photographyAdd');
-                const photographyNone = document.getElementById('photographyNone');
-                
-                if (reservation.photographyServices === 'إضافة تصوير') {
-                    photographyAdd.checked = true;
-                } else {
-                    photographyNone.checked = true;
-                }
-                
-                // تعيين القاعات
-                document.querySelectorAll('input[name="hall"]').forEach(cb => {
-                    const halls = Array.isArray(reservation.halls) ? reservation.halls : [reservation.halls];
-                    cb.checked = halls.includes(cb.value);
-                });
-                
-                updateRemainingAmount();
-                currentReservationData = reservation;
-                
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelector('[data-page="preview-page"]').classList.add('active');
-                
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('preview-page').classList.add('active');
-                
-                updatePreview();
-                updatePrintContent();
-                
-                showAlert(`تم تحميل بيانات الحجز رقم ${reservation.reservationNumber || docId}`, 'info');
-            };
-            
-            // ==================== حذف الحجز ====================
-            window.deleteReservation = async function(docId) {
-                const reservation = reservations.find(r => r.id === docId);
-                if (!reservation) return;
-                
-                if (!confirm(`هل أنت متأكد من حذف الحجز رقم ${reservation.reservationNumber}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
-                    return;
-                }
-                
-                // حذف من Firebase
-                showAlert('جاري حذف الحجز من السحابة...', 'info');
-                
-                try {
-                    await window.firebaseModules.deleteDoc(
-                        window.firebaseModules.doc(window.firestore, 'reservations', docId)
-                    );
-                    
-                    // تحديث النسخة الاحتياطية
-                    const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
-                    const updatedBackup = backupReservations.filter(r => r.id !== docId);
-                    localStorage.setItem('nakhilReservations_backup', JSON.stringify(updatedBackup));
-                    
-                    // إرسال إشعار حذف للتليجرام
-                    sendDeleteNotificationToTelegram(reservation);
-                    
-                    // تحديث واجهة المستخدم
-                    updateReservationsTable();
-                    generateCalendar();
-                    
-                    showAlert(`تم حذف الحجز رقم ${reservation.reservationNumber} بنجاح`, 'success');
-                    
-                } catch (error) {
-                    console.error('❌ خطأ في حذف الحجز:', error);
-                    showAlert('خطأ في حذف الحجز من السحابة', 'error');
-                }
-            };
-            
-            // ==================== حذف جميع الحجوزات ====================
+            // حذف جميع الحجوزات
             document.getElementById('deleteAllBtn').addEventListener('click', async function() {
                 if (reservations.length === 0) {
                     showAlert('لا توجد حجوزات لحذفها', 'info');
@@ -3520,321 +2963,890 @@
                 }
             });
             
-            // ==================== البحث في الحجوزات ====================
+            // البحث في الحجوزات
             document.getElementById('searchBtn').addEventListener('click', searchReservations);
             document.getElementById('searchInput').addEventListener('input', searchReservations);
             
-            function searchReservations() {
-                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-                const tableBody = document.getElementById('reservationsTableBody');
-                tableBody.innerHTML = '';
-                
-                const filteredReservations = reservations.filter(reservation => 
-                    reservation.customerName?.toLowerCase().includes(searchTerm) ||
-                    reservation.phone?.includes(searchTerm) ||
-                    reservation.eventType?.toLowerCase().includes(searchTerm) ||
-                    reservation.groomName?.toLowerCase().includes(searchTerm) ||
-                    reservation.brideName?.toLowerCase().includes(searchTerm) ||
-                    reservation.groomAddress?.toLowerCase().includes(searchTerm) ||
-                    reservation.brideAddress?.toLowerCase().includes(searchTerm) ||
-                    reservation.reservationNumber?.toString().includes(searchTerm) ||
-                    reservation.photographyServices?.toLowerCase().includes(searchTerm)
-                );
-                
-                if (filteredReservations.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="14" style="text-align: center; padding: 30px;">لا توجد نتائج تطابق البحث</td></tr>';
-                    return;
-                }
-                
-                filteredReservations.forEach(reservation => {
-                    const row = document.createElement('tr');
-                    
-                    let hallBadge = '';
-                    if (Array.isArray(reservation.halls) && reservation.halls.length === 2) {
-                        hallBadge = '<span class="hall-badge-list">1/2</span>';
-                    } else if (Array.isArray(reservation.halls) && reservation.halls.includes('القاعة رقم 1')) {
-                        hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
-                    } else {
-                        hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
-                    }
-                    
-                    let photographyBadge = '';
-                    let photographyText = reservation.photographyServices || 'بدون تصوير';
-                    if (reservation.photographyServices === 'إضافة تصوير') {
-                        photographyBadge = '<span class="photography-badge-list"><i class="fas fa-camera"></i></span>';
-                        photographyText = 'إضافة تصوير';
-                    }
-                    
-                    let telegramStatus = '';
-                    if (reservation.telegramSent) {
-                        const sentTime = reservation.telegramSentAt ? 
-                            new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
-                        telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
-                    } else {
-                        telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
-                    }
-                    
-                    const actions = `
-                        <div class="action-cell">
-                            <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
-                                <i class="fas fa-eye"></i> معاينة
-                            </button>
-                            <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
-                                <i class="fas fa-trash-alt"></i> حذف
-                            </button>
-                        </div>
-                    `;
-                    
-                    row.innerHTML = `
-                        <td>${reservation.reservationNumber || reservation.id}</td>
-                        <td>${reservation.customerName}</td>
-                        <td>${reservation.groomName || '-'}</td>
-                        <td>${reservation.brideName || '-'}</td>
-                        <td>${reservation.groomAddress || '-'}</td>
-                        <td>${reservation.brideAddress || '-'}</td>
-                        <td>${photographyText} ${photographyBadge}</td>
-                        <td>${reservation.phone}</td>
-                        <td>${formatDate(reservation.eventDate)}</td>
-                        <td>${reservation.eventType}</td>
-                        <td>${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls} ${hallBadge}</td>
-                        <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
-                        <td>${telegramStatus}</td>
-                        <td>${actions}</td>
-                    `;
-                    
-                    tableBody.appendChild(row);
-                });
-            }
-            
-            // ==================== مسح البحث ====================
+            // مسح البحث
             document.getElementById('clearSearch').addEventListener('click', function() {
                 document.getElementById('searchInput').value = '';
                 updateReservationsTable();
             });
+        }
+        
+        // ==================== الحصول على بيانات النموذج ====================
+        function getFormData() {
+            const selectedHalls = Array.from(document.querySelectorAll('input[name="hall"]:checked')).map(cb => cb.value);
             
-            // ==================== تصدير البيانات ====================
-            document.getElementById('exportReservations').addEventListener('click', function() {
-                if (reservations.length === 0) {
-                    showAlert('لا توجد بيانات للتصدير', 'error');
-                    return;
+            // الحصول على بيانات التصوير
+            const photographyAdd = document.getElementById('photographyAdd');
+            const photographyService = photographyAdd.checked ? 'إضافة تصوير' : 'بدون تصوير';
+            
+            return {
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                groomName: document.getElementById('groomName').value || '',
+                brideName: document.getElementById('brideName').value || '',
+                groomAddress: document.getElementById('groomAddress').value || '',
+                brideAddress: document.getElementById('brideAddress').value || '',
+                photographyServices: photographyService,
+                eventDate: document.getElementById('eventDate').value,
+                eventType: document.getElementById('eventType').value,
+                eventTime: document.getElementById('eventTime').value,
+                halls: selectedHalls,
+                totalAmount: parseFloat(document.getElementById('totalAmount').value) || 0,
+                paidAmount: parseFloat(document.getElementById('paidAmount').value) || 0,
+                remainingAmount: parseFloat(document.getElementById('remainingAmount').value) || 0,
+                notes: document.getElementById('notes').value,
+                bookingDate: new Date().toISOString().split('T')[0],
+                telegramSent: false,
+                telegramSentAt: null,
+                status: 'مؤكد'
+            };
+        }
+        
+        // ==================== تحديث صفحة المعاينة ====================
+        function updatePreview() {
+            const data = currentReservationData || getFormData();
+            
+            // معلومات الحجز الأساسية
+            document.getElementById('previewCustomerName').textContent = data.customerName;
+            document.getElementById('previewPhone').textContent = data.phone;
+            document.getElementById('previewBookingDate').textContent = new Date().toLocaleDateString('ar-IQ');
+            
+            // خدمة التصوير
+            const photographySelection = document.getElementById('previewPhotographySelection');
+            const photographyBadges = document.getElementById('previewPhotographyBadges');
+            
+            photographyBadges.innerHTML = '';
+            
+            if (data.photographyServices === 'إضافة تصوير') {
+                photographySelection.textContent = 'نعم، مطلوب خدمة تصوير';
+                photographySelection.style.color = 'var(--info)';
+                photographySelection.style.fontWeight = 'bold';
+                
+                const badge = document.createElement('span');
+                badge.className = 'photography-tag';
+                badge.textContent = 'خدمة تصوير';
+                photographyBadges.appendChild(badge);
+            } else {
+                photographySelection.textContent = 'بدون تصوير';
+                photographySelection.style.color = 'var(--gray)';
+            }
+            
+            // تفاصيل المناسبة
+            document.getElementById('previewEventType').textContent = data.eventType;
+            document.getElementById('previewEventDate').textContent = formatDate(data.eventDate);
+            document.getElementById('previewEventTime').textContent = data.eventTime;
+            
+            // القاعة المختارة
+            const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
+            const hallSelection = document.getElementById('previewHallSelection');
+            const hallBadges = document.getElementById('previewHallBadges');
+            
+            hallBadges.innerHTML = '';
+            
+            if (selectedHalls.length === 0 || selectedHalls[0] === '') {
+                hallSelection.textContent = 'لم يتم اختيار قاعة';
+            } else if (selectedHalls.length === 2) {
+                hallSelection.textContent = 'تم حجز القاعتين معاً';
+                hallBadges.innerHTML = '<span class="hall-tag">القاعة 1</span><span class="hall-tag">القاعة 2</span>';
+            } else {
+                hallSelection.textContent = selectedHalls.join(', ');
+                selectedHalls.forEach(hall => {
+                    const badge = document.createElement('span');
+                    badge.className = 'hall-tag';
+                    badge.textContent = hall === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2';
+                    hallBadges.appendChild(badge);
+                });
+            }
+            
+            // التفاصيل المالية
+            document.getElementById('previewTotalAmount').textContent = formatCurrency(data.totalAmount || '0');
+            document.getElementById('previewPaidAmount').textContent = formatCurrency(data.paidAmount || '0');
+            document.getElementById('previewRemainingAmount').textContent = formatCurrency(data.remainingAmount || '0');
+            
+            // الملاحظات
+            const notes = data.notes;
+            document.getElementById('previewNotes').textContent = notes || 'لا توجد ملاحظات';
+            
+            // رقم الحجز
+            document.getElementById('previewReservationId').textContent = reservationCounter + 1;
+            
+            // توقيع الزبون
+            const signatureBox = document.getElementById('customerSignatureBox');
+            signatureBox.innerHTML = '<span>.......................</span>';
+        }
+        
+        // ==================== تحديث محتوى الطباعة ====================
+        function updatePrintContent() {
+            const data = currentReservationData || getFormData();
+            const printableArea = document.getElementById('printableArea');
+            const printMobileContent = document.getElementById('printMobileContent');
+            
+            const customerName = data.customerName;
+            const phone = data.phone;
+            const photographyServices = data.photographyServices;
+            const eventType = data.eventType;
+            const eventDate = formatDate(data.eventDate);
+            const eventTime = data.eventTime;
+            const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
+            const totalAmount = data.totalAmount || '0';
+            const paidAmount = data.paidAmount || '0';
+            const remainingAmount = data.remainingAmount || '0';
+            const notes = data.notes;
+            
+            let hallTags = '';
+            if (selectedHalls.length === 2) {
+                hallTags = '<span class="print-tag">القاعة 1</span> <span class="print-tag">القاعة 2</span>';
+            } else if (selectedHalls.length === 1 && selectedHalls[0] !== '') {
+                hallTags = `<span class="print-tag">${selectedHalls[0] === 'القاعة رقم 1' ? 'القاعة 1' : 'القاعة 2'}</span>`;
+            }
+            
+            let photographyTag = '';
+            if (photographyServices === 'إضافة تصوير') {
+                photographyTag = '<span class="print-tag" style="background-color: #17a2b8;">خدمة تصوير</span>';
+            }
+            
+            const printHTML = `
+                <div class="print-content">
+                    <div class="print-header">
+                        <div class="print-logo">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h2 style="font-size: 22pt; margin-bottom: 5px;">قاعة النخيل للمناسبات</h2>
+                        <p style="font-size: 12pt; color: #666;">عقد حجز قاعة للمناسبات - نسخة الزبون</p>
+                        <div style="margin-top: 10px; padding: 5px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; font-size: 10pt;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>رقم الحجز: ${reservationCounter + 1}</span>
+                                <span>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-IQ')}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="print-details">
+                        <div class="print-section" style="flex: 2; min-width: 250px;">
+                            <div class="print-title" style="font-size: 14pt;">معلومات الحجز</div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 100px;">اسم السيد المحجِز:</div>
+                                <div class="print-value">${customerName || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 100px;">رقم الهاتف:</div>
+                                <div class="print-value">${phone || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 100px;">خدمة التصوير:</div>
+                                <div class="print-value">${photographyServices === 'إضافة تصوير' ? 'مطلوب خدمة تصوير' : 'بدون تصوير'} ${photographyTag}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="print-section" style="flex: 2; min-width: 250px;">
+                            <div class="print-title" style="font-size: 14pt;">تفاصيل المناسبة</div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 100px;">نوع المناسبة:</div>
+                                <div class="print-value">${eventType || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 100px;">التاريخ:</div>
+                                <div class="print-value">${eventDate || '-'}</div>
+                            </div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 100px;">الوقت:</div>
+                                <div class="print-value">${eventTime || '-'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="print-section" style="flex: 1.5; min-width: 200px;">
+                            <div class="print-title" style="font-size: 14pt;">القاعة المختارة</div>
+                            <div class="print-row">
+                                <div class="print-label" style="min-width: 90px;">القاعات:</div>
+                                <div class="print-value">${selectedHalls.length > 0 && selectedHalls[0] !== '' ? selectedHalls.join(', ') : 'لم يتم اختيار قاعة'} ${hallTags}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="print-amount" style="padding: 10px; margin-bottom: 15px;">
+                        <div class="print-title" style="font-size: 14pt;">التفاصيل المالية</div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">المبلغ الكلي:</div>
+                                <div style="font-size: 12pt;">${formatCurrency(totalAmount)} د.ع</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">المبلغ الواصل:</div>
+                                <div style="font-size: 12pt;">${formatCurrency(paidAmount)} د.ع</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 3px;">المبلغ المتبقي:</div>
+                                <div style="font-size: 12pt;">${formatCurrency(remainingAmount)} د.ع</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${notes ? `
+                    <div class="print-notes" style="padding: 8px; margin-bottom: 12px;">
+                        <div class="print-title" style="font-size: 13pt;">ملاحظات إضافية</div>
+                        <div class="print-value" style="font-size: 11pt; line-height: 1.4;">${notes}</div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="print-signature" style="margin-top: 15px;">
+                        <div class="print-title" style="font-size: 14pt;">توقيع الطرفين</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع السيد:</div>
+                                <div class="signature-line" style="height: 40px; font-size: 11pt;">.......................</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع المسؤول:</div>
+                                <div class="signature-line" style="height: 40px; font-size: 11pt;">إدارة قاعة النخيل</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="print-terms" style="margin-top: 15px; padding: 8px;">
+                        <h4 style="font-size: 12pt; margin-bottom: 6px;">الشروط والأحكام:</h4>
+                        <ul style="padding-right: 15px; margin: 0;">
+                            <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
+                            <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                            <li style="font-size: 9pt; line-height: 1.3;">قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="print-footer" style="margin-top: 10px; padding-top: 8px; font-size: 9pt;">
+                        <p style="margin-bottom: 5px;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
+                        <p style="margin-bottom: 3px;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
+                        <p>رقم الهاتف: 07701234567 | العنوان: بغداد، المنصور</p>
+                    </div>
+                </div>
+            `;
+            
+            printableArea.innerHTML = printHTML;
+            printMobileContent.innerHTML = printHTML;
+        }
+        
+        // ==================== حفظ الحجز في Firestore ====================
+        async function saveReservationToFirestore(reservationData) {
+            try {
+                reservationCounter++;
+                
+                // تحضير بيانات الحجز
+                const firestoreData = {
+                    ...reservationData,
+                    reservationNumber: reservationCounter,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                // إضافة إلى Firestore
+                const docRef = await window.firebaseModules.addDoc(
+                    window.firebaseModules.collection(window.firestore, 'reservations'),
+                    firestoreData
+                );
+                
+                console.log('✅ تم حفظ الحجز في Firestore:', docRef.id);
+                
+                // حفظ نسخة احتياطية في localStorage
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                backupReservations.push({
+                    id: docRef.id,
+                    ...firestoreData
+                });
+                localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
+                
+                return {
+                    success: true,
+                    docId: docRef.id,
+                    reservationNumber: reservationCounter,
+                    data: firestoreData
+                };
+                
+            } catch (error) {
+                console.error('❌ خطأ في حفظ الحجز في Firestore:', error);
+                
+                // محاولة الحفظ في localStorage كنسخة احتياطية
+                try {
+                    reservationCounter++;
+                    reservationData.reservationNumber = reservationCounter;
+                    reservationData.createdAt = new Date().toISOString();
+                    
+                    const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                    backupReservations.push({
+                        id: 'local_' + reservationCounter,
+                        ...reservationData
+                    });
+                    localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
+                    
+                    return {
+                        success: true,
+                        docId: 'local_' + reservationCounter,
+                        reservationNumber: reservationCounter,
+                        data: reservationData
+                    };
+                    
+                } catch (localError) {
+                    console.error('❌ خطأ في حفظ النسخة الاحتياطية:', localError);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+        }
+        
+        // ==================== حفظ الحجز ====================
+        async function saveReservation() {
+            if (!validateForm()) {
+                showAlert('يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
+                return;
+            }
+            
+            const reservationData = getFormData();
+            
+            // حفظ في Firebase
+            showAlert('جاري حفظ الحجز في السحابة...', 'info');
+            const saveResult = await saveReservationToFirestore(reservationData);
+            
+            if (!saveResult.success) {
+                showAlert('خطأ في حفظ الحجز في السحابة', 'error');
+                return;
+            }
+            
+            const reservationNumber = saveResult.reservationNumber;
+            
+            // إرسال إشعار تليجرام
+            let telegramSuccess = false;
+            try {
+                const telegramMessage = formatTelegramMessage();
+                await sendToAllAdmins(telegramMessage);
+                telegramSuccess = true;
+                
+                // تحديث حالة التليجرام في Firestore
+                try {
+                    await window.firebaseModules.updateDoc(
+                        window.firebaseModules.doc(window.firestore, 'reservations', saveResult.docId),
+                        {
+                            telegramSent: true,
+                            telegramSentAt: new Date().toISOString()
+                        }
+                    );
+                } catch (updateError) {
+                    console.error('❌ خطأ في تحديث حالة التليجرام:', updateError);
                 }
                 
-                const csvContent = convertToCSV(reservations);
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
+            } catch (error) {
+                console.error('خطأ في إرسال تليجرام:', error);
+            }
+            
+            // إظهار رسالة نجاح
+            showAlert(`تم حفظ الحجز بنجاح! رقم الحجز: ${reservationNumber} ${telegramSuccess ? '✅ (تم الإرسال للتليجرام)' : '⚠️ (لم يتم الإرسال للتليجرام)'}`, 'success');
+            
+            // مسح النموذج
+            document.getElementById('reservationForm').reset();
+            updateRemainingAmount();
+            currentReservationData = null;
+            
+            // إعادة تعيين التصوير
+            document.getElementById('photographyNone').checked = true;
+            
+            // تحديث قائمة الحجوزات والتقويم
+            updateReservationsTable();
+            generateCalendar();
+            
+            // العودة إلى صفحة الحجز
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-page="booking-form"]').classList.add('active');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('booking-form').classList.add('active');
+        }
+        
+        // ==================== التحقق من صحة النموذج ====================
+        function validateForm() {
+            const requiredFields = [
+                'customerName',
+                'phone',
+                'eventDate',
+                'eventType',
+                'eventTime',
+                'totalAmount',
+                'paidAmount'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    field.focus();
+                    return false;
+                }
+            }
+            
+            const selectedHalls = document.querySelectorAll('input[name="hall"]:checked');
+            if (selectedHalls.length === 0) {
+                showAlert('يرجى اختيار قاعة واحدة على الأقل', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // ==================== تحديث قائمة الحجوزات ====================
+        function updateReservationsTable() {
+            const tableBody = document.getElementById('reservationsTableBody');
+            tableBody.innerHTML = '';
+            
+            if (reservations.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="14" style="text-align: center; padding: 30px;">لا توجد حجوزات مسجلة بعد</td></tr>';
+                return;
+            }
+            
+            const sortedReservations = [...reservations].sort((a, b) => 
+                new Date(b.createdAt || b.bookingDate) - new Date(a.createdAt || a.bookingDate)
+            );
+            
+            sortedReservations.forEach(reservation => {
+                const row = document.createElement('tr');
                 
-                link.setAttribute('href', url);
-                link.setAttribute('download', `حجوزات_قاعة_النخيل_${new Date().toISOString().split('T')[0]}.csv`);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                let hallBadge = '';
+                if (Array.isArray(reservation.halls) && reservation.halls.length === 2) {
+                    hallBadge = '<span class="hall-badge-list">1/2</span>';
+                } else if (Array.isArray(reservation.halls) && reservation.halls.includes('القاعة رقم 1')) {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
+                } else {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
+                }
                 
-                showAlert('تم تصدير بيانات الحجوزات بنجاح', 'success');
+                let photographyBadge = '';
+                let photographyText = reservation.photographyServices || 'بدون تصوير';
+                if (reservation.photographyServices === 'إضافة تصوير') {
+                    photographyBadge = '<span class="photography-badge-list"><i class="fas fa-camera"></i></span>';
+                    photographyText = 'إضافة تصوير';
+                }
+                
+                let telegramStatus = '';
+                if (reservation.telegramSent) {
+                    const sentTime = reservation.telegramSentAt ? 
+                        new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
+                    telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
+                } else {
+                    telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
+                }
+                
+                const actions = `
+                    <div class="action-cell">
+                        <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
+                            <i class="fas fa-eye"></i> معاينة
+                        </button>
+                        <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
+                row.innerHTML = `
+                    <td>${reservation.reservationNumber || reservation.id}</td>
+                    <td>${reservation.customerName}</td>
+                    <td>${reservation.groomName || '-'}</td>
+                    <td>${reservation.brideName || '-'}</td>
+                    <td>${reservation.groomAddress || '-'}</td>
+                    <td>${reservation.brideAddress || '-'}</td>
+                    <td>${photographyText} ${photographyBadge}</td>
+                    <td>${reservation.phone}</td>
+                    <td>${formatDate(reservation.eventDate)}</td>
+                    <td>${reservation.eventType}</td>
+                    <td>${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls} ${hallBadge}</td>
+                    <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
+                    <td>${telegramStatus}</td>
+                    <td>${actions}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // ==================== عرض تفاصيل الحجز (دالة عامة) ====================
+        window.viewReservation = function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
+            if (!reservation) return;
+            
+            // تعبئة الحقول الرئيسية
+            document.getElementById('customerName').value = reservation.customerName;
+            document.getElementById('phone').value = reservation.phone;
+            document.getElementById('groomName').value = reservation.groomName;
+            document.getElementById('brideName').value = reservation.brideName;
+            document.getElementById('groomAddress').value = reservation.groomAddress;
+            document.getElementById('brideAddress').value = reservation.brideAddress;
+            document.getElementById('eventDate').value = reservation.eventDate;
+            document.getElementById('eventType').value = reservation.eventType;
+            document.getElementById('eventTime').value = reservation.eventTime;
+            document.getElementById('totalAmount').value = reservation.totalAmount;
+            document.getElementById('paidAmount').value = reservation.paidAmount;
+            document.getElementById('remainingAmount').value = reservation.remainingAmount;
+            document.getElementById('notes').value = reservation.notes;
+            
+            // تعيين خدمة التصوير
+            const photographyAdd = document.getElementById('photographyAdd');
+            const photographyNone = document.getElementById('photographyNone');
+            
+            if (reservation.photographyServices === 'إضافة تصوير') {
+                photographyAdd.checked = true;
+            } else {
+                photographyNone.checked = true;
+            }
+            
+            // تعيين القاعات
+            document.querySelectorAll('input[name="hall"]').forEach(cb => {
+                const halls = Array.isArray(reservation.halls) ? reservation.halls : [reservation.halls];
+                cb.checked = halls.includes(cb.value);
             });
             
-            // ==================== دعم تليجرام ====================
-            async function sendToAllAdmins(message) {
-                showAlert('جاري إرسال الإشعار للتليجرام...', 'info');
+            updateRemainingAmount();
+            currentReservationData = reservation;
+            
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-page="preview-page"]').classList.add('active');
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('preview-page').classList.add('active');
+            
+            updatePreview();
+            updatePrintContent();
+            
+            showAlert(`تم تحميل بيانات الحجز رقم ${reservation.reservationNumber || docId}`, 'info');
+        };
+        
+        // ==================== حذف الحجز (دالة عامة) ====================
+        window.deleteReservation = async function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
+            if (!reservation) return;
+            
+            if (!confirm(`هل أنت متأكد من حذف الحجز رقم ${reservation.reservationNumber}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+                return;
+            }
+            
+            // حذف من Firebase
+            showAlert('جاري حذف الحجز من السحابة...', 'info');
+            
+            try {
+                await window.firebaseModules.deleteDoc(
+                    window.firebaseModules.doc(window.firestore, 'reservations', docId)
+                );
                 
-                let successCount = 0;
-                let failedCount = 0;
+                // تحديث النسخة الاحتياطية
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                const updatedBackup = backupReservations.filter(r => r.id !== docId);
+                localStorage.setItem('nakhilReservations_backup', JSON.stringify(updatedBackup));
                 
-                for (const chatId of ADMIN_CHAT_IDS) {
-                    try {
-                        const response = await sendTelegramMessage(chatId, message);
-                        if (response.ok) {
-                            successCount++;
-                        } else {
-                            failedCount++;
-                        }
-                    } catch (error) {
+                // إرسال إشعار حذف للتليجرام
+                sendDeleteNotificationToTelegram(reservation);
+                
+                // تحديث واجهة المستخدم
+                updateReservationsTable();
+                generateCalendar();
+                
+                showAlert(`تم حذف الحجز رقم ${reservation.reservationNumber} بنجاح`, 'success');
+                
+            } catch (error) {
+                console.error('❌ خطأ في حذف الحجز:', error);
+                showAlert('خطأ في حذف الحجز من السحابة', 'error');
+            }
+        };
+        
+        // ==================== البحث في الحجوزات ====================
+        function searchReservations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tableBody = document.getElementById('reservationsTableBody');
+            tableBody.innerHTML = '';
+            
+            const filteredReservations = reservations.filter(reservation => 
+                reservation.customerName?.toLowerCase().includes(searchTerm) ||
+                reservation.phone?.includes(searchTerm) ||
+                reservation.eventType?.toLowerCase().includes(searchTerm) ||
+                reservation.groomName?.toLowerCase().includes(searchTerm) ||
+                reservation.brideName?.toLowerCase().includes(searchTerm) ||
+                reservation.groomAddress?.toLowerCase().includes(searchTerm) ||
+                reservation.brideAddress?.toLowerCase().includes(searchTerm) ||
+                reservation.reservationNumber?.toString().includes(searchTerm) ||
+                reservation.photographyServices?.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredReservations.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="14" style="text-align: center; padding: 30px;">لا توجد نتائج تطابق البحث</td></tr>';
+                return;
+            }
+            
+            filteredReservations.forEach(reservation => {
+                const row = document.createElement('tr');
+                
+                let hallBadge = '';
+                if (Array.isArray(reservation.halls) && reservation.halls.length === 2) {
+                    hallBadge = '<span class="hall-badge-list">1/2</span>';
+                } else if (Array.isArray(reservation.halls) && reservation.halls.includes('القاعة رقم 1')) {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #4a8c4a;">1</span>';
+                } else {
+                    hallBadge = '<span class="hall-badge-list" style="background-color: #d4af37; color: #333;">2</span>';
+                }
+                
+                let photographyBadge = '';
+                let photographyText = reservation.photographyServices || 'بدون تصوير';
+                if (reservation.photographyServices === 'إضافة تصوير') {
+                    photographyBadge = '<span class="photography-badge-list"><i class="fas fa-camera"></i></span>';
+                    photographyText = 'إضافة تصوير';
+                }
+                
+                let telegramStatus = '';
+                if (reservation.telegramSent) {
+                    const sentTime = reservation.telegramSentAt ? 
+                        new Date(reservation.telegramSentAt).toLocaleTimeString('ar-IQ', {hour: '2-digit', minute:'2-digit'}) : '';
+                    telegramStatus = `<span class="telegram-status telegram-sent"><i class="fab fa-telegram"></i> تم الإرسال ${sentTime ? 'في ' + sentTime : ''}</span>`;
+                } else {
+                    telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
+                }
+                
+                const actions = `
+                    <div class="action-cell">
+                        <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
+                            <i class="fas fa-eye"></i> معاينة
+                        </button>
+                        <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
+                row.innerHTML = `
+                    <td>${reservation.reservationNumber || reservation.id}</td>
+                    <td>${reservation.customerName}</td>
+                    <td>${reservation.groomName || '-'}</td>
+                    <td>${reservation.brideName || '-'}</td>
+                    <td>${reservation.groomAddress || '-'}</td>
+                    <td>${reservation.brideAddress || '-'}</td>
+                    <td>${photographyText} ${photographyBadge}</td>
+                    <td>${reservation.phone}</td>
+                    <td>${formatDate(reservation.eventDate)}</td>
+                    <td>${reservation.eventType}</td>
+                    <td>${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls} ${hallBadge}</td>
+                    <td>${formatCurrency(reservation.totalAmount)} د.ع</td>
+                    <td>${telegramStatus}</td>
+                    <td>${actions}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // ==================== دوال دعم تليجرام ====================
+        async function sendToAllAdmins(message) {
+            showAlert('جاري إرسال الإشعار للتليجرام...', 'info');
+            
+            let successCount = 0;
+            let failedCount = 0;
+            
+            for (const chatId of ADMIN_CHAT_IDS) {
+                try {
+                    const response = await sendTelegramMessage(chatId, message);
+                    if (response.ok) {
+                        successCount++;
+                    } else {
                         failedCount++;
                     }
-                }
-                
-                if (successCount > 0) {
-                    showAlert(`تم إرسال الإشعار لـ ${successCount} من الأدمنين بنجاح ✅`, 'success');
-                }
-                
-                if (failedCount > 0) {
-                    showAlert(`فشل إرسال الإشعار لـ ${failedCount} من الأدمنين ❌`, 'error');
-                }
-            }
-            
-            async function sendTelegramMessage(chatId, message) {
-                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
-                
-                return response.json();
-            }
-            
-            function formatTelegramMessage() {
-                const data = currentReservationData || getFormData();
-                
-                const customerName = data.customerName;
-                const phone = data.phone;
-                const photographyServices = data.photographyServices;
-                const eventType = data.eventType;
-                const eventDate = formatDate(data.eventDate);
-                const eventTime = data.eventTime;
-                
-                const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
-                const hallText = selectedHalls.length === 2 ? 'القاعتين معاً' : selectedHalls.join(', ');
-                
-                const totalAmount = data.totalAmount || '0';
-                const paidAmount = data.paidAmount || '0';
-                const remainingAmount = data.remainingAmount || '0';
-                
-                const notes = data.notes || 'لا توجد ملاحظات';
-                
-                return `
-        🎉 *حجز جديد - قاعة النخيل للمناسبات* 🎉
-
-        🔢 *رقم الحجز:* ${reservationCounter + 1}
-        📅 *تاريخ الحجز:* ${new Date().toLocaleDateString('ar-IQ')}
-
-        👤 *معلومات السيد:*
-        • الاسم: ${customerName}
-        • الهاتف: ${phone}
-
-        💒 *تفاصيل المناسبة:*
-        • النوع: ${eventType}
-        • التاريخ: ${eventDate}
-        • الوقت: ${eventTime}
-
-        📸 *خدمة التصوير:*
-        • ${photographyServices}
-
-        🏛️ *القاعة المختارة:*
-        • ${hallText}
-
-        💰 *التفاصيل المالية:*
-        • المبلغ الكلي: ${formatCurrency(totalAmount)} د.ع
-        • المبلغ الواصل: ${formatCurrency(paidAmount)} د.ع
-        • المبلغ المتبقي: ${formatCurrency(remainingAmount)} د.ع
-
-        📝 *ملاحظات:*
-        ${notes}
-
-        🕒 *تم الحفظ في:* ${new Date().toLocaleTimeString('ar-IQ')}
-
-        ✅ *حالة الحجز:* مؤكد
-                `;
-            }
-            
-            async function sendDeleteNotificationToTelegram(reservation) {
-                const message = `
-        ⚠️ *حذف حجز - قاعة النخيل للمناسبات* ⚠️
-
-        🔢 *رقم الحجز المحذوف:* ${reservation.reservationNumber}
-        👤 *اسم السيد:* ${reservation.customerName}
-        📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
-        💒 *نوع المناسبة:* ${reservation.eventType}
-
-        🕒 *تم الحذف في:* ${new Date().toLocaleTimeString('ar-IQ')}
-        📅 *تاريخ الحذف:* ${new Date().toLocaleDateString('ar-IQ')}
-                `;
-                
-                try {
-                    await sendToAllAdmins(message);
                 } catch (error) {
-                    console.error('خطأ في إرسال إشعار الحذف:', error);
+                    failedCount++;
                 }
             }
             
-            async function sendDeleteAllNotificationToTelegram(count) {
-                const message = `
-        🚨 *حذف جميع الحجوزات - قاعة النخيل للمناسبات* 🚨
+            if (successCount > 0) {
+                showAlert(`تم إرسال الإشعار لـ ${successCount} من الأدمنين بنجاح ✅`, 'success');
+            }
+            
+            if (failedCount > 0) {
+                showAlert(`فشل إرسال الإشعار لـ ${failedCount} من الأدمنين ❌`, 'error');
+            }
+        }
+        
+        async function sendTelegramMessage(chatId, message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+            
+            return response.json();
+        }
+        
+        function formatTelegramMessage() {
+            const data = currentReservationData || getFormData();
+            
+            const customerName = data.customerName;
+            const phone = data.phone;
+            const photographyServices = data.photographyServices;
+            const eventType = data.eventType;
+            const eventDate = formatDate(data.eventDate);
+            const eventTime = data.eventTime;
+            
+            const selectedHalls = Array.isArray(data.halls) ? data.halls : [data.halls];
+            const hallText = selectedHalls.length === 2 ? 'القاعتين معاً' : selectedHalls.join(', ');
+            
+            const totalAmount = data.totalAmount || '0';
+            const paidAmount = data.paidAmount || '0';
+            const remainingAmount = data.remainingAmount || '0';
+            
+            const notes = data.notes || 'لا توجد ملاحظات';
+            
+            return `
+🎉 *حجز جديد - قاعة النخيل للمناسبات* 🎉
 
-        🔢 *عدد الحجوزات المحذوفة:* ${count}
+🔢 *رقم الحجز:* ${reservationCounter + 1}
+📅 *تاريخ الحجز:* ${new Date().toLocaleDateString('ar-IQ')}
 
-        🕒 *تم الحذف في:* ${new Date().toLocaleTimeString('ar-IQ')}
-        📅 *تاريخ الحذف:* ${new Date().toLocaleDateString('ar-IQ')}
-                `;
+👤 *معلومات السيد:*
+• الاسم: ${customerName}
+• الهاتف: ${phone}
+
+💒 *تفاصيل المناسبة:*
+• النوع: ${eventType}
+• التاريخ: ${eventDate}
+• الوقت: ${eventTime}
+
+📸 *خدمة التصوير:*
+• ${photographyServices}
+
+🏛️ *القاعة المختارة:*
+• ${hallText}
+
+💰 *التفاصيل المالية:*
+• المبلغ الكلي: ${formatCurrency(totalAmount)} د.ع
+• المبلغ الواصل: ${formatCurrency(paidAmount)} د.ع
+• المبلغ المتبقي: ${formatCurrency(remainingAmount)} د.ع
+
+📝 *ملاحظات:*
+${notes}
+
+🕒 *تم الحفظ في:* ${new Date().toLocaleTimeString('ar-IQ')}
+
+✅ *حالة الحجز:* مؤكد
+            `;
+        }
+        
+        async function sendDeleteNotificationToTelegram(reservation) {
+            const message = `
+⚠️ *حذف حجز - قاعة النخيل للمناسبات* ⚠️
+
+🔢 *رقم الحجز المحذوف:* ${reservation.reservationNumber}
+👤 *اسم السيد:* ${reservation.customerName}
+📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
+💒 *نوع المناسبة:* ${reservation.eventType}
+
+🕒 *تم الحذف في:* ${new Date().toLocaleTimeString('ar-IQ')}
+📅 *تاريخ الحذف:* ${new Date().toLocaleDateString('ar-IQ')}
+            `;
+            
+            try {
+                await sendToAllAdmins(message);
+            } catch (error) {
+                console.error('خطأ في إرسال إشعار الحذف:', error);
+            }
+        }
+        
+        async function sendDeleteAllNotificationToTelegram(count) {
+            const message = `
+🚨 *حذف جميع الحجوزات - قاعة النخيل للمناسبات* 🚨
+
+🔢 *عدد الحجوزات المحذوفة:* ${count}
+
+🕒 *تم الحذف في:* ${new Date().toLocaleTimeString('ar-IQ')}
+📅 *تاريخ الحذف:* ${new Date().toLocaleDateString('ar-IQ')}
+            `;
+            
+            try {
+                await sendToAllAdmins(message);
+            } catch (error) {
+                console.error('خطأ في إرسال إشعار حذف الكل:', error);
+            }
+        }
+        
+        async function testTelegramConnection() {
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`);
+                const data = await response.json();
                 
-                try {
-                    await sendToAllAdmins(message);
-                } catch (error) {
-                    console.error('خطأ في إرسال إشعار حذف الكل:', error);
+                if (data.ok) {
+                    console.log('✅ اتصال تليجرام نشط:', data.result.username);
                 }
+            } catch (error) {
+                console.error('❌ خطأ في اتصال تليجرام:', error);
             }
+        }
+        
+        // ==================== دوال مساعدة ====================
+        function convertToCSV(data) {
+            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
+            const rows = data.map(item => [
+                item.reservationNumber || item.id,
+                item.customerName,
+                item.phone,
+                item.groomName || '',
+                item.brideName || '',
+                item.groomAddress || '',
+                item.brideAddress || '',
+                item.photographyServices || 'بدون تصوير',
+                item.eventDate,
+                item.eventType,
+                item.eventTime,
+                Array.isArray(item.halls) ? item.halls.join(' + ') : item.halls,
+                item.totalAmount,
+                item.paidAmount,
+                item.remainingAmount,
+                item.bookingDate,
+                item.telegramSent ? 'تم الإرسال' : 'لم يرسل',
+                item.telegramSentAt || '',
+                item.status
+            ]);
             
-            async function testTelegramConnection() {
-                try {
-                    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`);
-                    const data = await response.json();
-                    
-                    if (data.ok) {
-                        console.log('✅ اتصال تليجرام نشط:', data.result.username);
-                    }
-                } catch (error) {
-                    console.error('❌ خطأ في اتصال تليجرام:', error);
-                }
-            }
+            return [headers, ...rows].map(row => 
+                row.map(cell => `"${cell}"`).join(',')
+            ).join('\n');
+        }
+        
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('ar-IQ');
+        }
+        
+        function formatCurrency(amount) {
+            return parseFloat(amount).toLocaleString('ar-IQ');
+        }
+        
+        function updateRemainingAmount() {
+            const total = parseFloat(document.getElementById('totalAmount').value) || 0;
+            const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
+            const remaining = total - paid;
+            document.getElementById('remainingAmount').value = remaining > 0 ? remaining : 0;
+        }
+        
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = message;
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.display = 'block';
             
-            // ==================== دوال مساعدة ====================
-            function convertToCSV(data) {
-                const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
-                const rows = data.map(item => [
-                    item.reservationNumber || item.id,
-                    item.customerName,
-                    item.phone,
-                    item.groomName || '',
-                    item.brideName || '',
-                    item.groomAddress || '',
-                    item.brideAddress || '',
-                    item.photographyServices || 'بدون تصوير',
-                    item.eventDate,
-                    item.eventType,
-                    item.eventTime,
-                    Array.isArray(item.halls) ? item.halls.join(' + ') : item.halls,
-                    item.totalAmount,
-                    item.paidAmount,
-                    item.remainingAmount,
-                    item.bookingDate,
-                    item.telegramSent ? 'تم الإرسال' : 'لم يرسل',
-                    item.telegramSentAt || '',
-                    item.status
-                ]);
-                
-                return [headers, ...rows].map(row => 
-                    row.map(cell => `"${cell}"`).join(',')
-                ).join('\n');
-            }
-            
-            function formatDate(dateStr) {
-                if (!dateStr) return '-';
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('ar-IQ');
-            }
-            
-            function formatCurrency(amount) {
-                return parseFloat(amount).toLocaleString('ar-IQ');
-            }
-            
-            function showAlert(message, type) {
-                const alertDiv = document.getElementById('alertMessage');
-                alertDiv.textContent = message;
-                alertDiv.className = `alert alert-${type}`;
-                alertDiv.style.display = 'block';
-                
-                setTimeout(() => {
-                    alertDiv.style.display = 'none';
-                }, 5000);
-            }
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
         }
     </script>
 </body>
