@@ -2367,50 +2367,63 @@
                     const reservationsList = document.createElement('div');
                     reservationsList.className = 'reservations-list';
                     
-                    // تجميع الحجوزات حسب القاعة
-                    const hall1Reservations = dayReservations.filter(r => 
-                        Array.isArray(r.halls) && r.halls.includes('القاعة رقم 1') && 
-                        (!Array.isArray(r.halls) || r.halls.length < 2)
-                    );
-                    
-                    const hall2Reservations = dayReservations.filter(r => 
-                        Array.isArray(r.halls) && r.halls.includes('القاعة رقم 2') && 
-                        (!Array.isArray(r.halls) || r.halls.length < 2)
-                    );
-                    
+                    // تجميع الحجوزات حسب القاعة - النظام الجديد المعدل
                     const bothHallsReservations = dayReservations.filter(r => 
                         Array.isArray(r.halls) && r.halls.length === 2
                     );
                     
-                    // عرض الحجوزات - التحديث الجديد
+                    // الحجوزات الفردية (غير المتضمنة في حجوزات القاعتين)
+                    const individualReservations = dayReservations.filter(r => {
+                        // استبعاد الحجوزات التي هي جزء من حجز القاعتين معاً
+                        if (Array.isArray(r.halls) && r.halls.length === 2) {
+                            return false;
+                        }
+                        return true;
+                    });
+                    
+                    // تجميع الحجوزات الفردية حسب القاعة
+                    const hall1Reservations = individualReservations.filter(r => 
+                        Array.isArray(r.halls) && r.halls.includes('القاعة رقم 1')
+                    );
+                    
+                    const hall2Reservations = individualReservations.filter(r => 
+                        Array.isArray(r.halls) && r.halls.includes('القاعة رقم 2')
+                    );
+                    
+                    // عرض الحجوزات - النظام الجديد المعدل:
+                    // 1. عرض حجز القاعتين معاً (1/2) إذا وجد
+                    // 2. عرض الحجوزات الفردية للقاعة 1 (1 ثم 1x)
+                    // 3. عرض الحجوزات الفردية للقاعة 2 (2 ثم 2x)
+                    
+                    // عرض حجز القاعتين معاً إذا وجد
                     if (bothHallsReservations.length > 0) {
                         const badge = createReservationBadge('1/2', 'both-halls-badge', bothHallsReservations[0]);
                         reservationsList.appendChild(badge);
-                    } else {
-                        // عرض الحجوزات للقاعة 1
-                        if (hall1Reservations.length > 0) {
-                            // الحجز الأول للقاعة 1
-                            const badge1 = createReservationBadge('1', 'hall1-badge', hall1Reservations[0]);
-                            reservationsList.appendChild(badge1);
-                            
-                            // الحجز الثاني للقاعة 1 - 1x بلون بنفسجي
-                            if (hall1Reservations.length > 1) {
-                                const badge2 = createReservationBadge('1x', 'hall1-second-badge', hall1Reservations[1]);
-                                reservationsList.appendChild(badge2);
-                            }
-                        }
+                    }
+                    
+                    // عرض الحجوزات الفردية للقاعة 1
+                    if (hall1Reservations.length > 0) {
+                        // الحجز الأول للقاعة 1
+                        const badge1 = createReservationBadge('1', 'hall1-badge', hall1Reservations[0]);
+                        reservationsList.appendChild(badge1);
                         
-                        // عرض الحجوزات للقاعة 2
-                        if (hall2Reservations.length > 0) {
-                            // الحجز الأول للقاعة 2
-                            const badge1 = createReservationBadge('2', 'hall2-badge', hall2Reservations[0]);
-                            reservationsList.appendChild(badge1);
-                            
-                            // الحجز الثاني للقاعة 2 - 2x بلون أخضر
-                            if (hall2Reservations.length > 1) {
-                                const badge2 = createReservationBadge('2x', 'hall2-second-badge', hall2Reservations[1]);
-                                reservationsList.appendChild(badge2);
-                            }
+                        // الحجز الثاني للقاعة 1 - 1x بلون بنفسجي
+                        if (hall1Reservations.length > 1) {
+                            const badge2 = createReservationBadge('1x', 'hall1-second-badge', hall1Reservations[1]);
+                            reservationsList.appendChild(badge2);
+                        }
+                    }
+                    
+                    // عرض الحجوزات الفردية للقاعة 2
+                    if (hall2Reservations.length > 0) {
+                        // الحجز الأول للقاعة 2
+                        const badge1 = createReservationBadge('2', 'hall2-badge', hall2Reservations[0]);
+                        reservationsList.appendChild(badge1);
+                        
+                        // الحجز الثاني للقاعة 2 - 2x بلون أخضر
+                        if (hall2Reservations.length > 1) {
+                            const badge2 = createReservationBadge('2x', 'hall2-second-badge', hall2Reservations[1]);
+                            reservationsList.appendChild(badge2);
                         }
                     }
                     
