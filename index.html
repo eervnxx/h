@@ -537,6 +537,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
+        .btn-camera {
+            background-color: #9c27b0;
+            color: white;
+        }
+        
+        .btn-camera:hover {
+            background-color: #7b1fa2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
         /* صفحة المعاينة */
         .preview-container {
             background-color: white;
@@ -795,6 +806,15 @@
         
         .action-btn.delete:hover {
             background-color: #c82333;
+        }
+        
+        .action-btn.camera {
+            background-color: #9c27b0;
+            color: white;
+        }
+        
+        .action-btn.camera:hover {
+            background-color: #7b1fa2;
         }
         
         /* رسائل التنبيه */
@@ -2236,13 +2256,16 @@
         const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
         const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
         
+        // سعر إضافة التصوير
+        const PHOTOGRAPHY_ADDITIONAL_PRICE = 100000;
+        
         // ==================== تحميل الحجوزات من Firestore ====================
         async function loadReservationsFromFirestore() {
             try {
                 showAlert('جاري تحميل الحجوزات من السحابة...', 'info');
                 
                 const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
-                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('eventDate', 'asc'));
                 const querySnapshot = await window.firebaseModules.getDocs(q);
                 
                 reservations = [];
@@ -2292,7 +2315,7 @@
         function setupRealtimeListener() {
             try {
                 const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
-                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('eventDate', 'asc'));
                 
                 window.firebaseModules.onSnapshot(q, (snapshot) => {
                     const updatedReservations = [];
@@ -3489,7 +3512,7 @@
             return true;
         }
         
-        // ==================== تحديث قائمة الحجوزات ====================
+        // ==================== تحديث قائمة الحجوزات (معدلة للترتيب حسب تاريخ الحفل) ====================
         function updateReservationsTable() {
             const tableBody = document.getElementById('reservationsTableBody');
             tableBody.innerHTML = '';
@@ -3499,9 +3522,15 @@
                 return;
             }
             
-            const sortedReservations = [...reservations].sort((a, b) => 
-                new Date(b.createdAt || b.bookingDate) - new Date(a.createdAt || a.bookingDate)
-            );
+            // ========== التعديل المهم: ترتيب حسب تاريخ الحفل تصاعدياً ==========
+            const sortedReservations = [...reservations].sort((a, b) => {
+                // التحقق من وجود التواريخ
+                const dateA = a.eventDate ? new Date(a.eventDate) : new Date(0);
+                const dateB = b.eventDate ? new Date(b.eventDate) : new Date(0);
+                
+                // الترتيب التصاعدي (من الأقدم إلى الأحدث)
+                return dateA - dateB;
+            });
             
             sortedReservations.forEach(reservation => {
                 const row = document.createElement('tr');
@@ -3531,11 +3560,19 @@
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
+                // ========== إضافة زر "إضافة تصوير" ==========
+                const showAddPhotographyBtn = reservation.photographyServices !== 'إضافة تصوير';
+                const addPhotographyBtn = showAddPhotographyBtn ? 
+                    `<button class="action-btn camera" onclick="addPhotographyService('${reservation.id}')">
+                        <i class="fas fa-camera"></i> تصوير
+                    </button>` : '';
+                
                 const actions = `
                     <div class="action-cell">
                         <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
                             <i class="fas fa-eye"></i> معاينة
                         </button>
+                        ${addPhotographyBtn}
                         <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
                             <i class="fas fa-trash-alt"></i> حذف
                         </button>
@@ -3562,6 +3599,75 @@
                 tableBody.appendChild(row);
             });
         }
+        
+        // ==================== إضافة خدمة التصوير لحجز موجود ====================
+        window.addPhotographyService = async function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
+            if (!reservation) return;
+            
+            if (!confirm(`هل تريد إضافة خدمة التصوير للحجز رقم ${reservation.reservationNumber}؟\nسيتم زيادة المبلغ الكلي بـ 100,000 دينار.`)) {
+                return;
+            }
+            
+            showAlert('جاري إضافة خدمة التصوير...', 'info');
+            
+            try {
+                // تحديث البيانات في Firestore
+                const updatedData = {
+                    photographyServices: 'إضافة تصوير',
+                    totalAmount: (parseFloat(reservation.totalAmount) || 0) + PHOTOGRAPHY_ADDITIONAL_PRICE,
+                    remainingAmount: ((parseFloat(reservation.totalAmount) || 0) + PHOTOGRAPHY_ADDITIONAL_PRICE) - (parseFloat(reservation.paidAmount) || 0),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                await window.firebaseModules.updateDoc(
+                    window.firebaseModules.doc(window.firestore, 'reservations', docId),
+                    updatedData
+                );
+                
+                // إرسال إشعار تليجرام
+                const telegramMessage = `
+📸 *إضافة خدمة التصوير - قاعة النخيل للمناسبات* 📸
+
+🔢 *رقم الحجز:* ${reservation.reservationNumber}
+👤 *اسم السيد:* ${reservation.customerName}
+📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
+
+💰 *التغييرات المالية:*
+• المبلغ السابق: ${formatCurrency(reservation.totalAmount)} د.ع
+• المبلغ الجديد: ${formatCurrency(parseFloat(reservation.totalAmount) + PHOTOGRAPHY_ADDITIONAL_PRICE)} د.ع
+• زيادة بمقدار: ${formatCurrency(PHOTOGRAPHY_ADDITIONAL_PRICE)} د.ع
+
+✅ *تمت إضافة:* خدمة التصوير الكاملة
+
+🕒 *تم التحديث في:* ${new Date().toLocaleTimeString('ar-IQ')}
+📅 *تاريخ التحديث:* ${new Date().toLocaleDateString('ar-IQ')}
+                `;
+                
+                sendToAllAdmins(telegramMessage);
+                
+                // تحديث النسخة الاحتياطية
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                const reservationIndex = backupReservations.findIndex(r => r.id === docId);
+                if (reservationIndex !== -1) {
+                    backupReservations[reservationIndex] = {
+                        ...backupReservations[reservationIndex],
+                        ...updatedData
+                    };
+                    localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
+                }
+                
+                // تحديث واجهة المستخدم
+                showAlert(`تم إضافة خدمة التصوير للحجز رقم ${reservation.reservationNumber} بنجاح! زيادة 100,000 دينار`, 'success');
+                setTimeout(() => {
+                    updateReservationsTable();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('❌ خطأ في إضافة خدمة التصوير:', error);
+                showAlert('خطأ في إضافة خدمة التصوير', 'error');
+            }
+        };
         
         // ==================== عرض تفاصيل الحجز ====================
         window.viewReservation = function(docId) {
@@ -3755,11 +3861,19 @@
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
+                // زر إضافة التصوير للنتائج المبوبة أيضاً
+                const showAddPhotographyBtn = reservation.photographyServices !== 'إضافة تصوير';
+                const addPhotographyBtn = showAddPhotographyBtn ? 
+                    `<button class="action-btn camera" onclick="addPhotographyService('${reservation.id}')">
+                        <i class="fas fa-camera"></i> تصوير
+                    </button>` : '';
+                
                 const actions = `
                     <div class="action-cell">
                         <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
                             <i class="fas fa-eye"></i> معاينة
                         </button>
+                        ${addPhotographyBtn}
                         <button class="action-btn delete" onclick="deleteReservation('${reservation.id}')">
                             <i class="fas fa-trash-alt"></i> حذف
                         </button>
