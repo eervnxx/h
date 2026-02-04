@@ -132,38 +132,6 @@
             display: none;
         }
         
-        /* ==================== مؤشر حالة الاتصال ==================== */
-        .connection-status {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-        
-        .connection-status.online {
-            background-color: var(--success);
-            color: white;
-        }
-        
-        .connection-status.offline {
-            background-color: var(--danger);
-            color: white;
-        }
-        
-        .connection-status.syncing {
-            background-color: var(--warning);
-            color: var(--dark);
-        }
-        
         /* الأنماط الأصلية لموقعك تبقى كما هي */
         :root {
             --primary: #2c5f2d;
@@ -1547,12 +1515,6 @@
     
     <!-- ==================== التطبيق الرئيسي (مخفي قبل تسجيل الدخول) ==================== -->
     <div class="main-app">
-        <!-- مؤشر حالة الاتصال -->
-        <div id="connectionStatus" class="connection-status">
-            <i class="fas fa-wifi"></i>
-            <span>جاري التحقق من الاتصال...</span>
-        </div>
-        
         <!-- ترويسة الموقع -->
         <header>
             <div class="container header-content">
@@ -2186,34 +2148,7 @@
             initializeApp();
         }
         
-        // ==================== نظام العمل دون اتصال ====================
-        
-        // مفاتيح التخزين المحلي
-        const LOCAL_STORAGE_KEYS = {
-            DRAFT_FORM: 'nakhil_draft_form',
-            RESERVATIONS: 'nakhil_reservations',
-            RESERVATION_COUNTER: 'nakhil_reservation_counter',
-            SYNC_QUEUE: 'nakhil_sync_queue',
-            LAST_SYNC: 'nakhil_last_sync'
-        };
-        
-        // بيانات الحجوزات المحلية
-        let localReservations = [];
-        let reservationCounter = 0;
-        let currentReservationData = null;
-        let isOnline = navigator.onLine;
-        let syncQueue = [];
-        
-        // متغيرات التقويم
-        let currentDate = new Date();
-        let currentMonth = currentDate.getMonth();
-        let currentYear = currentDate.getFullYear();
-        
-        // إعدادات تليجرام
-        const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
-        const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
-        
-        // ==================== تهيئة التطبيق بعد تسجيل الدخول ====================
+        // تهيئة التطبيق بعد تسجيل الدخول
         function initializeApp() {
             // عرض التاريخ الحالي
             const today = new Date();
@@ -2227,23 +2162,8 @@
             // تعيين الحد الأدنى لتاريخ الحفل إلى اليوم
             document.getElementById('eventDate').min = today.toISOString().split('T')[0];
             
-            // تحديث حالة الاتصال
-            updateConnectionStatus();
-            
-            // تحميل البيانات المحلية
-            loadLocalData();
-            
-            // محاولة تحميل البيانات من Firestore إذا كان هناك اتصال
-            if (isOnline) {
-                loadReservationsFromFirestore();
-            } else {
-                showAlert('⚠️ أنت تعمل بدون اتصال بالإنترنت. يتم استخدام البيانات المخزنة محلياً.', 'warning');
-            }
-            
-            // تهيئة مستمعي الأحداث للنموذج
-            setupFormListeners();
-            
-            // تحديث الجدول والبيانات
+            // تحديث الجدول والبيانات من Firestore
+            loadReservationsFromFirestore();
             updateRemainingAmount();
             
             // تهيئة التقويم
@@ -2251,165 +2171,73 @@
             
             // اختبار اتصال تليجرام
             testTelegramConnection();
-            
-            // إعداد مستمعي الأحداث للاتصال
-            setupConnectionListeners();
         }
         
-        // ==================== تحميل البيانات المحلية ====================
-        function loadLocalData() {
-            try {
-                // تحميل مسودة النموذج الحالي
-                const savedDraft = localStorage.getItem(LOCAL_STORAGE_KEYS.DRAFT_FORM);
-                if (savedDraft) {
-                    const draftData = JSON.parse(savedDraft);
-                    populateFormFromDraft(draftData);
-                    showAlert('تم استعادة النموذج السابق من الذاكرة المحلية', 'info');
-                }
-                
-                // تحميل الحجوزات المحلية
-                const savedReservations = localStorage.getItem(LOCAL_STORAGE_KEYS.RESERVATIONS);
-                if (savedReservations) {
-                    localReservations = JSON.parse(savedReservations);
-                }
-                
-                // تحميل عداد الحجوزات
-                const savedCounter = localStorage.getItem(LOCAL_STORAGE_KEYS.RESERVATION_COUNTER);
-                if (savedCounter) {
-                    reservationCounter = parseInt(savedCounter) || 0;
-                }
-                
-                // تحميل قائمة المزامنة
-                const savedSyncQueue = localStorage.getItem(LOCAL_STORAGE_KEYS.SYNC_QUEUE);
-                if (savedSyncQueue) {
-                    syncQueue = JSON.parse(savedSyncQueue);
-                }
-                
-                console.log('✅ تم تحميل البيانات المحلية:', {
-                    reservations: localReservations.length,
-                    counter: reservationCounter,
-                    syncQueue: syncQueue.length
-                });
-                
-            } catch (error) {
-                console.error('❌ خطأ في تحميل البيانات المحلية:', error);
-                showAlert('خطأ في تحميل البيانات المحلية', 'error');
-            }
-        }
-        
-        // ==================== ملء النموذج من المسودة المحفوظة ====================
-        function populateFormFromDraft(draftData) {
-            try {
-                // تعبئة الحقول الأساسية
-                if (draftData.customerName) document.getElementById('customerName').value = draftData.customerName;
-                if (draftData.phone) document.getElementById('phone').value = draftData.phone;
-                if (draftData.groomName) document.getElementById('groomName').value = draftData.groomName;
-                if (draftData.brideName) document.getElementById('brideName').value = draftData.brideName;
-                if (draftData.groomAddress) document.getElementById('groomAddress').value = draftData.groomAddress;
-                if (draftData.brideAddress) document.getElementById('brideAddress').value = draftData.brideAddress;
-                if (draftData.eventDate) document.getElementById('eventDate').value = draftData.eventDate;
-                if (draftData.eventType) document.getElementById('eventType').value = draftData.eventType;
-                if (draftData.eventTime) document.getElementById('eventTime').value = draftData.eventTime;
-                if (draftData.totalAmount) document.getElementById('totalAmount').value = draftData.totalAmount;
-                if (draftData.paidAmount) document.getElementById('paidAmount').value = draftData.paidAmount;
-                if (draftData.notes) document.getElementById('notes').value = draftData.notes;
-                
-                // خدمة التصوير
-                if (draftData.photographyServices) {
-                    if (draftData.photographyServices === 'إضافة تصوير') {
-                        document.getElementById('photographyAdd').checked = true;
-                    } else {
-                        document.getElementById('photographyNone').checked = true;
-                    }
-                }
-                
-                // القاعات
-                if (draftData.halls && Array.isArray(draftData.halls)) {
-                    document.querySelectorAll('input[name="hall"]').forEach(cb => {
-                        cb.checked = draftData.halls.includes(cb.value);
-                    });
-                }
-                
-                // تحديث المبلغ المتبقي
-                updateRemainingAmount();
-                
-            } catch (error) {
-                console.error('❌ خطأ في تعبئة النموذج من المسودة:', error);
-            }
-        }
-        
-        // ==================== إعداد مستمعي الأحداث للنموذج ====================
-        function setupFormListeners() {
-            // حفظ المسودة تلقائياً عند تغيير أي حقل
-            const formInputs = document.querySelectorAll('#reservationForm input, #reservationForm select, #reservationForm textarea');
-            formInputs.forEach(input => {
-                input.addEventListener('input', saveFormDraft);
-                input.addEventListener('change', saveFormDraft);
-            });
-            
-            // أزرار الراديو والاختيار
-            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
-                input.addEventListener('change', saveFormDraft);
-            });
-        }
-        
-        // ==================== حفظ مسودة النموذج ====================
-        function saveFormDraft() {
-            try {
-                const formData = getFormData();
-                localStorage.setItem(LOCAL_STORAGE_KEYS.DRAFT_FORM, JSON.stringify(formData));
-                
-                // حفظ خفي دون إشعار للمستخدم
-                console.log('💾 تم حفظ مسودة النموذج محلياً');
-                
-            } catch (error) {
-                console.error('❌ خطأ في حفظ المسودة:', error);
-            }
-        }
-        
-        // ==================== تحديث حالة الاتصال ====================
-        function updateConnectionStatus() {
-            const statusElement = document.getElementById('connectionStatus');
-            isOnline = navigator.onLine;
-            
-            if (isOnline) {
-                statusElement.className = 'connection-status online';
-                statusElement.innerHTML = '<i class="fas fa-wifi"></i> <span>متصل بالإنترنت</span>';
-            } else {
-                statusElement.className = 'connection-status offline';
-                statusElement.innerHTML = '<i class="fas fa-wifi-slash"></i> <span>غير متصل - العمل محلياً</span>';
-            }
-        }
-        
-        // ==================== إعداد مستمعي الأحداث للاتصال ====================
-        function setupConnectionListeners() {
-            window.addEventListener('online', function() {
-                isOnline = true;
-                updateConnectionStatus();
-                showAlert('✅ تم استعادة الاتصال بالإنترنت. جاري مزامنة البيانات...', 'success');
-                
-                // محاولة مزامنة البيانات عند عودة الاتصال
-                setTimeout(syncLocalDataWithFirebase, 1000);
-                loadReservationsFromFirestore();
-            });
-            
-            window.addEventListener('offline', function() {
-                isOnline = false;
-                updateConnectionStatus();
-                showAlert('⚠️ فقدت الاتصال بالإنترنت. العمل باستخدام البيانات المحلية', 'warning');
-            });
-        }
-        
-        // ==================== تحميل الحجوزات من Firestore ====================
-        async function loadReservationsFromFirestore() {
-            if (!isOnline) {
-                console.log('ℹ️ لا يوجد اتصال، استخدام البيانات المحلية');
-                // عرض البيانات المحلية
-                updateReservationsTable();
-                generateCalendar();
+        // التحقق من تسجيل الدخول عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // التحقق أولاً من حالة تسجيل الدخول المحفوظة
+            if (checkSavedLogin()) {
+                loginSuccess();
                 return;
             }
             
+            // إذا لم يكن مسجلاً، إعداد مستمعي الأحداث لتسجيل الدخول
+            const loginForm = document.getElementById('loginForm');
+            const passwordInput = document.getElementById('passwordInput');
+            
+            // تركيز على حقل كلمة المرور
+            passwordInput.focus();
+            
+            // إرسال النموذج
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const enteredPassword = passwordInput.value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+                
+                if (enteredPassword === CORRECT_PASSWORD) {
+                    // حفظ حالة تسجيل الدخول
+                    saveLoginStatus(rememberMe);
+                    
+                    // تسجيل الدخول الناجح
+                    loginSuccess();
+                } else {
+                    // إظهار خطأ
+                    showLoginError();
+                }
+            });
+            
+            // زر تسجيل الخروج
+            document.getElementById('logoutBtn')?.addEventListener('click', logout);
+            
+            // إضافة أنيميشن الاهتزاز
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                    20%, 40%, 60%, 80% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+        
+        // بيانات الحجوزات
+        let reservations = [];
+        let reservationCounter = 0;
+        let currentReservationData = null;
+        
+        // متغيرات التقويم
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        
+        // إعدادات تليجرام
+        const TELEGRAM_BOT_TOKEN = '8397496793:AAH0h2R3MoKt4YUwWtU7uJCs1N4KB4RRRYM';
+        const ADMIN_CHAT_IDS = ['5627350311', '8256049330'];
+        
+        // ==================== تحميل الحجوزات من Firestore ====================
+        async function loadReservationsFromFirestore() {
             try {
                 showAlert('جاري تحميل الحجوزات من السحابة...', 'info');
                 
@@ -2417,99 +2245,68 @@
                 const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
                 const querySnapshot = await window.firebaseModules.getDocs(q);
                 
-                const cloudReservations = [];
+                reservations = [];
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    cloudReservations.push({
+                    reservations.push({
                         id: doc.id,
                         ...data
                     });
                 });
                 
-                // دمج البيانات المحلية مع السحابية
-                mergeReservations(cloudReservations);
-                
                 // حساب أعلى رقم حجز
-                if (localReservations.length > 0) {
-                    const maxId = Math.max(...localReservations.map(r => {
+                if (reservations.length > 0) {
+                    const maxId = Math.max(...reservations.map(r => {
                         const numId = parseInt(r.reservationNumber) || 0;
                         return numId;
                     }));
                     reservationCounter = maxId;
+                } else {
+                    reservationCounter = 0;
                 }
-                
-                // حفظ البيانات المدمجة محلياً
-                saveLocalReservations();
                 
                 updateReservationsTable();
                 generateCalendar();
-                showAlert(`تم تحميل ${cloudReservations.length} حجز من السحابة`, 'success');
+                showAlert(`تم تحميل ${reservations.length} حجز من السحابة`, 'success');
                 
                 // الاستماع للتحديثات الحية
                 setupRealtimeListener();
                 
             } catch (error) {
                 console.error('❌ خطأ في تحميل الحجوزات:', error);
-                showAlert('خطأ في تحميل الحجوزات من السحابة. استخدام البيانات المحلية', 'error');
+                showAlert('خطأ في تحميل الحجوزات من السحابة. تحقق من اتصالك بالإنترنت', 'error');
                 
-                // استخدام البيانات المحلية
-                updateReservationsTable();
-                generateCalendar();
-            }
-        }
-        
-        // ==================== دمج الحجوزات المحلية والسحابية ====================
-        function mergeReservations(cloudReservations) {
-            const mergedReservations = [...cloudReservations];
-            
-            // إضافة الحجوزات المحلية غير الموجودة في السحابة
-            localReservations.forEach(localReservation => {
-                const existsInCloud = cloudReservations.some(cloudRes => 
-                    cloudRes.id === localReservation.id || 
-                    cloudRes.reservationNumber === localReservation.reservationNumber
-                );
-                
-                if (!existsInCloud && !localReservation.isSynced) {
-                    // إضافة إلى المصفوفة المدمجة
-                    mergedReservations.push({
-                        ...localReservation,
-                        source: 'local',
-                        needsSync: true
-                    });
+                // محاولة التحميل من localStorage كنسخة احتياطية
+                const localData = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                reservations = localData;
+                if (reservations.length > 0) {
+                    reservationCounter = Math.max(...reservations.map(r => r.reservationNumber || 0));
+                    updateReservationsTable();
+                    generateCalendar();
+                    showAlert('تم تحميل النسخة الاحتياطية من الحجوزات', 'info');
                 }
-            });
-            
-            localReservations = mergedReservations;
+            }
         }
         
         // ==================== إعداد الاستماع للتحديثات الحية ====================
         function setupRealtimeListener() {
-            if (!isOnline) return;
-            
             try {
                 const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
                 const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('createdAt', 'desc'));
                 
                 window.firebaseModules.onSnapshot(q, (snapshot) => {
-                    if (!isOnline) return;
-                    
                     const updatedReservations = [];
                     snapshot.forEach((doc) => {
                         const data = doc.data();
                         updatedReservations.push({
                             id: doc.id,
-                            ...data,
-                            source: 'cloud'
+                            ...data
                         });
                     });
                     
-                    // تحديث القائمة المحلية
-                    localReservations = updatedReservations;
-                    saveLocalReservations();
-                    
+                    reservations = updatedReservations;
                     updateReservationsTable();
                     generateCalendar();
-                    
                 }, (error) => {
                     console.error('❌ خطأ في تحديثات الوقت الحقيقي:', error);
                 });
@@ -2575,7 +2372,7 @@
                         Array.isArray(r.halls) && r.halls.length === 2
                     );
                     
-                    // الحجوزات الفردية (غير المتضمنة في حجوزات القاعتين معاً)
+                    // الحجوزات الفردية (غير المتضمنة في حجوزات القاعتين)
                     const individualReservations = dayReservations.filter(r => {
                         // استبعاد الحجوزات التي هي جزء من حجز القاعتين معاً
                         if (Array.isArray(r.halls) && r.halls.length === 2) {
@@ -2649,7 +2446,7 @@
         
         // ==================== الحصول على الحجوزات لتاريخ معين ====================
         function getReservationsForDate(dateStr) {
-            return localReservations.filter(reservation => {
+            return reservations.filter(reservation => {
                 if (!reservation.eventDate) return false;
                 
                 // تحويل التاريخ إلى نفس التنسيق
@@ -2677,9 +2474,8 @@
         
         // ==================== عرض تفاصيل الحجز ====================
         function showReservationDetails(reservation) {
-            const source = reservation.source === 'local' ? ' (محلي)' : ' (سحابي)';
             const message = `
-اسم السيد: ${reservation.customerName}${source}
+اسم السيد: ${reservation.customerName}
 رقم الهاتف: ${reservation.phone}
 نوع المناسبة: ${reservation.eventType}
 القاعة: ${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls}
@@ -2754,19 +2550,11 @@
             hallCheckboxes.forEach(cb => {
                 cb.checked = this.checked;
             });
-            saveFormDraft();
         });
         
         // ==================== حساب المبلغ المتبقي ====================
-        document.getElementById('totalAmount')?.addEventListener('input', function() {
-            updateRemainingAmount();
-            saveFormDraft();
-        });
-        
-        document.getElementById('paidAmount')?.addEventListener('input', function() {
-            updateRemainingAmount();
-            saveFormDraft();
-        });
+        document.getElementById('totalAmount')?.addEventListener('input', updateRemainingAmount);
+        document.getElementById('paidAmount')?.addEventListener('input', updateRemainingAmount);
         
         function updateRemainingAmount() {
             const total = parseFloat(document.getElementById('totalAmount').value) || 0;
@@ -2782,10 +2570,6 @@
                 updateRemainingAmount();
                 // إعادة تعيين التصوير
                 document.getElementById('photographyNone').checked = true;
-                
-                // مسح المسودة المحفوظة
-                localStorage.removeItem(LOCAL_STORAGE_KEYS.DRAFT_FORM);
-                showAlert('تم مسح النموذج والمسودة المحفوظة', 'success');
             }
         });
         
@@ -3532,61 +3316,72 @@
             sendToAllAdmins(telegramMessage);
         });
         
-        // ==================== حفظ الحجز محلياً ====================
-        function saveReservationLocally(reservationData) {
+        // ==================== حفظ الحجز في Firestore ====================
+        async function saveReservationToFirestore(reservationData) {
             try {
                 reservationCounter++;
-                const localId = 'local_' + Date.now() + '_' + reservationCounter;
                 
-                const reservation = {
-                    id: localId,
+                // تحضير بيانات الحجز
+                const firestoreData = {
                     ...reservationData,
                     reservationNumber: reservationCounter,
                     createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    source: 'local',
-                    isSynced: false,
-                    needsSync: true
+                    updatedAt: new Date().toISOString()
                 };
                 
-                // إضافة إلى القائمة المحلية
-                localReservations.unshift(reservation);
+                // إضافة إلى Firestore
+                const docRef = await window.firebaseModules.addDoc(
+                    window.firebaseModules.collection(window.firestore, 'reservations'),
+                    firestoreData
+                );
                 
-                // حفظ محلياً
-                saveLocalReservations();
+                console.log('✅ تم حفظ الحجز في Firestore:', docRef.id);
                 
-                // مسح المسودة
-                localStorage.removeItem(LOCAL_STORAGE_KEYS.DRAFT_FORM);
+                // حفظ نسخة احتياطية في localStorage
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                backupReservations.push({
+                    id: docRef.id,
+                    ...firestoreData
+                });
+                localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
                 
                 return {
                     success: true,
-                    localId: localId,
+                    docId: docRef.id,
                     reservationNumber: reservationCounter,
-                    data: reservation
+                    data: firestoreData
                 };
                 
             } catch (error) {
-                console.error('❌ خطأ في حفظ الحجز محلياً:', error);
-                return {
-                    success: false,
-                    error: error.message
-                };
-            }
-        }
-        
-        // ==================== حفظ الحجوزات المحلية ====================
-        function saveLocalReservations() {
-            try {
-                localStorage.setItem(LOCAL_STORAGE_KEYS.RESERVATIONS, JSON.stringify(localReservations));
-                localStorage.setItem(LOCAL_STORAGE_KEYS.RESERVATION_COUNTER, reservationCounter.toString());
+                console.error('❌ خطأ في حفظ الحجز في Firestore:', error);
                 
-                // حفظ تاريخ آخر مزامنة
-                localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
-                
-                console.log('💾 تم حفظ الحجوزات محلياً:', localReservations.length);
-                
-            } catch (error) {
-                console.error('❌ خطأ في حفظ الحجوزات محلية:', error);
+                // محاولة الحفظ في localStorage كنسخة احتياطية
+                try {
+                    reservationCounter++;
+                    reservationData.reservationNumber = reservationCounter;
+                    reservationData.createdAt = new Date().toISOString();
+                    
+                    const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                    backupReservations.push({
+                        id: 'local_' + reservationCounter,
+                        ...reservationData
+                    });
+                    localStorage.setItem('nakhilReservations_backup', JSON.stringify(backupReservations));
+                    
+                    return {
+                        success: true,
+                        docId: 'local_' + reservationCounter,
+                        reservationNumber: reservationCounter,
+                        data: reservationData
+                    };
+                    
+                } catch (localError) {
+                    console.error('❌ خطأ في حفظ النسخة الاحتياطية:', localError);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
             }
         }
         
@@ -3605,62 +3400,43 @@
             
             const reservationData = getFormData();
             
-            if (isOnline) {
-                // إذا كان متصلاً، حفظ في Firebase
-                showAlert('جاري حفظ الحجز في السحابة...', 'info');
-                const saveResult = await saveReservationToFirestore(reservationData);
-                
-                if (!saveResult.success) {
-                    // إذا فشل حفظ Firebase، حفظ محلياً
-                    showAlert('فشل حفظ في السحابة، جاري الحفظ محلياً...', 'warning');
-                    const localResult = saveReservationLocally(reservationData);
-                    
-                    if (!localResult.success) {
-                        showAlert('خطأ في حفظ الحجز محلياً', 'error');
-                        return;
-                    }
-                    
-                    showAlert(`تم حفظ الحجز محلياً! رقم الحجز: ${localResult.reservationNumber} ⚠️ (بانتظار المزامنة)`, 'warning');
-                    
-                } else {
-                    // حفظ ناجح في Firebase
-                    showAlert(`تم حفظ الحجز في السحابة! رقم الحجز: ${saveResult.reservationNumber} ✅`, 'success');
-                    
-                    // إرسال إشعار تليجرام
-                    try {
-                        const telegramMessage = formatTelegramMessage();
-                        await sendToAllAdmins(telegramMessage);
-                        
-                        // تحديث حالة التليجرام
-                        try {
-                            await window.firebaseModules.updateDoc(
-                                window.firebaseModules.doc(window.firestore, 'reservations', saveResult.docId),
-                                {
-                                    telegramSent: true,
-                                    telegramSentAt: new Date().toISOString()
-                                }
-                            );
-                        } catch (updateError) {
-                            console.error('❌ خطأ في تحديث حالة التليجرام:', updateError);
-                        }
-                        
-                    } catch (error) {
-                        console.error('خطأ في إرسال تليجرام:', error);
-                    }
-                }
-                
-            } else {
-                // إذا كان غير متصل، حفظ محلياً فقط
-                showAlert('جاري حفظ الحجز محلياً (غير متصل بالإنترنت)...', 'info');
-                const localResult = saveReservationLocally(reservationData);
-                
-                if (!localResult.success) {
-                    showAlert('خطأ في حفظ الحجز محلياً', 'error');
-                    return;
-                }
-                
-                showAlert(`تم حفظ الحجز محلياً! رقم الحجز: ${localResult.reservationNumber} ⚠️ (بانتظار المزامنة عند الاتصال)`, 'warning');
+            // حفظ في Firebase
+            showAlert('جاري حفظ الحجز في السحابة...', 'info');
+            const saveResult = await saveReservationToFirestore(reservationData);
+            
+            if (!saveResult.success) {
+                showAlert('خطأ في حفظ الحجز في السحابة', 'error');
+                return;
             }
+            
+            const reservationNumber = saveResult.reservationNumber;
+            
+            // إرسال إشعار تليجرام
+            let telegramSuccess = false;
+            try {
+                const telegramMessage = formatTelegramMessage();
+                await sendToAllAdmins(telegramMessage);
+                telegramSuccess = true;
+                
+                // تحديث حالة التليجرام في Firestore
+                try {
+                    await window.firebaseModules.updateDoc(
+                        window.firebaseModules.doc(window.firestore, 'reservations', saveResult.docId),
+                        {
+                            telegramSent: true,
+                            telegramSentAt: new Date().toISOString()
+                        }
+                    );
+                } catch (updateError) {
+                    console.error('❌ خطأ في تحديث حالة التليجرام:', updateError);
+                }
+                
+            } catch (error) {
+                console.error('خطأ في إرسال تليجرام:', error);
+            }
+            
+            // إظهار رسالة نجاح
+            showAlert(`تم حفظ الحجز بنجاح! رقم الحجز: ${reservationNumber} ${telegramSuccess ? '✅ (تم الإرسال للتليجرام)' : '⚠️ (لم يتم الإرسال للتليجرام)'}`, 'success');
             
             // مسح النموذج
             document.getElementById('reservationForm').reset();
@@ -3682,125 +3458,6 @@
                 page.classList.remove('active');
             });
             document.getElementById('booking-form').classList.add('active');
-        }
-        
-        // ==================== حفظ الحجز في Firestore ====================
-        async function saveReservationToFirestore(reservationData) {
-            try {
-                reservationCounter++;
-                
-                // تحضير بيانات الحجز
-                const firestoreData = {
-                    ...reservationData,
-                    reservationNumber: reservationCounter,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                    source: 'cloud',
-                    isSynced: true
-                };
-                
-                // إضافة إلى Firestore
-                const docRef = await window.firebaseModules.addDoc(
-                    window.firebaseModules.collection(window.firestore, 'reservations'),
-                    firestoreData
-                );
-                
-                console.log('✅ تم حفظ الحجز في Firestore:', docRef.id);
-                
-                // إضافة إلى القائمة المحلية
-                localReservations.unshift({
-                    id: docRef.id,
-                    ...firestoreData
-                });
-                
-                // حفظ محلياً
-                saveLocalReservations();
-                
-                return {
-                    success: true,
-                    docId: docRef.id,
-                    reservationNumber: reservationCounter,
-                    data: firestoreData
-                };
-                
-            } catch (error) {
-                console.error('❌ خطأ في حفظ الحجز في Firestore:', error);
-                return {
-                    success: false,
-                    error: error.message
-                };
-            }
-        }
-        
-        // ==================== مزامنة البيانات المحلية مع Firebase ====================
-        async function syncLocalDataWithFirebase() {
-            if (!isOnline) {
-                console.log('ℹ️ لا يوجد اتصال، لا يمكن المزامنة');
-                return;
-            }
-            
-            const localReservationsToSync = localReservations.filter(r => 
-                r.source === 'local' && r.needsSync
-            );
-            
-            if (localReservationsToSync.length === 0) {
-                console.log('ℹ️ لا توجد بيانات للمزامنة');
-                return;
-            }
-            
-            showAlert(`جاري مزامنة ${localReservationsToSync.length} حجز مع السحابة...`, 'info');
-            
-            let syncedCount = 0;
-            let failedCount = 0;
-            
-            for (const localReservation of localReservationsToSync) {
-                try {
-                    // نسخة من البيانات بدون الخصائص المحلية
-                    const { id, source, isSynced, needsSync, ...reservationData } = localReservation;
-                    
-                    // حفظ في Firebase
-                    const docRef = await window.firebaseModules.addDoc(
-                        window.firebaseModules.collection(window.firestore, 'reservations'),
-                        {
-                            ...reservationData,
-                            isSynced: true,
-                            syncedAt: new Date().toISOString()
-                        }
-                    );
-                    
-                    // تحديث القائمة المحلية
-                    const index = localReservations.findIndex(r => r.id === localReservation.id);
-                    if (index !== -1) {
-                        localReservations[index] = {
-                            ...localReservations[index],
-                            id: docRef.id,
-                            isSynced: true,
-                            needsSync: false,
-                            source: 'cloud',
-                            syncedAt: new Date().toISOString()
-                        };
-                    }
-                    
-                    syncedCount++;
-                    
-                } catch (error) {
-                    console.error(`❌ خطأ في مزامنة الحجز ${localReservation.id}:`, error);
-                    failedCount++;
-                }
-            }
-            
-            // حفظ القائمة المحدثة
-            saveLocalReservations();
-            
-            if (syncedCount > 0) {
-                showAlert(`تم مزامنة ${syncedCount} حجز مع السحابة بنجاح ✅`, 'success');
-                updateReservationsTable();
-                generateCalendar();
-            }
-            
-            if (failedCount > 0) {
-                showAlert(`فشل مزامنة ${failedCount} حجز ❌`, 'error');
-            }
         }
         
         // ==================== التحقق من صحة النموذج ====================
@@ -3837,12 +3494,12 @@
             const tableBody = document.getElementById('reservationsTableBody');
             tableBody.innerHTML = '';
             
-            if (localReservations.length === 0) {
+            if (reservations.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="14" style="text-align: center; padding: 30px;">لا توجد حجوزات مسجلة بعد</td></tr>';
                 return;
             }
             
-            const sortedReservations = [...localReservations].sort((a, b) => 
+            const sortedReservations = [...reservations].sort((a, b) => 
                 new Date(b.createdAt || b.bookingDate) - new Date(a.createdAt || a.bookingDate)
             );
             
@@ -3874,12 +3531,6 @@
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
-                // إضافة مؤشر إذا كان محلياً وغير متزامن
-                let syncIndicator = '';
-                if (reservation.source === 'local' && reservation.needsSync) {
-                    syncIndicator = ' <span style="color: var(--warning); font-size: 0.7rem;" title="بانتظار المزامنة مع السحابة">⏳</span>';
-                }
-                
                 const actions = `
                     <div class="action-cell">
                         <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
@@ -3892,7 +3543,7 @@
                 `;
                 
                 row.innerHTML = `
-                    <td>${reservation.reservationNumber || reservation.id}${syncIndicator}</td>
+                    <td>${reservation.reservationNumber || reservation.id}</td>
                     <td>${reservation.customerName}</td>
                     <td>${reservation.groomName || '-'}</td>
                     <td>${reservation.brideName || '-'}</td>
@@ -3913,8 +3564,8 @@
         }
         
         // ==================== عرض تفاصيل الحجز ====================
-        window.viewReservation = function(reservationId) {
-            const reservation = localReservations.find(r => r.id === reservationId);
+        window.viewReservation = function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
             if (!reservation) return;
             
             // تعبئة الحقول الرئيسية
@@ -3962,130 +3613,92 @@
             updatePreview();
             updatePrintContent();
             
-            showAlert(`تم تحميل بيانات الحجز رقم ${reservation.reservationNumber || reservationId}`, 'info');
+            showAlert(`تم تحميل بيانات الحجز رقم ${reservation.reservationNumber || docId}`, 'info');
         };
         
         // ==================== حذف الحجز ====================
-        window.deleteReservation = async function(reservationId) {
-            const reservation = localReservations.find(r => r.id === reservationId);
+        window.deleteReservation = async function(docId) {
+            const reservation = reservations.find(r => r.id === docId);
             if (!reservation) return;
             
             if (!confirm(`هل أنت متأكد من حذف الحجز رقم ${reservation.reservationNumber}؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
                 return;
             }
             
-            // حذف من القائمة المحلية
-            const index = localReservations.findIndex(r => r.id === reservationId);
-            if (index !== -1) {
-                localReservations.splice(index, 1);
+            // حذف من Firebase
+            showAlert('جاري حذف الحجز من السحابة...', 'info');
+            
+            try {
+                await window.firebaseModules.deleteDoc(
+                    window.firebaseModules.doc(window.firestore, 'reservations', docId)
+                );
+                
+                // تحديث النسخة الاحتياطية
+                const backupReservations = JSON.parse(localStorage.getItem('nakhilReservations_backup')) || [];
+                const updatedBackup = backupReservations.filter(r => r.id !== docId);
+                localStorage.setItem('nakhilReservations_backup', JSON.stringify(updatedBackup));
+                
+                // إرسال إشعار حذف للتليجرام
+                sendDeleteNotificationToTelegram(reservation);
+                
+                // تحديث واجهة المستخدم
+                updateReservationsTable();
+                generateCalendar();
+                
+                showAlert(`تم حذف الحجز رقم ${reservation.reservationNumber} بنجاح`, 'success');
+                
+            } catch (error) {
+                console.error('❌ خطأ في حذف الحجز:', error);
+                showAlert('خطأ في حذف الحجز من السحابة', 'error');
             }
-            
-            // حفظ التغييرات محلياً
-            saveLocalReservations();
-            
-            // إذا كان الحجز موجوداً في السحابة، حذفه منها أيضاً
-            if (reservation.source === 'cloud' && isOnline) {
-                try {
-                    await window.firebaseModules.deleteDoc(
-                        window.firebaseModules.doc(window.firestore, 'reservations', reservationId)
-                    );
-                    
-                    // إرسال إشعار حذف للتليجرام
-                    sendDeleteNotificationToTelegram(reservation);
-                    
-                } catch (error) {
-                    console.error('❌ خطأ في حذف الحجز من السحابة:', error);
-                    // إضافة إلى قائمة المزامنة للحذف لاحقاً
-                    addToSyncQueue({
-                        type: 'delete',
-                        reservationId: reservationId,
-                        data: reservation
-                    });
-                }
-            } else if (reservation.source === 'local') {
-                // إذا كان محلياً فقط، إضافة إلى قائمة المزامنة للحذف لاحقاً
-                addToSyncQueue({
-                    type: 'delete',
-                    reservationId: reservationId,
-                    data: reservation
-                });
-            }
-            
-            // تحديث واجهة المستخدم
-            updateReservationsTable();
-            generateCalendar();
-            
-            showAlert(`تم حذف الحجز رقم ${reservation.reservationNumber} بنجاح`, 'success');
         };
-        
-        // ==================== إضافة إلى قائمة المزامنة ====================
-        function addToSyncQueue(item) {
-            syncQueue.push({
-                ...item,
-                timestamp: new Date().toISOString(),
-                attempts: 0
-            });
-            
-            localStorage.setItem(LOCAL_STORAGE_KEYS.SYNC_QUEUE, JSON.stringify(syncQueue));
-        }
         
         // ==================== حذف جميع الحجوزات ====================
         document.getElementById('deleteAllBtn')?.addEventListener('click', async function() {
-            if (localReservations.length === 0) {
+            if (reservations.length === 0) {
                 showAlert('لا توجد حجوزات لحذفها', 'info');
                 return;
             }
             
-            if (!confirm(`هل أنت متأكد من حذف جميع الحجوزات (${localReservations.length} حجز)؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
+            if (!confirm(`هل أنت متأكد من حذف جميع الحجوزات (${reservations.length} حجز)؟ هذا الإجراء لا يمكن التراجع عنه.`)) {
                 return;
             }
             
-            showAlert('جاري حذف جميع الحجوزات...', 'info');
+            showAlert('جاري حذف جميع الحجوزات من السحابة...', 'info');
             
-            // نسخة من الحجوزات قبل الحذف
-            const reservationsToDelete = [...localReservations];
+            let deletedCount = 0;
+            let errorCount = 0;
             
-            // حذف محلياً
-            localReservations = [];
-            reservationCounter = 0;
-            
-            // حفظ التغييرات
-            saveLocalReservations();
-            
-            // إذا كان متصلاً، حذف من السحابة
-            if (isOnline) {
-                let cloudDeletedCount = 0;
-                let cloudErrorCount = 0;
-                
-                for (const reservation of reservationsToDelete) {
-                    if (reservation.source === 'cloud') {
-                        try {
-                            await window.firebaseModules.deleteDoc(
-                                window.firebaseModules.doc(window.firestore, 'reservations', reservation.id)
-                            );
-                            cloudDeletedCount++;
-                        } catch (error) {
-                            console.error(`❌ خطأ في حذف الحجز ${reservation.id}:`, error);
-                            cloudErrorCount++;
-                        }
-                    }
+            // حذف كل وثيقة على حدة
+            for (const reservation of reservations) {
+                try {
+                    await window.firebaseModules.deleteDoc(
+                        window.firebaseModules.doc(window.firestore, 'reservations', reservation.id)
+                    );
+                    deletedCount++;
+                } catch (error) {
+                    console.error(`❌ خطأ في حذف الحجز ${reservation.id}:`, error);
+                    errorCount++;
                 }
-                
-                // إرسال إشعار حذف الكل للتليجرام
-                sendDeleteAllNotificationToTelegram(reservationsToDelete.length);
-                
-                if (cloudErrorCount > 0) {
-                    showAlert(`تم حذف جميع الحجوزات محلياً، وفشل حذف ${cloudErrorCount} من السحابة`, 'warning');
-                } else {
-                    showAlert(`تم حذف جميع الحجوزات بنجاح (${reservationsToDelete.length} حجز)`, 'success');
-                }
-            } else {
-                showAlert(`تم حذف جميع الحجوزات محلياً (${reservationsToDelete.length} حجز) ⚠️ (بانتظار المزامنة)`, 'warning');
             }
+            
+            // إرسال إشعار حذف الكل للتليجرام
+            sendDeleteAllNotificationToTelegram(reservations.length);
+            
+            // تحديث البيانات المحلية
+            reservations = [];
+            reservationCounter = 0;
+            localStorage.removeItem('nakhilReservations_backup');
             
             // تحديث واجهة المستخدم
             updateReservationsTable();
             generateCalendar();
+            
+            if (errorCount > 0) {
+                showAlert(`تم حذف ${deletedCount} حجز بنجاح، وفشل حذف ${errorCount} حجز`, 'warning');
+            } else {
+                showAlert(`تم حذف جميع الحجوزات بنجاح (${deletedCount} حجز)`, 'success');
+            }
         });
         
         // ==================== البحث في الحجوزات ====================
@@ -4097,7 +3710,7 @@
             const tableBody = document.getElementById('reservationsTableBody');
             tableBody.innerHTML = '';
             
-            const filteredReservations = localReservations.filter(reservation => 
+            const filteredReservations = reservations.filter(reservation => 
                 reservation.customerName?.toLowerCase().includes(searchTerm) ||
                 reservation.phone?.includes(searchTerm) ||
                 reservation.eventType?.toLowerCase().includes(searchTerm) ||
@@ -4142,12 +3755,6 @@
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
-                // إضافة مؤشر إذا كان محلياً وغير متزامن
-                let syncIndicator = '';
-                if (reservation.source === 'local' && reservation.needsSync) {
-                    syncIndicator = ' <span style="color: var(--warning); font-size: 0.7rem;" title="بانتظار المزامنة مع السحابة">⏳</span>';
-                }
-                
                 const actions = `
                     <div class="action-cell">
                         <button class="action-btn view" onclick="viewReservation('${reservation.id}')">
@@ -4160,7 +3767,7 @@
                 `;
                 
                 row.innerHTML = `
-                    <td>${reservation.reservationNumber || reservation.id}${syncIndicator}</td>
+                    <td>${reservation.reservationNumber || reservation.id}</td>
                     <td>${reservation.customerName}</td>
                     <td>${reservation.groomName || '-'}</td>
                     <td>${reservation.brideName || '-'}</td>
@@ -4188,12 +3795,12 @@
         
         // ==================== تصدير البيانات ====================
         document.getElementById('exportReservations')?.addEventListener('click', function() {
-            if (localReservations.length === 0) {
+            if (reservations.length === 0) {
                 showAlert('لا توجد بيانات للتصدير', 'error');
                 return;
             }
             
-            const csvContent = convertToCSV(localReservations);
+            const csvContent = convertToCSV(reservations);
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
@@ -4210,11 +3817,6 @@
         
         // ==================== دعم تليجرام ====================
         async function sendToAllAdmins(message) {
-            if (!isOnline) {
-                showAlert('لا يمكن إرسال الإشعارات بدون اتصال بالإنترنت', 'error');
-                return;
-            }
-            
             showAlert('جاري إرسال الإشعار للتليجرام...', 'info');
             
             let successCount = 0;
@@ -4315,8 +3917,6 @@ ${notes}
         }
         
         async function sendDeleteNotificationToTelegram(reservation) {
-            if (!isOnline) return;
-            
             const message = `
 ⚠️ *حذف حجز - قاعة النخيل للمناسبات* ⚠️
 
@@ -4337,8 +3937,6 @@ ${notes}
         }
         
         async function sendDeleteAllNotificationToTelegram(count) {
-            if (!isOnline) return;
-            
             const message = `
 🚨 *حذف جميع الحجوزات - قاعة النخيل للمناسبات* 🚨
 
@@ -4356,8 +3954,6 @@ ${notes}
         }
         
         async function testTelegramConnection() {
-            if (!isOnline) return;
-            
             try {
                 const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`);
                 const data = await response.json();
@@ -4372,7 +3968,7 @@ ${notes}
         
         // ==================== دوال مساعدة ====================
         function convertToCSV(data) {
-            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة', 'المصدر'];
+            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
             const rows = data.map(item => [
                 item.reservationNumber || item.id,
                 item.customerName,
@@ -4392,8 +3988,7 @@ ${notes}
                 item.bookingDate,
                 item.telegramSent ? 'تم الإرسال' : 'لم يرسل',
                 item.telegramSentAt || '',
-                item.status,
-                item.source === 'local' ? 'محلي' : 'سحابي'
+                item.status
             ]);
             
             return [headers, ...rows].map(row => 
@@ -4421,55 +4016,6 @@ ${notes}
                 alertDiv.style.display = 'none';
             }, 5000);
         }
-        
-        // ==================== تحميل الصفحة ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            // التحقق أولاً من حالة تسجيل الدخول المحفوظة
-            if (checkSavedLogin()) {
-                loginSuccess();
-                return;
-            }
-            
-            // إذا لم يكن مسجلاً، إعداد مستمعي الأحداث لتسجيل الدخول
-            const loginForm = document.getElementById('loginForm');
-            const passwordInput = document.getElementById('passwordInput');
-            
-            // تركيز على حقل كلمة المرور
-            passwordInput.focus();
-            
-            // إرسال النموذج
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const enteredPassword = passwordInput.value;
-                const rememberMe = document.getElementById('rememberMe').checked;
-                
-                if (enteredPassword === CORRECT_PASSWORD) {
-                    // حفظ حالة تسجيل الدخول
-                    saveLoginStatus(rememberMe);
-                    
-                    // تسجيل الدخول الناجح
-                    loginSuccess();
-                } else {
-                    // إظهار خطأ
-                    showLoginError();
-                }
-            });
-            
-            // زر تسجيل الخروج
-            document.getElementById('logoutBtn')?.addEventListener('click', logout);
-            
-            // إضافة أنيميشن الاهتزاز
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes shake {
-                    0%, 100% { transform: translateX(0); }
-                    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-                    20%, 40%, 60%, 80% { transform: translateX(5px); }
-                }
-            `;
-            document.head.appendChild(style);
-        });
     </script>
 </body>
 </html>
