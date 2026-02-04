@@ -2265,7 +2265,7 @@
                 showAlert('جاري تحميل الحجوزات من السحابة...', 'info');
                 
                 const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
-                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('eventDate', 'asc'));
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('eventDate', 'desc'));
                 const querySnapshot = await window.firebaseModules.getDocs(q);
                 
                 reservations = [];
@@ -2315,7 +2315,7 @@
         function setupRealtimeListener() {
             try {
                 const reservationsCollection = window.firebaseModules.collection(window.firestore, 'reservations');
-                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('eventDate', 'asc'));
+                const q = window.firebaseModules.query(reservationsCollection, window.firebaseModules.orderBy('eventDate', 'desc'));
                 
                 window.firebaseModules.onSnapshot(q, (snapshot) => {
                     const updatedReservations = [];
@@ -3512,7 +3512,7 @@
             return true;
         }
         
-        // ==================== تحديث قائمة الحجوزات (معدلة للترتيب حسب تاريخ الحفل) ====================
+        // ==================== تحديث قائمة الحجوزات (معدلة للترتيب تنازلياً حسب تاريخ الحفل) ====================
         function updateReservationsTable() {
             const tableBody = document.getElementById('reservationsTableBody');
             tableBody.innerHTML = '';
@@ -3522,14 +3522,14 @@
                 return;
             }
             
-            // ========== التعديل المهم: ترتيب حسب تاريخ الحفل تصاعدياً ==========
+            // ========== التعديل: ترتيب تنازلي حسب تاريخ الحفل ==========
             const sortedReservations = [...reservations].sort((a, b) => {
                 // التحقق من وجود التواريخ
                 const dateA = a.eventDate ? new Date(a.eventDate) : new Date(0);
                 const dateB = b.eventDate ? new Date(b.eventDate) : new Date(0);
                 
-                // الترتيب التصاعدي (من الأقدم إلى الأحدث)
-                return dateA - dateB;
+                // الترتيب التنازلي (من الأحدث إلى الأقدم)
+                return dateB - dateA;
             });
             
             sortedReservations.forEach(reservation => {
@@ -3560,7 +3560,7 @@
                     telegramStatus = '<span class="telegram-status telegram-failed"><i class="fas fa-times-circle"></i> لم يرسل</span>';
                 }
                 
-                // ========== إضافة زر "إضافة تصوير" ==========
+                // زر إضافة التصوير
                 const showAddPhotographyBtn = reservation.photographyServices !== 'إضافة تصوير';
                 const addPhotographyBtn = showAddPhotographyBtn ? 
                     `<button class="action-btn camera" onclick="addPhotographyService('${reservation.id}')">
