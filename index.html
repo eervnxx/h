@@ -1056,6 +1056,140 @@
             border-radius: 4px;
         }
         
+        /* ==================== صفحة عرسان اليوم الحالي ==================== */
+        .brides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .bride-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bride-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* ألوان الإطارات */
+        .bride-card.hall1 {
+            border-top-color: #dc3545; /* أحمر - القاعة 1 */
+        }
+        
+        .bride-card.hall1x {
+            border-top-color: #9c27b0; /* بنفسجي - القاعة 1x */
+        }
+        
+        .bride-card.hall2 {
+            border-top-color: #007bff; /* أزرق - القاعة 2 */
+        }
+        
+        .bride-card.hall2x {
+            border-top-color: #4caf50; /* أخضر - القاعة 2x */
+        }
+        
+        .bride-card.both-halls {
+            border-top-color: #ffc107; /* ذهبي - القاعتين معاً */
+        }
+        
+        .hall-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .bride-details-simple {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .bride-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .bride-row:last-child {
+            border-bottom: none;
+        }
+        
+        .bride-label {
+            font-weight: bold;
+            min-width: 100px;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+        
+        .bride-value {
+            flex: 1;
+            color: var(--dark);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--gray-light);
+        }
+        
+        .empty-state h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        /* شريط تحكم تاريخ عرسان اليوم */
+        .brides-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .date-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .date-selector input {
+            width: 200px;
+        }
+        
+        .brides-count {
+            margin-right: auto;
+            font-weight: bold;
+            color: var(--primary);
+            background: rgba(44, 95, 45, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
         /* تصميم متجاوب */
         @media (max-width: 1200px) {
             .container {
@@ -1076,6 +1210,10 @@
             .reservation-badge {
                 font-size: 0.65rem;
                 padding: 2px 5px;
+            }
+            
+            .brides-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
         }
         
@@ -1166,6 +1304,30 @@
             
             .login-title {
                 font-size: 1.6rem;
+            }
+            
+            /* صفحة عرسان اليوم على الهواتف */
+            .brides-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .brides-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .date-selector {
+                width: 100%;
+            }
+            
+            .date-selector input {
+                width: 100%;
+            }
+            
+            .brides-count {
+                margin-right: 0;
+                text-align: center;
+                margin-top: 10px;
             }
         }
         
@@ -1296,7 +1458,7 @@
             .print-header {
                 text-align: center !important;
                 margin-bottom: 20px !important;
-                padding-bottom: 15px !important;
+                                padding-bottom: 15px !important;
                 border-bottom: 3px solid #2c5f2d !important;
             }
             
@@ -1574,6 +1736,9 @@
                 </div>
                 <div class="nav-tab" data-page="reservations-calendar">
                     <i class="fas fa-calendar-alt"></i> تقويم الحجوزات
+                </div>
+                <div class="nav-tab" data-page="today-reservations">
+                    <i class="fas fa-heart"></i> عرسان اليوم
                 </div>
                 <div class="nav-tab" data-page="reservations-list">
                     <i class="fas fa-list"></i> قائمة الحجوزات
@@ -2017,6 +2182,30 @@
                 </div>
             </div>
             
+            <!-- صفحة عرسان اليوم -->
+            <div id="today-reservations" class="page">
+                <h2 class="page-title"><i class="fas fa-heart"></i> عرسان اليوم</h2>
+                
+                <div class="brides-controls">
+                    <div class="date-selector">
+                        <input type="date" id="specificDate" class="form-control">
+                        <button class="btn btn-success" id="showDateReservations">
+                            <i class="fas fa-search"></i> عرض حجوزات التاريخ المحدد
+                        </button>
+                        <button class="btn btn-primary" id="todayBtnSpecial">
+                            <i class="fas fa-calendar-day"></i> اليوم الحالي
+                        </button>
+                    </div>
+                    <div class="brides-count" id="bridesCount">
+                        جاري التحميل...
+                    </div>
+                </div>
+                
+                <div id="bridesTodayContainer">
+                    <!-- سيتم تعبئتها بواسطة الجافاسكريبت -->
+                </div>
+            </div>
+            
             <!-- قائمة الحجوزات -->
             <div id="reservations-list" class="page">
                 <h2 class="page-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات</h2>
@@ -2330,6 +2519,10 @@
                     reservations = updatedReservations;
                     updateReservationsTable();
                     generateCalendar();
+                    // تحديث صفحة عرسان اليوم إذا كانت مفتوحة
+                    if (document.getElementById('today-reservations').classList.contains('active')) {
+                        loadTodayBrides();
+                    }
                 }, (error) => {
                     console.error('❌ خطأ في تحديثات الوقت الحقيقي:', error);
                 });
@@ -2563,6 +2756,10 @@
                 
                 if (pageId === 'reservations-calendar') {
                     generateCalendar();
+                }
+                
+                if (pageId === 'today-reservations') {
+                    loadTodayBrides();
                 }
             });
         });
@@ -3511,6 +3708,161 @@
             
             return true;
         }
+        
+        // ==================== صفحة عرسان اليوم الحالي ====================
+        function loadTodayBrides() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            document.getElementById('specificDate').value = todayStr;
+            showReservationsForDate(todayStr);
+        }
+        
+        function showReservationsForDate(dateStr) {
+            const container = document.getElementById('bridesTodayContainer');
+            const date = new Date(dateStr);
+            const formattedDate = date.toLocaleDateString('ar-IQ');
+            
+            // تصفية الحجوزات للتاريخ المحدد
+            const dayReservations = reservations.filter(reservation => {
+                if (!reservation.eventDate) return false;
+                const resDate = new Date(reservation.eventDate);
+                return resDate.toDateString() === date.toDateString();
+            });
+            
+            // تصفية فقط الحجوزات التي تحتوي على عرسان
+            const bridesReservations = dayReservations.filter(reservation => 
+                (reservation.groomName && reservation.groomName.trim() !== '') || 
+                (reservation.brideName && reservation.brideName.trim() !== '')
+            );
+            
+            // تحديث العداد
+            document.getElementById('bridesCount').textContent = `عدد الحفلات: ${bridesReservations.length}`;
+            
+            if (bridesReservations.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart-broken"></i>
+                        <h3>لا توجد حفلات عرس في ${formattedDate}</h3>
+                        <p>لا توجد حجوزات تحتوي على عرسان لهذا التاريخ</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // تجميع الحجوزات حسب القاعة
+            const bothHallsReservations = bridesReservations.filter(r => 
+                Array.isArray(r.halls) && r.halls.length === 2
+            );
+            
+            const individualReservations = bridesReservations.filter(r => {
+                if (Array.isArray(r.halls) && r.halls.length === 2) {
+                    return false;
+                }
+                return true;
+            });
+            
+            const hall1Reservations = individualReservations.filter(r => 
+                Array.isArray(r.halls) && r.halls.includes('القاعة رقم 1')
+            );
+            
+            const hall2Reservations = individualReservations.filter(r => 
+                Array.isArray(r.halls) && r.halls.includes('القاعة رقم 2')
+            );
+            
+            let html = `
+                <div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+                    <h3 style="margin: 0; color: var(--primary);">
+                        <i class="fas fa-calendar-alt"></i> حفلات العرس في ${formattedDate}
+                    </h3>
+                </div>
+                <div class="brides-grid">
+            `;
+            
+            // عرض حجوزات القاعة 1
+            if (hall1Reservations.length > 0) {
+                // القاعة 1 - أول حجز
+                html += createBrideCard(hall1Reservations[0], 'القاعة 1', 'hall1');
+                
+                // القاعة 1x - حجز إضافي
+                if (hall1Reservations.length > 1) {
+                    html += createBrideCard(hall1Reservations[1], 'القاعة 1x', 'hall1x');
+                }
+            }
+            
+            // عرض حجوزات القاعة 2
+            if (hall2Reservations.length > 0) {
+                // القاعة 2 - أول حجز
+                html += createBrideCard(hall2Reservations[0], 'القاعة 2', 'hall2');
+                
+                // القاعة 2x - حجز إضافي
+                if (hall2Reservations.length > 1) {
+                    html += createBrideCard(hall2Reservations[1], 'القاعة 2x', 'hall2x');
+                }
+            }
+            
+            // عرض حجوزات القاعتين معاً
+            if (bothHallsReservations.length > 0) {
+                bothHallsReservations.forEach((reservation, index) => {
+                    html += createBrideCard(reservation, 'القاعتين معاً', 'both-halls');
+                });
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function createBrideCard(reservation, hallTitle, hallClass) {
+            const groomName = reservation.groomName || 'غير محدد';
+            const brideName = reservation.brideName || 'غير محدد';
+            const groomAddress = reservation.groomAddress || 'غير محدد';
+            const brideAddress = reservation.brideAddress || 'غير محدد';
+            const eventTime = reservation.eventTime || 'غير محدد';
+            
+            return `
+                <div class="bride-card ${hallClass}">
+                    <div class="hall-title">${hallTitle}</div>
+                    <div class="bride-details-simple">
+                        <div class="bride-row">
+                            <span class="bride-label">العريس:</span>
+                            <span class="bride-value">${groomName}</span>
+                        </div>
+                        <div class="bride-row">
+                            <span class="bride-label">العروس:</span>
+                            <span class="bride-value">${brideName}</span>
+                        </div>
+                        <div class="bride-row">
+                            <span class="bride-label">عنوان العريس:</span>
+                            <span class="bride-value">${groomAddress}</span>
+                        </div>
+                        <div class="bride-row">
+                            <span class="bride-label">عنوان العروس:</span>
+                            <span class="bride-value">${brideAddress}</span>
+                        </div>
+                        <div class="bride-row">
+                            <span class="bride-label">الوقت:</span>
+                            <span class="bride-value">${eventTime}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // إعداد مستمعي الأحداث لصفحة عرسان اليوم
+        document.getElementById('todayBtnSpecial')?.addEventListener('click', function() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            document.getElementById('specificDate').value = todayStr;
+            showReservationsForDate(todayStr);
+        });
+        
+        document.getElementById('showDateReservations')?.addEventListener('click', function() {
+            const dateInput = document.getElementById('specificDate');
+            if (dateInput.value) {
+                showReservationsForDate(dateInput.value);
+            } else {
+                showAlert('يرجى اختيار تاريخ', 'error');
+            }
+        });
         
         // ==================== تحديث قائمة الحجوزات (معدلة للترتيب تنازلياً حسب تاريخ الحفل) ====================
         function updateReservationsTable() {
