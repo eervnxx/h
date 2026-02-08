@@ -1056,7 +1056,7 @@
             border-radius: 4px;
         }
         
-        /* ==================== صفحة عرسان اليوم الحالي ==================== */
+        /* ==================== صفحة عرسان اليوم ==================== */
         .brides-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -1458,7 +1458,7 @@
             .print-header {
                 text-align: center !important;
                 margin-bottom: 20px !important;
-                                padding-bottom: 15px !important;
+                padding-bottom: 15px !important;
                 border-bottom: 3px solid #2c5f2d !important;
             }
             
@@ -3811,12 +3811,29 @@
             container.innerHTML = html;
         }
         
+        // ==================== التعديل: إضافة البيانات المالية لكل حجز في صفحة عرسان اليوم ====================
         function createBrideCard(reservation, hallTitle, hallClass) {
             const groomName = reservation.groomName || 'غير محدد';
             const brideName = reservation.brideName || 'غير محدد';
             const groomAddress = reservation.groomAddress || 'غير محدد';
             const brideAddress = reservation.brideAddress || 'غير محدد';
             const eventTime = reservation.eventTime || 'غير محدد';
+            
+            // إضافة البيانات المالية
+            const totalAmount = reservation.totalAmount || 0;
+            const paidAmount = reservation.paidAmount || 0;
+            const remainingAmount = reservation.remainingAmount || 0;
+            
+            // تنسيق المبالغ
+            const formattedTotal = formatCurrency(totalAmount);
+            const formattedPaid = formatCurrency(paidAmount);
+            const formattedRemaining = formatCurrency(remainingAmount);
+            
+            // تحديد لون المبلغ المتبقي
+            let remainingColor = '#28a745'; // أخضر إذا تم الدفع بالكامل
+            if (remainingAmount > 0) {
+                remainingColor = '#dc3545'; // أحمر إذا بقي دفعات
+            }
             
             return `
                 <div class="bride-card ${hallClass}">
@@ -3841,6 +3858,20 @@
                         <div class="bride-row">
                             <span class="bride-label">الوقت:</span>
                             <span class="bride-value">${eventTime}</span>
+                        </div>
+                        
+                        <!-- إضافة البيانات المالية -->
+                        <div class="bride-row">
+                            <span class="bride-label">المبلغ الكلي:</span>
+                            <span class="bride-value" style="color: #2c5f2d; font-weight: bold;">${formattedTotal} د.ع</span>
+                        </div>
+                        <div class="bride-row">
+                            <span class="bride-label">المبلغ المدفوع:</span>
+                            <span class="bride-value" style="color: #007bff;">${formattedPaid} د.ع</span>
+                        </div>
+                        <div class="bride-row">
+                            <span class="bride-label">المبلغ المتبقي:</span>
+                            <span class="bride-value" style="color: ${remainingColor}; font-weight: bold;">${formattedRemaining} د.ع</span>
                         </div>
                     </div>
                 </div>
