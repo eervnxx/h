@@ -4,25 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قاعة النخيل للمناسبات - نظام إدارة الحجوزات</title>
-    
-    <!-- ==================== بداية إضافات PWA ==================== -->
-    <!-- ربط ملف manifest.json -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- أيقونات للآيفون والأجهزة الأخرى -->
-    <link rel="apple-touch-icon" href="/icons/icon-192.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="قاعة النخيل">
-    
-    <!-- لون الشريط العلوي في المتصفح -->
-    <meta name="theme-color" content="#2c5f2d">
-    <meta name="msapplication-TileColor" content="#2c5f2d">
-    <!-- ==================== نهاية إضافات PWA ==================== -->
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* جميع الأنماط الأصلية كما هي - لم يتغير شيء */
         /* ==================== أنماط صفحة تسجيل الدخول ==================== */
         #login-page {
             display: flex;
@@ -2525,20 +2508,6 @@
             </div>
         </div>
     </div>
-
-    <!-- ==================== بداية إضافة Service Worker لـ PWA ==================== -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('sw.js').then(function(registration) {
-                    console.log('✅ Service Worker registered with scope:', registration.scope);
-                }, function(err) {
-                    console.log('❌ Service Worker registration failed:', err);
-                });
-            });
-        }
-    </script>
-    <!-- ==================== نهاية إضافة Service Worker ==================== -->
 
     <script>
         // ==================== نظام تسجيل الدخول ====================
