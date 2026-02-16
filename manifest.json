@@ -1,22 +1,26 @@
 {
-  "name": "قاعة النخيل",
-  "short_name": "قاغة النخيل",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
-  "icons": [
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ]
+    "name": "قاعة النخيل للمناسبات",
+    "short_name": "قاعة النخيل",
+    "description": "نظام إدارة حجوزات قاعة المناسبات",
+    "lang": "ar",
+    "dir": "rtl",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2c5f2d",
+    "theme_color": "#2c5f2d",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
 }
