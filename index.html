@@ -1960,13 +1960,13 @@
                 <form id="reservationForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="customerName" class="required">اسم السيد المحجِز</label>
+                            <label for="customerName" class="required">اسم السيد </label>
                             <input type="text" id="customerName" required placeholder="أدخل الاسم الكامل">
                         </div>
                         
                         <div class="form-group">
                             <label for="phone" class="required">رقم الهاتف</label>
-                            <input type="tel" id="phone" required placeholder="مثال: 07701234567">
+                            <input type="tel" id="phone" required placeholder="مثال: 07705987837">
                         </div>
                     </div>
                     
@@ -1985,12 +1985,12 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="groomAddress">عنوان العريس</label>
-                            <input type="text" id="groomAddress" placeholder="أدخل عنوان العريس الكامل">
+                            <input type="text" id="groomAddress" placeholder="أدخل عنوان العريس ">
                         </div>
                         
                         <div class="form-group">
                             <label for="brideAddress">عنوان العروس</label>
-                            <input type="text" id="brideAddress" placeholder="أدخل عنوان العروس الكامل">
+                            <input type="text" id="brideAddress" placeholder="أدخل عنوان العروس ">
                         </div>
                     </div>
                     
@@ -2027,7 +2027,7 @@
                                 <option value="">اختر نوع المناسبة</option>
                                 <option value="عرس">عرس</option>
                                 <option value="خطوبة">خطوبة</option>
-                                <option value="حفلة خاصة">حفلة خاصة</option>
+                                <option value="حنة ">حنة </option>
                                 <option value="عيد ميلاد">عيد ميلاد</option>
                                 <option value="مناسبة رسمية">مناسبة رسمية</option>
                                 <option value="مؤتمر">مؤتمر</option>
@@ -2133,7 +2133,7 @@
                                 </div>
                                 <div class="detail-content">
                                     <div class="detail-row">
-                                        <span class="detail-label">اسم السيد المحجِز:</span>
+                                        <span class="detail-label">اسم السيد :</span>
                                         <span class="detail-value" id="previewCustomerName">-</span>
                                     </div>
                                     <div class="detail-row">
@@ -2261,7 +2261,7 @@
                             <h4>الشروط والأحكام:</h4>
                             <ul>
                                 <li>يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
-                                <li>في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                                <li>لايحق المطالبة بالعربون في حالة الغاء الحجز مهما كانت الظروف</li>
                                 <li>قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
                             </ul>
                         </div>
@@ -2273,11 +2273,11 @@
                             <div class="detail-content">
                                 <div class="detail-row">
                                     <span class="detail-label">رقم الهاتف:</span>
-                                    <span class="detail-value">07701234567</span>
+                                    <span class="detail-value">07705987837-07803145115</span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">العنوان:</span>
-                                    <span class="detail-value">بغداد، المنصور</span>
+                                    <span class="detail-value">البصرة المشراق الجديد مقابل جامعة باب الزبير</span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">حالة الحجز:</span>
@@ -3223,7 +3223,7 @@
                         <div class="print-section" style="flex: 2; min-width: 250px;">
                             <div class="print-title" style="font-size: 14pt;">معلومات الحجز</div>
                             <div class="print-row">
-                                <div class="print-label" style="min-width: 100px;">اسم السيد المحجِز:</div>
+                                <div class="print-label" style="min-width: 100px;">اسم السيد :</div>
                                 <div class="print-value">${customerName || '-'}</div>
                             </div>
                             <div class="print-row">
@@ -3304,7 +3304,7 @@
                         <h4 style="font-size: 12pt; margin-bottom: 6px;">الشروط والأحكام:</h4>
                         <ul style="padding-right: 15px; margin: 0;">
                             <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">يتم دفع 50% من قيمة الحجز كعربون عند التوقيع على العقد.</li>
-                            <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">في حال الإلغاء قبل 15 يوم من الموعد، يسترد 50% من العربون.</li>
+                            <li style="margin-bottom: 4px; font-size: 9pt; line-height: 1.3;">لايحق المطالبة بالعربون في حالة الغاء الحجز مهما كانت الظروف.</li>
                             <li style="font-size: 9pt; line-height: 1.3;">قاعة النخيل غير مسؤولة عن فقدان الأشياء الشخصية داخل القاعة.</li>
                         </ul>
                     </div>
@@ -3312,7 +3312,7 @@
                     <div class="print-footer" style="margin-top: 10px; padding-top: 8px; font-size: 9pt;">
                         <p style="margin-bottom: 5px;">شكراً لاختياركم قاعة النخيل للمناسبات</p>
                         <p style="margin-bottom: 3px;">هذه النسخة للزبون - الرجاء الاحتفاظ بها</p>
-                        <p>رقم الهاتف: 07701234567 | العنوان: بغداد، المنصور</p>
+                        <p>رقم الهاتف: 07705987837-07803145115 | العنوان: البصرة المشراق الجديد مقابل جامعة باب الزبير</p>
                     </div>
                 </div>
             `;
