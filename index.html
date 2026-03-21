@@ -1960,7 +1960,7 @@
                 <form id="reservationForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="customerName" class="required">اسم السيد </label>
+                            <label for="customerName" class="required">اسم الزبون </label>
                             <input type="text" id="customerName" required placeholder="أدخل الاسم الكامل">
                         </div>
                         
@@ -2133,7 +2133,7 @@
                                 </div>
                                 <div class="detail-content">
                                     <div class="detail-row">
-                                        <span class="detail-label">اسم السيد :</span>
+                                        <span class="detail-label">اسم الزبون:</span>
                                         <span class="detail-value" id="previewCustomerName">-</span>
                                     </div>
                                     <div class="detail-row">
@@ -2230,7 +2230,7 @@
                                 
                                 <div style="margin-top: 10px;">
                                     <div class="detail-row" style="margin-bottom: 10px;">
-                                        <span class="detail-label">توقيع السيد:</span>
+                                        <span class="detail-label">توقيع الزبون</span>
                                         <span class="detail-value">
                                             <div class="signature-box" id="customerSignatureBox">
                                                 <span>.......................</span>
@@ -2412,7 +2412,7 @@
                         
                         <div class="filter-group">
                             <label><i class="fas fa-user"></i> الاسم</label>
-                            <input type="text" id="searchName" placeholder="اسم السيد أو العريس أو العروس">
+                            <input type="text" id="searchName" placeholder="اسم الزبون أو العريس أو العروس">
                         </div>
                         
                         <div class="filter-group">
@@ -2450,7 +2450,7 @@
                 <h2 class="page-title"><i class="fas fa-list-alt"></i> قائمة الحجوزات</h2>
                 
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="ابحث باسم السيد أو رقم الهاتف أو نوع المناسبة...">
+                    <input type="text" id="searchInput" placeholder="ابحث باسم الزبون أو رقم الهاتف أو نوع المناسبة...">
                     <button class="btn btn-secondary" id="searchBtn">
                         <i class="fas fa-search"></i> بحث
                     </button>
@@ -2464,7 +2464,7 @@
                         <thead>
                             <tr>
                                 <th>رقم الحجز</th>
-                                <th>اسم السيد</th>
+                                <th>اسم الزبون/th>
                                 <th>العريس</th>
                                 <th>العروس</th>
                                 <th>عنوان العريس</th>
@@ -2946,7 +2946,7 @@
         // ==================== عرض تفاصيل الحجز ====================
         function showReservationDetails(reservation) {
             const message = `
-اسم السيد: ${reservation.customerName}
+اسم الزبون: ${reservation.customerName}
 رقم الهاتف: ${reservation.phone}
 نوع المناسبة: ${reservation.eventType}
 القاعة: ${Array.isArray(reservation.halls) ? reservation.halls.join(', ') : reservation.halls}
@@ -3224,7 +3224,7 @@
                         <div class="print-section" style="flex: 2; min-width: 250px;">
                             <div class="print-title" style="font-size: 14pt;">معلومات الحجز</div>
                             <div class="print-row">
-                                <div class="print-label" style="min-width: 100px;">اسم السيد :</div>
+                                <div class="print-label" style="min-width: 100px;">اسم الزب :</div>
                                 <div class="print-value">${customerName || '-'}</div>
                             </div>
                             <div class="print-row">
@@ -3291,7 +3291,7 @@
                         <div class="print-title" style="font-size: 14pt;">توقيع الطرفين</div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
                             <div>
-                                <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع السيد:</div>
+                                <div style="font-weight: bold; margin-bottom: 5px; font-size: 11pt;">توقيع الزبون:</div>
                                 <div class="signature-line" style="height: 40px; font-size: 11pt;">.......................</div>
                             </div>
                             <div>
@@ -4049,7 +4049,7 @@
 📸 *إضافة خدمة التصوير - قاعة النخيل للمناسبات* 📸
 
 🔢 *رقم الحجز:* ${reservation.reservationNumber}
-👤 *اسم السيد:* ${reservation.customerName}
+👤 *اسم الزبون:* ${reservation.customerName}
 📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
 
 💰 *التغييرات المالية:*
@@ -4405,7 +4405,7 @@
 🔢 *رقم الحجز:* ${reservationCounter + 1}
 📅 *تاريخ الحجز:* ${new Date().toLocaleDateString('ar-IQ')}
 
-👤 *معلومات السيد:*
+👤 *معلومات الزبون:*
 • الاسم: ${customerName}
 • الهاتف: ${phone}
 
@@ -4439,7 +4439,7 @@ ${notes}
 ⚠️ *حذف حجز - قاعة النخيل للمناسبات* ⚠️
 
 🔢 *رقم الحجز المحذوف:* ${reservation.reservationNumber}
-👤 *اسم السيد:* ${reservation.customerName}
+👤 *اسم الزبون:* ${reservation.customerName}
 📅 *تاريخ الحفل:* ${formatDate(reservation.eventDate)}
 💒 *نوع المناسبة:* ${reservation.eventType}
 
@@ -4486,7 +4486,7 @@ ${notes}
         
         // ==================== دوال مساعدة ====================
         function convertToCSV(data) {
-            const headers = ['رقم الحجز', 'اسم السيد', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
+            const headers = ['رقم الحجز', 'اسم الزبون', 'رقم الهاتف', 'اسم العريس', 'اسم العروس', 'عنوان العريس', 'عنوان العروس', 'خدمة التصوير', 'تاريخ الحفل', 'نوع المناسبة', 'الوقت', 'القاعة', 'المبلغ الكلي', 'المبلغ الواصل', 'المبلغ المتبقي', 'تاريخ الحجز', 'حالة التليجرام', 'وقت الإرسال', 'الحالة'];
             const rows = data.map(item => [
                 item.reservationNumber || item.id,
                 item.customerName,
@@ -4804,7 +4804,7 @@ ${notes}
                             <span class="detail-value">${reservation.reservationNumber || reservation.id}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">اسم السيد:</span>
+                            <span class="detail-label">اسم الزبون:</span>
                             <span class="detail-value">${reservation.customerName}</span>
                         </div>
                         <div class="detail-row">
