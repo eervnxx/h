@@ -3856,7 +3856,13 @@
             }
             
             const reservationData = getFormData();
-            
+                // منع التكرار
+    for (let r of reservations) {
+        if (r.customerName === reservationData.customerName && r.phone === reservationData.phone && r.eventDate === reservationData.eventDate && JSON.stringify(r.halls) === JSON.stringify(reservationData.halls)) {
+            showAlert('⚠️ هذا الحجز موجود مسبقاً! لا يمكن التكرار.', 'error');
+            return;
+        }
+    }
             showAlert('جاري حفظ الحجز في السحابة...', 'info');
             const saveResult = await saveReservationToFirestore(reservationData);
             
